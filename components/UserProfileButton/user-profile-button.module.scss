@@ -1,0 +1,15 @@
+@import '@/assets/styles/vars';
+@import '@/assets/styles/mixin';
+
+@mixin hover-user {
+  background-color: var(--mantine-primary-color-light);
+}
+
+.user {
+  /* padding: var(--mantine-spacing-md); */
+  border-radius: var(--mantine-radius-default);
+
+  &:hover {
+    @include hover-user;
+  }
+}

@@ -1,0 +1,10 @@
+@mixin light {
+  background-color: var(--mantine-color-gray-0);
+}
+
+.main {
+  min-height: 90vh;
+  /* padding: 16px 12px; */
+
+  @include light;
+}

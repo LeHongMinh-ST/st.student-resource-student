@@ -1,0 +1,12 @@
+export { default as RoleEnum } from '@/enums/role.enum';
+export { default as StatusEnum } from '@/enums/status.enum';
+export { default as HttpStatusEnum } from '@/enums/http-status.enum';
+export { default as ExcelFileImportType } from '@/enums/excelFileImportType.enum';
+export { default as StatusFileImport } from '@/enums/statusFileImport.enum';
+export { default as StudentRole } from '@/enums/studentRole.enum';
+export { default as StudentStatus } from '@/enums/studentStatus.enum';
+export { default as FamilyRelationship } from '@/enums/familyRelationship.enum';
+export { default as Gender } from '@/enums/gender.enum';
+export { default as TrainingType } from '@/enums/trainingType.enum';
+export { default as SocialPolicyObject } from '@/enums/socialPolicyObject.enum';
+export { default as ClassType } from '@/enums/classType.enum';

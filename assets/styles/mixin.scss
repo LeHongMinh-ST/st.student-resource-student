@@ -1,0 +1,14 @@
+@use 'sass:meta';
+@use 'sass:math';
+
+@function rem($value) {
+  $base-font-size: 16px;
+
+  @if meta.type-of($value) == 'number' and math.unit($value) == 'px' {
+    @return $value / $base-font-size * 1rem;
+  } @else if math.unit($value) == 'vh' {
+    @return $value;
+  } @else {
+    @return $value;
+  }
+}
