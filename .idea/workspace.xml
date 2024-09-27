@@ -1,14 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="4c4a58e4-af05-4f90-9112-3e28168cecf5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/services/authService.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/authService.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/studentService.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/userService.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/axios/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/utils/axios/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/sidebarNavigation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/constants/sidebarNavigation.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/classes/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/dashboard/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/departments/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/login/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/majors/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/notifications/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/settings/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/statistics/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/students/components/AdmissionYearCard.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/students/components/AdmissionYearItem.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/students/components/AdmissionYearList.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/students/components/StudentAdmission.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/students/components/StudentAdmissionContent/StudentImportTabComponent/ListExcelFileImport.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/students/components/StudentAdmissionContent/StudentImportTabComponent/StudentDropzoneImport.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/students/components/StudentAdmissionContent/StudentImportTabContent.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/students/components/StudentAdmissionContent/StudentListTabComponent/Cells/StudentNameCellTable.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/students/components/StudentAdmissionContent/StudentListTabComponent/Filters/StudentStatusFilter.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/students/components/StudentAdmissionContent/StudentListTabContent.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/students/components/skeletons/AdmissionYearCardSkeleton.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/students/components/skeletons/AdmissionYearItemSkeleton.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/students/detail/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/students/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/users/components/Cells/UserActionMenu.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/users/components/Cells/UserNameCellTable.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/users/components/Filters/RoleFilter.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/users/components/Filters/SearchFilter.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/users/create/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/users/edit/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/users/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/classes/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/departments/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/majors/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/notifications/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/settings/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/statistics/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/students/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/users/[id]/edit/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/users/create/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/users/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,28 +61,37 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php" />
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2mbVyAAbbGrAWMXM3LdFoEZT402" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/var/www/student.resource.vnua",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.stylelint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.stylelint": "",
-    "nodejs_package_manager_path": "yarn",
-    "ts.external.directory.path": "/home/minhlh/.local/share/JetBrains/Toolbox/apps/phpstorm/plugins/javascript-plugin/jsLanguageServicesImpl/external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/var/www/st.student-resource-student&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;/var/www/st.student-resource-student/node_modules/stylelint&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/var/www/st.student-resource-student/node_modules/prettier&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/var/www/st.student-resource-student/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/types" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -60,7 +108,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1727345514429</updated>
-      <workItem from="1727345515494" duration="97000" />
+      <workItem from="1727345515494" duration="2231000" />
+      <workItem from="1727421656828" duration="518000" />
     </task>
     <servers />
   </component>
