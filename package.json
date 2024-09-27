@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "analyze": "ANALYZE=true next build",
-    "start": "next start",
+    "start": "next start -p 3001",
     "export": "next build && next export",
     "typecheck": "tsc --noEmit",
     "lint": "eslint './**/*.{ts,tsx}'",
