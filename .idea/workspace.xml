@@ -5,49 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c4a58e4-af05-4f90-9112-3e28168cecf5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/services/authService.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/constants/sidebarNavigation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/constants/sidebarNavigation.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/classes/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/dashboard/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/departments/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/login/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/majors/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/notifications/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/settings/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/statistics/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/students/components/AdmissionYearCard.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/students/components/AdmissionYearItem.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/students/components/AdmissionYearList.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/students/components/StudentAdmission.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/students/components/StudentAdmissionContent/StudentImportTabComponent/ListExcelFileImport.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/students/components/StudentAdmissionContent/StudentImportTabComponent/StudentDropzoneImport.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/students/components/StudentAdmissionContent/StudentImportTabContent.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/students/components/StudentAdmissionContent/StudentListTabComponent/Cells/StudentNameCellTable.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/students/components/StudentAdmissionContent/StudentListTabComponent/Filters/StudentStatusFilter.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/students/components/StudentAdmissionContent/StudentListTabContent.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/students/components/skeletons/AdmissionYearCardSkeleton.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/students/components/skeletons/AdmissionYearItemSkeleton.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/students/detail/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/students/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/users/components/Cells/UserActionMenu.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/users/components/Cells/UserNameCellTable.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/users/components/Filters/RoleFilter.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/users/components/Filters/SearchFilter.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/users/create/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/users/edit/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/users/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/classes/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/departments/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/majors/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/notifications/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/settings/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/statistics/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/students/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/users/[id]/edit/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/users/create/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/users/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -109,7 +67,7 @@
       <option name="presentableId" value="Default" />
       <updated>1727345514429</updated>
       <workItem from="1727345515494" duration="2231000" />
-      <workItem from="1727421656828" duration="518000" />
+      <workItem from="1727421656828" duration="1967000" />
     </task>
     <servers />
   </component>

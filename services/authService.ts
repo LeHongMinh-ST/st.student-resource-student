@@ -26,7 +26,9 @@ export const useAuthService = () => {
   const login = (params: LoginPrams): Promise<AxiosResponse<LoginResponse, any>> =>
     axiosInstance.post('/auth/login', params);
 
-  const refreshToken = (params: RefreshTokenPrams): Promise<AxiosResponse<LoginResponse, any>> =>
+  const refreshToken = (
+    params: RefreshTokenPrams
+  ): Promise<AxiosResponse<RefreshTokenResponse, any>> =>
     axiosInstance.post('/auth/refresh', params);
 
   const getProfile = (): Promise<AxiosResponse<ResultResonse<User>, any>> =>
