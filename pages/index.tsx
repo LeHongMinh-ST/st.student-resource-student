@@ -1,5 +1,5 @@
-import Dashboard from '@/features/dashboard';
+import ProfilePage from '@/features/Profile';
 
-const HomePage = () => <Dashboard />;
+const HomePage = () => <ProfilePage />;
 
 export default HomePage;
