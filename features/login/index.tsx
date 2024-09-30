@@ -1,14 +1,5 @@
 import styled from '@emotion/styled';
-import {
-  Container,
-  Paper,
-  Stack,
-  Image,
-  TextInput,
-  Button,
-  Checkbox,
-  LoadingOverlay,
-} from '@mantine/core';
+import { Container, Paper, Stack, Image, TextInput, Button, LoadingOverlay } from '@mantine/core';
 import { IconAlertTriangle, IconLock, IconLogin2, IconUser } from '@tabler/icons-react';
 import { useForm } from 'react-hook-form';
 import { notifications } from '@mantine/notifications';
@@ -129,7 +120,6 @@ const LoginPage = () => {
                           })}
                           error={errors.password?.message}
                         />
-                        <Checkbox label="Nhớ mật khẩu" {...register('remember')} />
                         <Button type="submit" leftSection={iconLogin2}>
                           Đăng nhập
                         </Button>

@@ -5,23 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c4a58e4-af05-4f90-9112-3e28168cecf5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/features/classes/detail/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/classes/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/reflect/detail/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/reflect/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/requestUpdate/detail/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/features/requestUpdate/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pages/classes/[id]/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pages/classes/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pages/reflect/[id]/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pages/reflect/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pages/request-update/[id]/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pages/request-update/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/Navigation/Navigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Navigation/Navigation.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/constants/sidebarNavigation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/constants/sidebarNavigation.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/Profile/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/profile/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/login/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/login/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,7 +86,7 @@
       <workItem from="1727345515494" duration="2231000" />
       <workItem from="1727421656828" duration="5146000" />
       <workItem from="1727678009752" duration="161000" />
-      <workItem from="1727678767392" duration="2273000" />
+      <workItem from="1727678767392" duration="3697000" />
     </task>
     <servers />
   </component>
