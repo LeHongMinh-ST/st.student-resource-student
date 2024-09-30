@@ -11,7 +11,7 @@ export type AuthState = {
   authUser: User | null;
   isRemember: boolean;
   expiresIn: number;
-  refreshTokenTimeout: number;
+  refreshTokenStudentTimeout: number;
 };
 
 export const authState = atom<AuthState>({
@@ -20,7 +20,7 @@ export const authState = atom<AuthState>({
     authUser: null,
     isRemember: false,
     expiresIn: 0,
-    refreshTokenTimeout: 0,
+    refreshTokenStudentTimeout: 0,
   },
   effects_UNSTABLE: [persistAtom],
 });
@@ -40,15 +40,15 @@ export const useAuthStore = () => {
     setState((prevState) => ({ ...prevState, expiresIn }));
   };
 
-  const setAccessToken = (accessToken: string, ctx = null) => {
-    nookies.set(ctx, 'accessToken', accessToken, {
+  const setAccessToken = (accessTokenStudent: string, ctx = null) => {
+    nookies.set(ctx, 'accessTokenStudent', accessTokenStudent, {
       maxAge: 60 * 60,
       path: '/',
     });
   };
 
-  const setRefreshToken = (refreshToken: string, ctx = null) => {
-    nookies.set(ctx, 'refreshToken', refreshToken, {
+  const setRefreshToken = (refreshTokenStudent: string, ctx = null) => {
+    nookies.set(ctx, 'refreshTokenStudent', refreshTokenStudent, {
       maxAge: 30 * 24 * 60 * 60, // 30 days
       path: '/',
     });
@@ -56,13 +56,13 @@ export const useAuthStore = () => {
 
   const handleRefresh = async (ctx = null) => {
     const cookies = nookies.get(ctx);
-    const refreshToken = cookies?.refreshToken;
-    if (refreshToken) {
+    const refreshTokenStudent = cookies?.refreshTokenStudent;
+    if (refreshTokenStudent) {
       const authService = useAuthService();
-      const partial = { refresh_token: refreshToken } as RefreshTokenPrams;
+      const partial = { refresh_token: refreshTokenStudent } as RefreshTokenPrams;
 
       try {
-        const res: any = await authService.refreshToken(partial);
+        const res: any = await authService.refreshTokenStudent(partial);
         setAccessToken(res?.data.access_token, ctx);
         startRefreshTokenTimer();
       } catch (error) {
@@ -77,17 +77,17 @@ export const useAuthStore = () => {
     // Update state with the new timeout ID
     setState((prevState: AuthState) => ({
       ...prevState,
-      refreshTokenTimeout: Number(timer),
+      refreshTokenStudentTimeout: Number(timer),
     }));
   };
 
   const stopRefreshTokenTimer = () => {
-    clearTimeout(state.refreshTokenTimeout);
+    clearTimeout(state.refreshTokenStudentTimeout);
 
     // Reset the refresh token timeout ID in the state
     setState((prevState: AuthState) => ({
       ...prevState,
-      refreshTokenTimeout: 0,
+      refreshTokenStudentTimeout: 0,
     }));
   };
 
@@ -96,10 +96,10 @@ export const useAuthStore = () => {
       authUser: null,
       isRemember: false,
       expiresIn: 0,
-      refreshTokenTimeout: 0,
+      refreshTokenStudentTimeout: 0,
     });
-    nookies.destroy(ctx, 'accessToken');
-    nookies.destroy(ctx, 'refreshToken');
+    nookies.destroy(ctx, 'accessTokenStudent');
+    nookies.destroy(ctx, 'refreshTokenStudent');
     stopRefreshTokenTimer();
   };
 

@@ -6,9 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="4c4a58e4-af05-4f90-9112-3e28168cecf5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/login/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/login/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/login.svg" beforeDir="false" afterPath="$PROJECT_DIR$/public/images/login.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hooks/useAuthCheck.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hooks/useAuthCheck.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/authService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/services/authService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/axios/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/utils/axios/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/recoil/auth/authState.ts" beforeDir="false" afterPath="$PROJECT_DIR$/utils/recoil/auth/authState.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,23 +31,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/var/www/st.student-resource-student/public/images",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.stylelint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.stylelint": "/var/www/st.student-resource-student/node_modules/stylelint",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "yarn",
-    "prettierjs.PrettierConfiguration.Package": "/var/www/st.student-resource-student/node_modules/prettier",
-    "ts.external.directory.path": "/var/www/st.student-resource-student/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/var/www/st.student-resource-student/public/images&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;/var/www/st.student-resource-student/node_modules/stylelint&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/var/www/st.student-resource-student/node_modules/prettier&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/var/www/st.student-resource-student/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/public/images" />
@@ -75,7 +76,8 @@
       <option name="presentableId" value="Default" />
       <updated>1727345514429</updated>
       <workItem from="1727345515494" duration="2231000" />
-      <workItem from="1727421656828" duration="3144000" />
+      <workItem from="1727421656828" duration="5146000" />
+      <workItem from="1727678009752" duration="97000" />
     </task>
     <servers />
   </component>

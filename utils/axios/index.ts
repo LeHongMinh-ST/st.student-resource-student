@@ -9,11 +9,11 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const cookies = parseCookies(); // Retrieves cookies on the client side
-    const accessToken = cookies?.accessToken;
+    const accessTokenStudent = cookies?.accessTokenStudent;
 
     // If token is present, add it to request's Authorization Header
-    if (accessToken && config?.headers) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
+    if (accessTokenStudent && config?.headers) {
+      config.headers.Authorization = `Bearer ${accessTokenStudent}`;
     }
     return config;
   },
@@ -29,8 +29,8 @@ axiosInstance.interceptors.response.use(
       if (status === HttpStatus.HTTP_UNAUTHORIZED) {
         // Remove access and refresh tokens when unauthorized or forbidden
         if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
-          destroyCookie(null, 'accessToken', { path: '/' });
-          destroyCookie(null, 'refreshToken', { path: '/' });
+          destroyCookie(null, 'accessTokenStudent', { path: '/' });
+          destroyCookie(null, 'refreshTokenStudent', { path: '/' });
 
           // Redirect to login page
           window.location.href = '/login';

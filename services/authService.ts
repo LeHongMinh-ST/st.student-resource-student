@@ -26,7 +26,7 @@ export const useAuthService = () => {
   const login = (params: LoginPrams): Promise<AxiosResponse<LoginResponse, any>> =>
     axiosInstance.post('/auth/login', params);
 
-  const refreshToken = (
+  const refreshTokenStudent = (
     params: RefreshTokenPrams
   ): Promise<AxiosResponse<RefreshTokenResponse, any>> =>
     axiosInstance.post('/auth/refresh', params);
@@ -36,7 +36,7 @@ export const useAuthService = () => {
 
   return {
     login,
-    refreshToken,
+    refreshTokenStudent,
     getProfile,
   };
 };

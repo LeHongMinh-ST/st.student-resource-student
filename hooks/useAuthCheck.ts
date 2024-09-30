@@ -12,8 +12,8 @@ const useAuthCheck = () => {
     (url: string) => {
       const path = url.split('?')[0];
       const cookies = parseCookies(); // Retrieves cookies on the client side
-      const accessToken = cookies?.accessToken;
-      if (!accessToken) {
+      const accessTokenStudent = cookies?.accessTokenStudent;
+      if (!accessTokenStudent) {
         setAuthorized(false);
         if (!publicPaths.includes(path)) {
           router.push({
