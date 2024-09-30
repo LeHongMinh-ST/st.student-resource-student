@@ -1,7 +1,7 @@
 import { ActionIcon, Box, Group, ScrollArea, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { IconX } from '@tabler/icons-react';
-import sidebarNavigationAdmin from '@/constants/sidebarNavigation';
+import { sidebarNavigationStudent } from '@/constants/sidebarNavigation';
 import LinksGroup from '@/components/Navigation/Links/LinksGroup';
 import Logo from '@/components/Logo/Logo';
 import { SidebarNavigationLinkProp, User } from '@/types';
@@ -16,7 +16,7 @@ type NavigationProps = {
 const Navigation: React.FC<NavigationProps> = ({ onClose, user }) => {
   const tablet_match = useMediaQuery('(max-width: 768px)');
 
-  const links = sidebarNavigationAdmin.map((navigationItem) => (
+  const links = sidebarNavigationStudent.map((navigationItem) => (
     <Box pl={0} mb="md" key={navigationItem.title}>
       <Text tt="uppercase" size="xs" pl="md" fw={500} mb="sm" className={classes.linkHeader}>
         {navigationItem.title}

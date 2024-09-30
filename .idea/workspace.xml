@@ -5,11 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c4a58e4-af05-4f90-9112-3e28168cecf5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/features/classes/detail/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/classes/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/reflect/detail/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/reflect/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/requestUpdate/detail/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/requestUpdate/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/classes/[id]/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/classes/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/reflect/[id]/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/reflect/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/request-update/[id]/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/request-update/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hooks/useAuthCheck.ts" beforeDir="false" afterPath="$PROJECT_DIR$/hooks/useAuthCheck.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/authService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/services/authService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/axios/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/utils/axios/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/recoil/auth/authState.ts" beforeDir="false" afterPath="$PROJECT_DIR$/utils/recoil/auth/authState.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/Navigation/Navigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/components/Navigation/Navigation.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/sidebarNavigation.ts" beforeDir="false" afterPath="$PROJECT_DIR$/constants/sidebarNavigation.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/Profile/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/profile/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,6 +30,14 @@
   </component>
   <component name="ComposerSettings">
     <execution />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -31,31 +51,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/var/www/st.student-resource-student/public/images&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.stylelint&quot;: &quot;/var/www/st.student-resource-student/node_modules/stylelint&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/var/www/st.student-resource-student/node_modules/prettier&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/var/www/st.student-resource-student/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/var/www/st.student-resource-student/pages/reflect/[id]",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.stylelint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.stylelint": "/var/www/st.student-resource-student/node_modules/stylelint",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "yarn",
+    "prettierjs.PrettierConfiguration.Package": "/var/www/st.student-resource-student/node_modules/prettier",
+    "settings.editor.selected.configurable": "preferences.sourceCode.TypeScript",
+    "ts.external.directory.path": "/var/www/st.student-resource-student/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pages/reflect/[id]" />
       <recent name="$PROJECT_DIR$/public/images" />
       <recent name="$PROJECT_DIR$/features" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/types" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/features/classes" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -77,11 +100,16 @@
       <updated>1727345514429</updated>
       <workItem from="1727345515494" duration="2231000" />
       <workItem from="1727421656828" duration="5146000" />
-      <workItem from="1727678009752" duration="97000" />
+      <workItem from="1727678009752" duration="161000" />
+      <workItem from="1727678767392" duration="2273000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

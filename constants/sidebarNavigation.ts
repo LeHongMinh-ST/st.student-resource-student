@@ -1,15 +1,24 @@
-import { IconBook, IconBookmark, IconBuilding } from '@tabler/icons-react';
+import { IconBuilding, IconUserCircle, IconSpeakerphone } from '@tabler/icons-react';
 import { SidebarNavigationProps } from '@/types';
 
-const sidebarNavigationAdmin: SidebarNavigationProps[] = [
+export const sidebarNavigationStudent: SidebarNavigationProps[] = [
   {
     title: 'Thông tin sinh viên',
     links: [
-      { label: 'Bộ môn', icon: IconBuilding, link: '/profile' },
-      { label: 'Ngành học', icon: IconBookmark, link: '/majors' },
-      { label: 'Lớp học', icon: IconBook, link: '/classes' },
+      { label: 'Thông tin', icon: IconUserCircle, link: '/profile' },
+      { label: 'Lớp học', icon: IconBuilding, link: '/classes' },
     ],
+  },
+  {
+    title: 'Phản ánh',
+    links: [{ label: 'Phản ánh', icon: IconSpeakerphone, link: '/reflect' }],
   },
 ];
 
-export default sidebarNavigationAdmin;
+export const sidebarNavigationStudentPresident: SidebarNavigationProps[] = [
+  ...sidebarNavigationStudent,
+  {
+    title: 'Yêu cầu chỉnh sửa',
+    links: [{ label: 'Danh sách yêu cầu', icon: IconSpeakerphone, link: '/request-update' }],
+  },
+];

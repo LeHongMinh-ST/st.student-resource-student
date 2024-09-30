@@ -1,4 +1,4 @@
-import ProfilePage from '@/features/Profile';
+import ProfilePage from '@/features/profile';
 
 const HomePage = () => <ProfilePage />;
 
