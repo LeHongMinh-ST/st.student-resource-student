@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import axiosInstance from '@/utils/axios';
-import { ResultResonse, User } from '@/types';
+import { ResultResonse, Student } from '@/types';
 
 export type LoginPrams = {
   user_name: string;
@@ -31,7 +31,7 @@ export const useAuthService = () => {
   ): Promise<AxiosResponse<RefreshTokenResponse, any>> =>
     axiosInstance.post('/auth/refresh', params);
 
-  const getProfile = (): Promise<AxiosResponse<ResultResonse<User>, any>> =>
+  const getProfile = (): Promise<AxiosResponse<ResultResonse<Student>, any>> =>
     axiosInstance.get('/auth/profile');
 
   return {

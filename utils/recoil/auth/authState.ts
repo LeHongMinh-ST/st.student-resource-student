@@ -2,13 +2,13 @@ import nookies from 'nookies';
 import { atom, useRecoilState } from 'recoil';
 import { recoilPersist } from 'recoil-persist';
 import { RefreshTokenPrams, useAuthService } from '@/services/authService';
-import { User } from '@/types';
+import { Student } from '@/types';
 
 const { persistAtom } = recoilPersist();
 const MILLISECOND = 1000;
 
 export type AuthState = {
-  authUser: User | null;
+  authUser: Student | null;
   isRemember: boolean;
   expiresIn: number;
   refreshTokenStudentTimeout: number;
@@ -28,7 +28,7 @@ export const authState = atom<AuthState>({
 export const useAuthStore = () => {
   const [state, setState] = useRecoilState(authState);
 
-  const setAuthUser = (user: User | null) => {
+  const setAuthUser = (user: Student | null) => {
     setState((prevState) => ({ ...prevState, authUser: user }));
   };
 

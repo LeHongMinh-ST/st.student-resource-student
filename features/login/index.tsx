@@ -42,7 +42,7 @@ const LoginPage = () => {
         authState.setIsRemember(data.remember);
 
         const profileRes = await authService.getProfile();
-        authState.setAuthUser((profileRes as any)?.data?.data ?? null);
+        authState.setAuthUser(profileRes.data.data ?? null);
         if (data.remember) {
           authState.startRefreshTokenTimer();
         }

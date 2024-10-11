@@ -5,8 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c4a58e4-af05-4f90-9112-3e28168cecf5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/ecosystem.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/npm_test.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/npm_test.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/features/login/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/login/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/profile/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/profile/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/services/authService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/services/authService.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/recoil/auth/authState.ts" beforeDir="false" afterPath="$PROJECT_DIR$/utils/recoil/auth/authState.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,11 +45,13 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/var/www/st.student-resource-student/pages/reflect/[id]",
+    "last_opened_file_path": "/var/www/st.student-resource-student",
     "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
     "node.js.detected.package.stylelint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
     "node.js.selected.package.stylelint": "/var/www/st.student-resource-student/node_modules/stylelint",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "yarn",
@@ -56,10 +63,10 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/pages/reflect/[id]" />
       <recent name="$PROJECT_DIR$/public/images" />
       <recent name="$PROJECT_DIR$/features" />
-      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/types" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -70,8 +77,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-PS-242.20224.427" />
-        <option value="bundled-php-predefined-a98d8de5180a-d6acee4cb394-com.jetbrains.php.sharedIndexes-PS-242.20224.427" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PS-242.23339.16" />
+        <option value="bundled-php-predefined-a98d8de5180a-90914f2295cb-com.jetbrains.php.sharedIndexes-PS-242.23339.16" />
       </set>
     </attachedChunks>
   </component>
@@ -86,7 +93,8 @@
       <workItem from="1727345515494" duration="2231000" />
       <workItem from="1727421656828" duration="5146000" />
       <workItem from="1727678009752" duration="161000" />
-      <workItem from="1727678767392" duration="3697000" />
+      <workItem from="1727678767392" duration="5672000" />
+      <workItem from="1728640493227" duration="72000" />
     </task>
     <servers />
   </component>

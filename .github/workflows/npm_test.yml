@@ -1,9 +1,12 @@
-name: npm test
+name: npm test lint
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
-      - '**'
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.sha }}
@@ -17,10 +20,12 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: '**/yarn.lock'
+          cache: 'npm'
+          cache-dependency-path: '**/package-lock.json'
       - name: Install dependencies
-        run: yarn
+        run: npm ci
+      - name: Run ESLint
+        run: npm run lint
       - name: Run build
         run: npm run build
       - name: Run tests
