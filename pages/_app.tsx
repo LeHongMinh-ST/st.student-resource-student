@@ -10,6 +10,7 @@ import '@/assets/styles/app.css';
 import 'mantine-datatable/styles.layer.css';
 import '@mantine/dropzone/styles.css';
 import '@mantine/notifications/styles.css';
+import '@mantine/dates/styles.css';
 import { theme } from '../theme';
 
 export default function App({ Component, pageProps }: AppProps) {

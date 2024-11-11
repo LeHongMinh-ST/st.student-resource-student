@@ -5,13 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c4a58e4-af05-4f90-9112-3e28168cecf5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/ecosystem.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/npm_test.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/npm_test.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/constants/form.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/features/form/job-survey/index.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pages/form-job-survey/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/login/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/login/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/features/profile/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/profile/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/services/authService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/services/authService.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/recoil/auth/authState.ts" beforeDir="false" afterPath="$PROJECT_DIR$/utils/recoil/auth/authState.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/commons.ts" beforeDir="false" afterPath="$PROJECT_DIR$/constants/commons.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/_app.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/pages/_app.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +48,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/var/www/st.student-resource-student",
+    "last_opened_file_path": "/opt/homebrew/var/www/st-team/st.student-resource-student/pages/form",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
     "node.js.detected.package.stylelint": "true",
@@ -55,24 +58,39 @@
     "node.js.selected.package.stylelint": "/var/www/st.student-resource-student/node_modules/stylelint",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "yarn",
-    "prettierjs.PrettierConfiguration.Package": "/var/www/st.student-resource-student/node_modules/prettier",
+    "npm.dev.executor": "Run",
+    "prettierjs.PrettierConfiguration.Package": "/opt/homebrew/var/www/st-team/st.student-resource-student/node_modules/prettier",
     "settings.editor.selected.configurable": "preferences.sourceCode.TypeScript",
-    "ts.external.directory.path": "/var/www/st.student-resource-student/node_modules/typescript/lib",
+    "ts.external.directory.path": "/opt/homebrew/var/www/st-team/st.student-resource-student/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pages/form" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/pages/reflect/[id]" />
       <recent name="$PROJECT_DIR$/public/images" />
       <recent name="$PROJECT_DIR$/features" />
-      <recent name="$PROJECT_DIR$/types" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/pages/form/[id]" />
+      <recent name="$PROJECT_DIR$/pages/form/job-survey " />
       <recent name="$PROJECT_DIR$/features/classes" />
       <recent name="$PROJECT_DIR$" />
     </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="dev" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="$USER_HOME$/.nvm/versions/node/v20.11.1/bin/node" />
+      <envs />
+      <method v="2" />
+    </configuration>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
