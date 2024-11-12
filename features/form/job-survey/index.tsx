@@ -29,7 +29,6 @@ const JobSurveyPage = () => {
   ): boolean => {
     const fieldValues = (getValues(fieldName) as IOptionCheckbox)?.value || [];
 
-    // Kiểm tra kiểu của fieldValues trước khi gọi includes
     if (
       typeof value === 'string' &&
       Array.isArray(fieldValues) &&
