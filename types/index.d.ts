@@ -143,3 +143,42 @@ type StudentInfo = {
   thumbnail: string;
   social_policy_object: SocialPolicyObject;
 };
+
+export type FormJobSurvey = {
+  id?: number;
+  form_id?: number;
+  user_id?: number;
+  email?: string;
+  full_name?: string;
+  dob?: string;
+  gender?: string;
+  code_student?: string;
+  identification_card_number?: string;
+  place_issue?: string;
+  doi_card?: string;
+  course?: string;
+  training_industry_id?: number | string;
+  phone_number?: string;
+  employment_status?: number | string;
+  work_agency?: string;
+  office_address?: string;
+  position?: string;
+  work_area?: number | string;
+  employed_since?: number | string;
+  trained_field?: number | string;
+  required_knowledge?: number | string;
+  current_income?: number | string;
+  find_job?: IOptionCheckbox;
+  degree_knowledge_used?: number | string;
+  degree_skill_used?: number | string;
+  province_work?: string;
+  soft_skills_required?: IOptionCheckbox;
+  training_course_required?: IOptionCheckbox;
+  employment_solutions?: IOptionCheckbox;
+  graduation_ceremony_id?: number;
+};
+
+export type IOptionCheckbox = {
+  value: number[] | string[];
+  other_content?: string;
+};

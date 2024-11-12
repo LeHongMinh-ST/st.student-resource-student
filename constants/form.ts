@@ -1,3 +1,4 @@
+import { SelectList } from '@/types';
 import Gender from '../enums/gender.enum';
 import { genderLabels } from '@/constants/labels';
 
@@ -19,7 +20,7 @@ export const ANSWER_WORK_AREA = {
   generateEmployment: 4, //Tự tạo việc làm
 };
 
-export const LIST_OPTION_QUESTION_FORM = [
+export const LIST_OPTION_QUESTION_FORM: SelectList<number | string | Gender>[][] = [
   [
     {
       label: genderLabels.male,

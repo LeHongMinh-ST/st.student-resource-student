@@ -1,17 +1,93 @@
 import styled from '@emotion/styled';
 import { Card, Text, TextInput, Button, Select, Radio, Checkbox } from '@mantine/core';
 import { IconSearch, IconCalendar, IconSend, IconTrash } from '@tabler/icons-react';
+import { FieldValues, useForm } from 'react-hook-form';
+import { useState } from 'react';
 import { DatePickerInput } from '@mantine/dates';
 import 'dayjs/locale/vi';
 import { GenderSelectList } from '@/constants/commons';
 import { LIST_OPTION_QUESTION_FORM } from '@/constants/form';
+import { FormJobSurvey, IOptionCheckbox } from '@/types';
 
 const JobSurveyPage = () => {
-  const className = 'page-job-survey';
+  const [inputSearchGenerate, setInputSearchGenerate] = useState('');
+
+  const {
+    register,
+    trigger,
+    handleSubmit,
+    getValues,
+    setValue,
+    formState: { isSubmitting },
+  } = useForm<FormJobSurvey>({
+    defaultValues: {},
+  });
+
+  const checkValueInArrayCheckbox = (
+    fieldName: keyof FormJobSurvey,
+    value: string | number
+  ): boolean => {
+    const fieldValues = (getValues(fieldName) as IOptionCheckbox)?.value || [];
+
+    // Kiểm tra kiểu của fieldValues trước khi gọi includes
+    if (
+      typeof value === 'string' &&
+      Array.isArray(fieldValues) &&
+      fieldValues.every((item) => typeof item === 'string')
+    ) {
+      return (fieldValues as string[]).includes(value);
+    }
+
+    if (
+      typeof value === 'number' &&
+      Array.isArray(fieldValues) &&
+      fieldValues.every((item) => typeof item === 'number')
+    ) {
+      return (fieldValues as number[]).includes(value);
+    }
+
+    return false;
+  };
+
+  const toggleValueInArrayCheckbox = (
+    fieldName: keyof FormJobSurvey,
+    value: string | number
+  ): void => {
+    const fieldValues = (getValues(fieldName) as IOptionCheckbox)?.value || [];
+
+    let updatedValues: (string | number)[];
+    if (typeof value === 'string' && fieldValues.every((item) => typeof item === 'string')) {
+      updatedValues = fieldValues.includes(value)
+        ? (fieldValues as string[]).filter((item) => item !== value)
+        : [...(fieldValues as string[]), value];
+    } else if (typeof value === 'number' && fieldValues.every((item) => typeof item === 'number')) {
+      updatedValues = fieldValues.includes(value)
+        ? (fieldValues as number[]).filter((item) => item !== value)
+        : [...(fieldValues as number[]), value];
+    } else {
+      updatedValues = fieldValues; // Giữ nguyên nếu kiểu không khớp
+    }
+
+    console.log(updatedValues);
+    setValue(fieldName, { value: updatedValues } as IOptionCheckbox);
+    trigger(fieldName);
+  };
+
+  const setRadioValue = (fieldName: keyof FormJobSurvey, value: string | number): void => {
+    setValue(fieldName, value);
+    trigger(fieldName);
+  };
+
+  const onSubmitForm = (data: FieldValues) => {
+    if (!isSubmitting) {
+      console.log('Submit form');
+      console.log(data);
+    }
+  };
 
   return (
     <JobSurveyPageStyled>
-      <div className={`form-wrap ${className}`}>
+      <div className="form-wrap">
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="xl" ta="center">
             Khảo sát việc làm
@@ -32,6 +108,8 @@ const JobSurveyPage = () => {
           </Text>
           <div className="input-search">
             <TextInput
+              value={inputSearchGenerate}
+              onChange={(e) => setInputSearchGenerate(e.target.value)}
               variant="unstyled"
               placeholder="Nhập mã sinh viên, email hoặc số điện thoại"
             />
@@ -44,21 +122,32 @@ const JobSurveyPage = () => {
           <Text fw={600} size="sm">
             1. Mã sinh viên <span className="required text-red">*</span>
           </Text>
-          <TextInput variant="unstyled" placeholder="vd: 637711" />
+          <TextInput variant="unstyled" placeholder="vd: 637711" {...register('code_student')} />
         </Card>
 
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
             2. Họ và tên <span className="required text-red">*</span>
           </Text>
-          <TextInput variant="unstyled" placeholder="vd: Đào Đức Anh" />
+          <TextInput variant="unstyled" placeholder="vd: Đào Đức Anh" {...register('full_name')} />
         </Card>
 
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
             3. Giới tính <span className="required text-red">*</span>
           </Text>
-          <Select placeholder="Chọn giới tính" data={GenderSelectList} />
+          <Select
+            placeholder="Chọn giới tính"
+            data={GenderSelectList}
+            value={getValues('gender') ?? ''}
+            onChange={(value) => {
+              if (value) {
+                // @ts-ignore
+                setValue('gender', value);
+                trigger('gender');
+              }
+            }}
+          />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
@@ -69,13 +158,27 @@ const JobSurveyPage = () => {
             placeholder="Chọn ngày sinh"
             locale="vi"
             valueFormat="DD/MM/YYYY"
+            value={getValues('dob') ? new Date(getValues('dob') ?? '') : null}
+            onChange={(value) => {
+              if (value) {
+                const formattedValue = value.toLocaleDateString('vi-VN');
+                setValue('dob', formattedValue);
+              } else {
+                setValue('dob', '');
+              }
+              trigger('dob');
+            }}
           />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
             5. Số chứng minh thư/Căn cước công dân <span className="required text-red">*</span>
           </Text>
-          <TextInput variant="unstyled" placeholder="vd: 0334********" />
+          <TextInput
+            variant="unstyled"
+            placeholder="vd: 0334********"
+            {...register('identification_card_number')}
+          />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
@@ -86,43 +189,73 @@ const JobSurveyPage = () => {
             placeholder="DD/MM/YYYY"
             locale="vi"
             valueFormat="DD/MM/YYYY"
+            value={getValues('doi_card') ? new Date(getValues('doi_card') ?? '') : null}
+            onChange={(value) => {
+              if (value) {
+                const formattedValue = value.toLocaleDateString('vi-VN');
+                setValue('doi_card', formattedValue);
+              } else {
+                setValue('doi_card', '');
+              }
+              trigger('doi_card');
+            }}
           />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
             7. Nơi cấp CMT/CCCD <span className="required text-red">*</span>
           </Text>
-          <TextInput variant="unstyled" placeholder="vd: Khu 2 Hoàng Khương, Thanh Ba, Phú Thọ" />
+          <TextInput
+            variant="unstyled"
+            placeholder="vd: Khu 2 Hoàng Khương, Thanh Ba, Phú Thọ"
+            {...register('place_issue')}
+          />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
             8. Khoá học <span className="required text-red">*</span>
           </Text>
-          <TextInput variant="unstyled" placeholder="vd: K63" />
+          <TextInput variant="unstyled" placeholder="vd: K63" {...register('course')} />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
             9. Tên ngành đào tạo <span className="required text-red">*</span>
           </Text>
-          <Select placeholder="Chọn ngành đào tạo" />
+          <Select
+            placeholder="Chọn ngành đào tạo"
+            value={(getValues('training_industry_id') as string) ?? ''}
+            onChange={(value) => {
+              if (value) {
+                // @ts-ignore
+                setValue('training_industry_id', value);
+                trigger('training_industry_id');
+              }
+            }}
+          />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
             10. Điện thoại <span className="required text-red">*</span>
           </Text>
-          <TextInput variant="unstyled" placeholder="vd: 0333555****" />
+          <TextInput
+            variant="unstyled"
+            placeholder="vd: 0333555****"
+            {...register('phone_number')}
+          />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
             11. Email <span className="required text-red">*</span>
           </Text>
-          <TextInput variant="unstyled" placeholder="vd: abc@gmail.com" />
+          <TextInput variant="unstyled" placeholder="vd: abc@gmail.com" {...register('email')} />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            12. Anh/Chị vui lòng cho biết tình trạng việc làm hiện tại của Anh/Chị
-          </Text>
-          <Radio.Group>
+          <Text fw={600} size="sm"></Text>
+          12. Anh/Chị vui lòng cho biết tình trạng việc làm hiện tại của Anh/Chị
+          <Radio.Group
+            value={getValues('employment_status') as string}
+            onChange={(value) => setRadioValue('employment_status', value)}
+          >
             {LIST_OPTION_QUESTION_FORM[1].map((item) => (
               <Radio mt="lg" value={item.value} label={item.label}></Radio>
             ))}
@@ -272,15 +405,26 @@ const JobSurveyPage = () => {
             <span className="required">*</span>
           </Text>
           <Checkbox.Group>
-            {LIST_OPTION_QUESTION_FORM[11].map((item) => (
-              <Checkbox mt="lg" value={item.value} label={item.label}></Checkbox>
+            {LIST_OPTION_QUESTION_FORM[11].map((item, index) => (
+              <Checkbox
+                key={index}
+                checked={checkValueInArrayCheckbox('employment_solutions', item.value)}
+                onChange={(e) => {
+                  toggleValueInArrayCheckbox('employment_solutions', e.target.value);
+                }}
+                mt="lg"
+                value={item.value}
+                label={item.label}
+              ></Checkbox>
             ))}
             <Checkbox mt="lg" value={0} label="Khác"></Checkbox>
             <TextInput mt="sm" variant="unstyled" placeholder="Nhập lựa chọn khác" />
           </Checkbox.Group>
         </Card>
         <div className="form-button">
-          <Button leftSection={<IconSend size={14} />}>Gửi</Button>
+          <Button onClick={handleSubmit(onSubmitForm)} leftSection={<IconSend size={14} />}>
+            Gửi
+          </Button>
           <Button leftSection={<IconTrash size={14} />} variant="default">
             Xoá hết câu trả lời
           </Button>
