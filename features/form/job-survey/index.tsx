@@ -332,9 +332,17 @@ const JobSurveyPage = () => {
               <Text fw={600} size="sm">
                 17. Đơn vị của anh chị đang làm việc thuộc khu vực làm việc nào?
               </Text>
-              <Radio.Group>
+              <Radio.Group
+                value={getValues('work_area') as string} // Make sure to add this key in your form state
+                onChange={(value) => setRadioValue('work_area', value)}
+              >
                 {LIST_OPTION_QUESTION_FORM[2].map((item) => (
-                  <Radio mt="lg" value={item.value} label={item.label}></Radio>
+                  <Radio
+                    key={item.value}
+                    mt="lg"
+                    value={String(item.value)}
+                    label={item.label}
+                  ></Radio>
                 ))}
               </Radio.Group>
             </Card>
@@ -342,9 +350,17 @@ const JobSurveyPage = () => {
               <Text fw={600} size="sm">
                 18. Sau khi tốt nghiệp, Anh/Chị có việc làm khi nào ?
               </Text>
-              <Radio.Group>
+              <Radio.Group
+                value={getValues('employed_since') as string}
+                onChange={(value) => setRadioValue('employed_since', value)}
+              >
                 {LIST_OPTION_QUESTION_FORM[3].map((item) => (
-                  <Radio mt="lg" value={item.value} label={item.label}></Radio>
+                  <Radio
+                    key={item.value}
+                    mt="lg"
+                    value={String(item.value)}
+                    label={item.label}
+                  ></Radio>
                 ))}
               </Radio.Group>
             </Card>
@@ -352,9 +368,17 @@ const JobSurveyPage = () => {
               <Text fw={600} size="sm">
                 19. Công việc Anh/Chị đang đảm nhận có phù hợp với ngành được đào tạo không?
               </Text>
-              <Radio.Group>
+              <Radio.Group
+                value={getValues('trained_field') as string}
+                onChange={(value) => setRadioValue('trained_field', value)}
+              >
                 {LIST_OPTION_QUESTION_FORM[4].map((item) => (
-                  <Radio mt="lg" value={item.value} label={item.label}></Radio>
+                  <Radio
+                    key={item.value}
+                    mt="lg"
+                    value={String(item.value)}
+                    label={item.label}
+                  ></Radio>
                 ))}
               </Radio.Group>
             </Card>
@@ -363,9 +387,17 @@ const JobSurveyPage = () => {
                 20. Anh/chị có học được các kiến thức và kỹ năng cần thiết từ nhà trường cho công
                 việc theo ngành tốt nghiệp không?
               </Text>
-              <Radio.Group>
+              <Radio.Group
+                value={getValues('required_knowledge') as string}
+                onChange={(value) => setRadioValue('required_knowledge', value)}
+              >
                 {LIST_OPTION_QUESTION_FORM[5].map((item) => (
-                  <Radio mt="lg" value={item.value} label={item.label}></Radio>
+                  <Radio
+                    key={item.value}
+                    mt="lg"
+                    value={String(item.value)}
+                    label={item.label}
+                  ></Radio>
                 ))}
               </Radio.Group>
             </Card>
@@ -373,9 +405,17 @@ const JobSurveyPage = () => {
               <Text fw={600} size="sm">
                 21. Mức thu nhập bình quân/tháng tính theo VNĐ của Anh/Chị hiện nay?
               </Text>
-              <Radio.Group>
+              <Radio.Group
+                value={getValues('current_income') as string}
+                onChange={(value) => setRadioValue('current_income', value)}
+              >
                 {LIST_OPTION_QUESTION_FORM[7].map((item) => (
-                  <Radio mt="lg" value={item.value} label={item.label}></Radio>
+                  <Radio
+                    key={item.value}
+                    mt="lg"
+                    value={String(item.value)}
+                    label={item.label}
+                  ></Radio>
                 ))}
               </Radio.Group>
             </Card>
@@ -395,9 +435,17 @@ const JobSurveyPage = () => {
               <Text fw={600} size="sm">
                 23. Mức độ Anh/Chị áp dụng kiến thức đã được đào tạo vào thực tế công việc?
               </Text>
-              <Radio.Group>
+              <Radio.Group
+                value={getValues('degree_knowledge_used') as string}
+                onChange={(value) => setRadioValue('degree_knowledge_used', value)}
+              >
                 {LIST_OPTION_QUESTION_FORM[8].map((item) => (
-                  <Radio mt="lg" value={String(item.value)} label={item.label}></Radio>
+                  <Radio
+                    key={item.value}
+                    mt="lg"
+                    value={String(item.value)}
+                    label={item.label}
+                  ></Radio>
                 ))}
               </Radio.Group>
             </Card>
@@ -405,9 +453,17 @@ const JobSurveyPage = () => {
               <Text fw={600} size="sm">
                 24. Mức độ Anh/Chị áp dụng kỹ năng đã được đào tạo vào thực tế công việc?
               </Text>
-              <Radio.Group>
+              <Radio.Group
+                value={getValues('degree_skill_used') as string}
+                onChange={(value) => setRadioValue('degree_skill_used', value)}
+              >
                 {LIST_OPTION_QUESTION_FORM[8].map((item) => (
-                  <Radio mt="lg" value={item.value} label={item.label}></Radio>
+                  <Radio
+                    key={item.value}
+                    mt="lg"
+                    value={String(item.value)}
+                    label={item.label}
+                  ></Radio>
                 ))}
               </Radio.Group>
             </Card>
@@ -415,12 +471,26 @@ const JobSurveyPage = () => {
               <Text fw={600} size="sm">
                 25. Trong quá trình làm việc, Anh/Chị cần những kỹ năng mềm nào sau đây?
               </Text>
-              <Checkbox.Group>
-                {LIST_OPTION_QUESTION_FORM[9].map((item) => (
-                  <Checkbox mt="lg" value={item.value} label={item.label}></Checkbox>
+              <Checkbox.Group onChange={(value) => setCheckboxValue('soft_skills_required', value)}>
+                {LIST_OPTION_QUESTION_FORM[9].map((item, index) => (
+                  <Checkbox
+                    mt="lg"
+                    key={index}
+                    checked={checkValueInArrayCheckbox('soft_skills_required', item.value)}
+                    value={String(item.value)}
+                    label={item.label}
+                  ></Checkbox>
                 ))}
                 <Checkbox mt="lg" value={0} label="Khác"></Checkbox>
-                <TextInput mt="sm" variant="unstyled" placeholder="Nhập lựa chọn khác" />
+                {watch('soft_skills_required')?.value?.includes('0') && (
+                  <TextInput
+                    mt="sm"
+                    variant="unstyled"
+                    value={getValues('soft_skills_required')?.other_content}
+                    onChange={(e) => setOtherContent('soft_skills_required', e.target.value)}
+                    placeholder="Nhập lựa chọn khác"
+                  />
+                )}
               </Checkbox.Group>
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
@@ -428,12 +498,26 @@ const JobSurveyPage = () => {
                 26 Sau khi được tuyển dụng, Anh/Chị có phải tham gia khóa học nâng cao nào dưới đây
                 để đáp ứng công việc không? <span className="required">*</span>
               </Text>
-              <Checkbox.Group>
-                {LIST_OPTION_QUESTION_FORM[10].map((item) => (
-                  <Checkbox mt="lg" value={item.value} label={item.label}></Checkbox>
+              <Checkbox.Group onChange={(value) => setCheckboxValue('employment_status', value)}>
+                {LIST_OPTION_QUESTION_FORM[10].map((item, index) => (
+                  <Checkbox
+                    mt="lg"
+                    key={index}
+                    checked={checkValueInArrayCheckbox('employment_status', item.value)}
+                    value={String(item.value)}
+                    label={item.label}
+                  ></Checkbox>
                 ))}
                 <Checkbox mt="lg" value={0} label="Khác"></Checkbox>
-                <TextInput mt="sm" variant="unstyled" placeholder="Nhập lựa chọn khác" />
+                {watch('employment_status')?.value?.includes('0') && (
+                  <TextInput
+                    mt="sm"
+                    variant="unstyled"
+                    value={getValues('employment_status')?.other_content}
+                    onChange={(e) => setOtherContent('employment_status', e.target.value)}
+                    placeholder="Nhập lựa chọn khác"
+                  />
+                )}
               </Checkbox.Group>
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
@@ -520,6 +604,7 @@ const JobSurveyPageStyled = styled.div`
       border-radius: unset;
       width: 100%;
     }
+
     .form-button {
       display: flex;
       justify-content: space-between;
@@ -527,9 +612,11 @@ const JobSurveyPageStyled = styled.div`
       margin-top: 20px;
     }
   }
+
   .form-footer {
     margin-top: 20px;
     text-align: center;
+
     .copyright {
       color: var(--mantine-color-gray-7);
       font-size: 12px;
