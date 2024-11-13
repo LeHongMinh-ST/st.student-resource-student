@@ -423,12 +423,26 @@ const JobSurveyPage = () => {
               <Text fw={600} size="sm">
                 22. Anh/chị tìm được việc làm thông qua những những hình thức nào?
               </Text>
-              <Checkbox.Group>
-                {LIST_OPTION_QUESTION_FORM[6].map((item) => (
-                  <Checkbox mt="lg" value={item.value} label={item.label}></Checkbox>
+              <Checkbox.Group onChange={(value) => setCheckboxValue('find_job', value)}>
+                {LIST_OPTION_QUESTION_FORM[6].map((item, index) => (
+                  <Checkbox
+                    mt="lg"
+                    key={index}
+                    checked={checkValueInArrayCheckbox('find_job', item.value)}
+                    value={String(item.value)}
+                    label={item.label}
+                  ></Checkbox>
                 ))}
-                <Checkbox mt="lg" value={0} label="Khác"></Checkbox>
-                <TextInput mt="sm" variant="unstyled" placeholder="Nhập lựa chọn khác" />
+                <Checkbox mt="lg" value="0" label="Khác"></Checkbox>
+                {watch('find_job')?.value?.includes('0') && (
+                  <TextInput
+                    mt="sm"
+                    variant="unstyled"
+                    value={getValues('find_job')?.other_content}
+                    onChange={(e) => setOtherContent('find_job', e.target.value)}
+                    placeholder="Nhập lựa chọn khác"
+                  />
+                )}
               </Checkbox.Group>
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
@@ -481,7 +495,7 @@ const JobSurveyPage = () => {
                     label={item.label}
                   ></Checkbox>
                 ))}
-                <Checkbox mt="lg" value={0} label="Khác"></Checkbox>
+                <Checkbox mt="lg" value="0" label="Khác"></Checkbox>
                 {watch('soft_skills_required')?.value?.includes('0') && (
                   <TextInput
                     mt="sm"
@@ -498,23 +512,25 @@ const JobSurveyPage = () => {
                 26 Sau khi được tuyển dụng, Anh/Chị có phải tham gia khóa học nâng cao nào dưới đây
                 để đáp ứng công việc không? <span className="required">*</span>
               </Text>
-              <Checkbox.Group onChange={(value) => setCheckboxValue('employment_status', value)}>
+              <Checkbox.Group
+                onChange={(value) => setCheckboxValue('training_course_required', value)}
+              >
                 {LIST_OPTION_QUESTION_FORM[10].map((item, index) => (
                   <Checkbox
                     mt="lg"
                     key={index}
-                    checked={checkValueInArrayCheckbox('employment_status', item.value)}
+                    checked={checkValueInArrayCheckbox('training_course_required', item.value)}
                     value={String(item.value)}
                     label={item.label}
                   ></Checkbox>
                 ))}
-                <Checkbox mt="lg" value={0} label="Khác"></Checkbox>
-                {watch('employment_status')?.value?.includes('0') && (
+                <Checkbox mt="lg" value="0" label="Khác"></Checkbox>
+                {watch('training_course_required')?.value?.includes('0') && (
                   <TextInput
                     mt="sm"
                     variant="unstyled"
-                    value={getValues('employment_status')?.other_content}
-                    onChange={(e) => setOtherContent('employment_status', e.target.value)}
+                    value={getValues('training_course_required')?.other_content}
+                    onChange={(e) => setOtherContent('training_course_required', e.target.value)}
                     placeholder="Nhập lựa chọn khác"
                   />
                 )}
