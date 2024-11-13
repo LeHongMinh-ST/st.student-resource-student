@@ -9,9 +9,10 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const surveyPeriodService = useSurveyPeriodService();
   const trainingIndustryService = useTrainingIndustryService();
 
-  if (typeof id === 'string' || typeof id === 'number') {
+  if (typeof id === 'string') {
     try {
       const res = await surveyPeriodService.getSurveyPeriod(id);
+      console.log(res);
       if (!res.data) {
         throw new Error('Survey period not found');
       }
@@ -34,13 +35,14 @@ export const getStaticProps: GetStaticProps = async (context) => {
         },
       };
     } catch (error) {
+      console.log(error);
       return {
-        notFound: true, // Chuyển đến trang 404
+        notFound: true,
       };
     }
   }
   return {
-    notFound: true, // Chuyển đến trang 404
+    notFound: true,
   };
 };
 

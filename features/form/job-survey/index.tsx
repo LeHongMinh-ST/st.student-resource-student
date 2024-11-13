@@ -40,6 +40,11 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
     defaultValues: {},
   });
 
+  const resetForm = () => {
+    console.log(getValues('employment_status'));
+    // setValue('employment_status', '')
+  };
+
   const checkValueInArrayCheckbox = (
     fieldName: keyof FormJobSurvey,
     value: string | number
@@ -78,18 +83,14 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
   };
 
   const setRadioValue = (fieldName: keyof FormJobSurvey, value: string | number): void => {
-    setValue(fieldName, value);
+    setValue(fieldName, String(value));
     trigger(fieldName);
   };
 
   const { createResponse } = useEmploymentSurveyResponse();
 
   const onSubmitForm = async (data: FormJobSurvey) => {
-    console.log('data', data);
-
     if (!isSubmitting) {
-      console.log('Submit form');
-      console.log(data);
       try {
         const res = await createResponse(data);
         if (res) {
@@ -103,7 +104,6 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
         }
         // Call api here
       } catch (e: any) {
-        console.log('error', e);
         if (e?.status === HttpStatus.HTTP_UNPROCESSABLE_ENTITY) {
           const errors = e.response?.data?.errors;
 
@@ -195,6 +195,9 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             3. Giới tính <span className="required text-red">*</span>
           </Text>
           <Select
+            {...register('gender', {
+              required: ERROR_MESSAGES.form_job.gender.required,
+            })}
             placeholder="Chọn giới tính"
             data={GenderSelectList}
             value={String(getValues('gender') ?? '')}
@@ -213,6 +216,9 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             4. Ngày sinh <span className="required text-red">*</span>
           </Text>
           <DatePickerInput
+            {...register('dob', {
+              required: ERROR_MESSAGES.form_job.dob.required,
+            })}
             rightSection={<IconCalendar style={{ width: '18px', height: '18px' }} stroke={1.5} />}
             placeholder="Chọn ngày sinh"
             locale="vi"
@@ -260,6 +266,9 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             6. Ngày cấp <span className="required text-red">*</span>
           </Text>
           <DatePickerInput
+            {...register('identification_issuance_place', {
+              required: ERROR_MESSAGES.form_job.identification_issuance_place.required,
+            })}
             rightSection={<IconCalendar style={{ width: '18px', height: '18px' }} stroke={1.5} />}
             placeholder="DD/MM/YYYY"
             valueFormat="DD/MM/YYYY"
@@ -311,6 +320,9 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             9. Tên ngành đào tạo <span className="required text-red">*</span>
           </Text>
           <Select
+            {...register('training_industry_id', {
+              required: ERROR_MESSAGES.form_job.training_industry_id.required,
+            })}
             placeholder="Chọn ngành đào tạo"
             value={(getValues('training_industry_id') as string) ?? ''}
             onChange={(value) => {
@@ -321,6 +333,7 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
               }
             }}
             data={dataOptionTrainingIndustries}
+            error={errors.training_industry_id?.message}
           />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
@@ -355,11 +368,12 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             <span className="required text-red">*</span>
           </Text>
           <Radio.Group
-            value={getValues('employment_status') as string}
+            value={getValues('employment_status')}
             onChange={(value) => setRadioValue('employment_status', value)}
+            error={errors.employment_status?.message}
           >
-            {LIST_OPTION_QUESTION_FORM[1].map((item) => (
-              <Radio mt="lg" value={String(item.value)} label={item.label}></Radio>
+            {LIST_OPTION_QUESTION_FORM[1].map((item, index) => (
+              <Radio mt="lg" key={index} value={String(item.value)} label={item.label}></Radio>
             ))}
           </Radio.Group>
         </Card>
@@ -645,7 +659,11 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
           <Button onClick={handleSubmit(onSubmitForm)} leftSection={<IconSend size={14} />}>
             Gửi
           </Button>
-          <Button leftSection={<IconTrash size={14} />} variant="default">
+          <Button
+            onClick={() => resetForm()}
+            leftSection={<IconTrash size={14} />}
+            variant="default"
+          >
             Xoá hết câu trả lời
           </Button>
         </div>

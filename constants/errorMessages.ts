@@ -64,5 +64,11 @@ export const ERROR_MESSAGES = {
     employment_status: {
       required: 'Vui lòng chọn tình trạng làm việc',
     },
+    solutions_get_job: {
+      required: 'Vui lòng chọn',
+    },
+    must_attended_courses: {
+      required: 'Vui lòng chọn',
+    },
   },
 };
