@@ -6,8 +6,9 @@ import { useState } from 'react';
 import { DatePickerInput } from '@mantine/dates';
 import 'dayjs/locale/vi';
 import { GenderSelectList } from '@/constants/commons';
-import { LIST_OPTION_QUESTION_FORM } from '@/constants/form';
+import { ANSWER_EMPLOYMENT_STATUS, LIST_OPTION_QUESTION_FORM } from '@/constants/form';
 import { FormJobSurvey, IOptionCheckbox } from '@/types';
+import { ERROR_MESSAGES } from '@/constants/errorMessages';
 
 const JobSurveyPage = () => {
   const [inputSearchGenerate, setInputSearchGenerate] = useState('');
@@ -19,7 +20,7 @@ const JobSurveyPage = () => {
     getValues,
     setValue,
     watch,
-    formState: { isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<FormJobSurvey>({
     defaultValues: {},
   });
@@ -112,14 +113,28 @@ const JobSurveyPage = () => {
           <Text fw={600} size="sm">
             1. Mã sinh viên <span className="required text-red">*</span>
           </Text>
-          <TextInput variant="unstyled" placeholder="vd: 637711" {...register('code_student')} />
+          <TextInput
+            variant="unstyled"
+            placeholder="vd: 637711"
+            {...register('code_student', {
+              required: ERROR_MESSAGES.form_job.code_student.required,
+            })}
+            error={errors?.code_student?.message}
+          />
         </Card>
 
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
             2. Họ và tên <span className="required text-red">*</span>
           </Text>
-          <TextInput variant="unstyled" placeholder="vd: Đào Đức Anh" {...register('full_name')} />
+          <TextInput
+            variant="unstyled"
+            placeholder="vd: Đào Đức Anh"
+            {...register('full_name', {
+              required: ERROR_MESSAGES.form_job.full_name.required,
+            })}
+            error={errors?.full_name?.message}
+          />
         </Card>
 
         <Card shadow="sm" padding="lg" mb="lg">
@@ -137,6 +152,7 @@ const JobSurveyPage = () => {
                 trigger('gender');
               }
             }}
+            error={errors?.gender?.message}
           />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
@@ -158,6 +174,7 @@ const JobSurveyPage = () => {
               }
               trigger('dob');
             }}
+            error={errors?.dob?.message}
           />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
@@ -167,7 +184,10 @@ const JobSurveyPage = () => {
           <TextInput
             variant="unstyled"
             placeholder="vd: 0334********"
-            {...register('identification_card_number')}
+            {...register('identification_card_number', {
+              required: ERROR_MESSAGES.form_job.identification_card_number.required,
+            })}
+            error={errors?.identification_card_number?.message}
           />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
@@ -189,6 +209,7 @@ const JobSurveyPage = () => {
               }
               trigger('doi_card');
             }}
+            error={errors?.doi_card?.message}
           />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
@@ -198,14 +219,24 @@ const JobSurveyPage = () => {
           <TextInput
             variant="unstyled"
             placeholder="vd: Khu 2 Hoàng Khương, Thanh Ba, Phú Thọ"
-            {...register('place_issue')}
+            {...register('place_issue', {
+              required: ERROR_MESSAGES.form_job.place_issue.required,
+            })}
+            error={errors?.place_issue?.message}
           />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
             8. Khoá học <span className="required text-red">*</span>
           </Text>
-          <TextInput variant="unstyled" placeholder="vd: K63" {...register('course')} />
+          <TextInput
+            variant="unstyled"
+            placeholder="vd: K63"
+            {...register('course', {
+              required: ERROR_MESSAGES.form_job.course.required,
+            })}
+            error={errors?.course?.message}
+          />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
@@ -230,18 +261,29 @@ const JobSurveyPage = () => {
           <TextInput
             variant="unstyled"
             placeholder="vd: 0333555****"
-            {...register('phone_number')}
+            {...register('phone_number', {
+              required: ERROR_MESSAGES.form_job.phone_number.required,
+            })}
+            error={errors?.phone_number?.message}
           />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
             11. Email <span className="required text-red">*</span>
           </Text>
-          <TextInput variant="unstyled" placeholder="vd: abc@gmail.com" {...register('email')} />
+          <TextInput
+            variant="unstyled"
+            placeholder="vd: abc@gmail.com"
+            {...register('email', {
+              required: ERROR_MESSAGES.form_job.email.required,
+            })}
+            error={errors?.email?.message}
+          />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
-            12. Anh/Chị vui lòng cho biết tình trạng việc làm hiện tại của Anh/Chị
+            12. Anh/Chị vui lòng cho biết tình trạng việc làm hiện tại của Anh/Chị{' '}
+            <span className="required text-red">*</span>
           </Text>
           <Radio.Group
             value={getValues('employment_status') as string}
@@ -252,171 +294,178 @@ const JobSurveyPage = () => {
             ))}
           </Radio.Group>
         </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            13. Cơ quan công tác
-          </Text>
-          <TextInput variant="unstyled" placeholder="vd: công ty TNHH A" />
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            14. Địa chỉ cơ quan
-          </Text>
-          <TextInput variant="unstyled" placeholder="vd: Khu 2 Hoàng Khương, Thanh Ba, Phú Thọ" />
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            15. Tỉnh/Thành phố làm việc hiện tại
-          </Text>
-          <TextInput variant="unstyled" placeholder="vd: Hà Nội" />
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            16. Chức vụ, vị trí việc làm
-          </Text>
-          <TextInput variant="unstyled" placeholder="vd: Trưởng phòng sale" />
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="lg">
-            Phần II: Nội dung khảo sát
-          </Text>
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            17. Đơn vị của anh chị đang làm việc thuộc khu vực làm việc nào?
-          </Text>
-          <Radio.Group>
-            {LIST_OPTION_QUESTION_FORM[2].map((item) => (
-              <Radio mt="lg" value={item.value} label={item.label}></Radio>
-            ))}
-          </Radio.Group>
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            18. Sau khi tốt nghiệp, Anh/Chị có việc làm khi nào ?
-          </Text>
-          <Radio.Group>
-            {LIST_OPTION_QUESTION_FORM[3].map((item) => (
-              <Radio mt="lg" value={item.value} label={item.label}></Radio>
-            ))}
-          </Radio.Group>
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            19. Công việc Anh/Chị đang đảm nhận có phù hợp với ngành được đào tạo không?
-          </Text>
-          <Radio.Group>
-            {LIST_OPTION_QUESTION_FORM[4].map((item) => (
-              <Radio mt="lg" value={item.value} label={item.label}></Radio>
-            ))}
-          </Radio.Group>
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            20. Anh/chị có học được các kiến thức và kỹ năng cần thiết từ nhà trường cho công việc
-            theo ngành tốt nghiệp không?
-          </Text>
-          <Radio.Group>
-            {LIST_OPTION_QUESTION_FORM[5].map((item) => (
-              <Radio mt="lg" value={item.value} label={item.label}></Radio>
-            ))}
-          </Radio.Group>
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            21. Mức thu nhập bình quân/tháng tính theo VNĐ của Anh/Chị hiện nay?
-          </Text>
-          <Radio.Group>
-            {LIST_OPTION_QUESTION_FORM[7].map((item) => (
-              <Radio mt="lg" value={item.value} label={item.label}></Radio>
-            ))}
-          </Radio.Group>
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            22. Anh/chị tìm được việc làm thông qua những những hình thức nào?
-          </Text>
-          <Checkbox.Group>
-            {LIST_OPTION_QUESTION_FORM[6].map((item) => (
-              <Checkbox mt="lg" value={item.value} label={item.label}></Checkbox>
-            ))}
-            <Checkbox mt="lg" value={0} label="Khác"></Checkbox>
-            <TextInput mt="sm" variant="unstyled" placeholder="Nhập lựa chọn khác" />
-          </Checkbox.Group>
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            23. Mức độ Anh/Chị áp dụng kiến thức đã được đào tạo vào thực tế công việc?
-          </Text>
-          <Radio.Group>
-            {LIST_OPTION_QUESTION_FORM[8].map((item) => (
-              <Radio mt="lg" value={String(item.value)} label={item.label}></Radio>
-            ))}
-          </Radio.Group>
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            24. Mức độ Anh/Chị áp dụng kỹ năng đã được đào tạo vào thực tế công việc?
-          </Text>
-          <Radio.Group>
-            {LIST_OPTION_QUESTION_FORM[8].map((item) => (
-              <Radio mt="lg" value={item.value} label={item.label}></Radio>
-            ))}
-          </Radio.Group>
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            25. Trong quá trình làm việc, Anh/Chị cần những kỹ năng mềm nào sau đây?
-          </Text>
-          <Checkbox.Group>
-            {LIST_OPTION_QUESTION_FORM[9].map((item) => (
-              <Checkbox mt="lg" value={item.value} label={item.label}></Checkbox>
-            ))}
-            <Checkbox mt="lg" value={0} label="Khác"></Checkbox>
-            <TextInput mt="sm" variant="unstyled" placeholder="Nhập lựa chọn khác" />
-          </Checkbox.Group>
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            26 Sau khi được tuyển dụng, Anh/Chị có phải tham gia khóa học nâng cao nào dưới đây để
-            đáp ứng công việc không? <span className="required">*</span>
-          </Text>
-          <Checkbox.Group>
-            {LIST_OPTION_QUESTION_FORM[10].map((item) => (
-              <Checkbox mt="lg" value={item.value} label={item.label}></Checkbox>
-            ))}
-            <Checkbox mt="lg" value={0} label="Khác"></Checkbox>
-            <TextInput mt="sm" variant="unstyled" placeholder="Nhập lựa chọn khác" />
-          </Checkbox.Group>
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            27 Theo Anh/Chị, những giải pháp nào sau đây giúp tăng tỷ lệ có việc làm đúng ngành của
-            sinh viên tốt nghiệp từ chương trình đào tạo mà Anh/Chị đã học?
-            <span className="required">*</span>
-          </Text>
-          <Checkbox.Group onChange={(value) => setCheckboxValue('employment_solutions', value)}>
-            {LIST_OPTION_QUESTION_FORM[11]?.map((item, index) => (
-              <Checkbox
-                key={index}
-                checked={checkValueInArrayCheckbox('employment_solutions', item.value)}
-                mt="lg"
-                value={String(item.value)}
-                label={item.label}
-              ></Checkbox>
-            ))}
-            <Checkbox mt="lg" value="0" label="Khác"></Checkbox>
-            {watch('employment_solutions')?.value?.includes('0') && (
+        {watch('employment_status') === String(ANSWER_EMPLOYMENT_STATUS.employed) && (
+          <>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                13. Cơ quan công tác
+              </Text>
+              <TextInput variant="unstyled" placeholder="vd: công ty TNHH A" />
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                14. Địa chỉ cơ quan
+              </Text>
               <TextInput
-                mt="sm"
                 variant="unstyled"
-                value={getValues('employment_solutions')?.other_content}
-                onChange={(e) => setOtherContent('employment_solutions', e.target.value)}
-                placeholder="Nhập lựa chọn khác"
+                placeholder="vd: Khu 2 Hoàng Khương, Thanh Ba, Phú Thọ"
               />
-            )}
-          </Checkbox.Group>
-        </Card>
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                15. Tỉnh/Thành phố làm việc hiện tại
+              </Text>
+              <TextInput variant="unstyled" placeholder="vd: Hà Nội" />
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                16. Chức vụ, vị trí việc làm
+              </Text>
+              <TextInput variant="unstyled" placeholder="vd: Trưởng phòng sale" />
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="lg">
+                Phần II: Nội dung khảo sát
+              </Text>
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                17. Đơn vị của anh chị đang làm việc thuộc khu vực làm việc nào?
+              </Text>
+              <Radio.Group>
+                {LIST_OPTION_QUESTION_FORM[2].map((item) => (
+                  <Radio mt="lg" value={item.value} label={item.label}></Radio>
+                ))}
+              </Radio.Group>
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                18. Sau khi tốt nghiệp, Anh/Chị có việc làm khi nào ?
+              </Text>
+              <Radio.Group>
+                {LIST_OPTION_QUESTION_FORM[3].map((item) => (
+                  <Radio mt="lg" value={item.value} label={item.label}></Radio>
+                ))}
+              </Radio.Group>
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                19. Công việc Anh/Chị đang đảm nhận có phù hợp với ngành được đào tạo không?
+              </Text>
+              <Radio.Group>
+                {LIST_OPTION_QUESTION_FORM[4].map((item) => (
+                  <Radio mt="lg" value={item.value} label={item.label}></Radio>
+                ))}
+              </Radio.Group>
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                20. Anh/chị có học được các kiến thức và kỹ năng cần thiết từ nhà trường cho công
+                việc theo ngành tốt nghiệp không?
+              </Text>
+              <Radio.Group>
+                {LIST_OPTION_QUESTION_FORM[5].map((item) => (
+                  <Radio mt="lg" value={item.value} label={item.label}></Radio>
+                ))}
+              </Radio.Group>
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                21. Mức thu nhập bình quân/tháng tính theo VNĐ của Anh/Chị hiện nay?
+              </Text>
+              <Radio.Group>
+                {LIST_OPTION_QUESTION_FORM[7].map((item) => (
+                  <Radio mt="lg" value={item.value} label={item.label}></Radio>
+                ))}
+              </Radio.Group>
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                22. Anh/chị tìm được việc làm thông qua những những hình thức nào?
+              </Text>
+              <Checkbox.Group>
+                {LIST_OPTION_QUESTION_FORM[6].map((item) => (
+                  <Checkbox mt="lg" value={item.value} label={item.label}></Checkbox>
+                ))}
+                <Checkbox mt="lg" value={0} label="Khác"></Checkbox>
+                <TextInput mt="sm" variant="unstyled" placeholder="Nhập lựa chọn khác" />
+              </Checkbox.Group>
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                23. Mức độ Anh/Chị áp dụng kiến thức đã được đào tạo vào thực tế công việc?
+              </Text>
+              <Radio.Group>
+                {LIST_OPTION_QUESTION_FORM[8].map((item) => (
+                  <Radio mt="lg" value={String(item.value)} label={item.label}></Radio>
+                ))}
+              </Radio.Group>
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                24. Mức độ Anh/Chị áp dụng kỹ năng đã được đào tạo vào thực tế công việc?
+              </Text>
+              <Radio.Group>
+                {LIST_OPTION_QUESTION_FORM[8].map((item) => (
+                  <Radio mt="lg" value={item.value} label={item.label}></Radio>
+                ))}
+              </Radio.Group>
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                25. Trong quá trình làm việc, Anh/Chị cần những kỹ năng mềm nào sau đây?
+              </Text>
+              <Checkbox.Group>
+                {LIST_OPTION_QUESTION_FORM[9].map((item) => (
+                  <Checkbox mt="lg" value={item.value} label={item.label}></Checkbox>
+                ))}
+                <Checkbox mt="lg" value={0} label="Khác"></Checkbox>
+                <TextInput mt="sm" variant="unstyled" placeholder="Nhập lựa chọn khác" />
+              </Checkbox.Group>
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                26 Sau khi được tuyển dụng, Anh/Chị có phải tham gia khóa học nâng cao nào dưới đây
+                để đáp ứng công việc không? <span className="required">*</span>
+              </Text>
+              <Checkbox.Group>
+                {LIST_OPTION_QUESTION_FORM[10].map((item) => (
+                  <Checkbox mt="lg" value={item.value} label={item.label}></Checkbox>
+                ))}
+                <Checkbox mt="lg" value={0} label="Khác"></Checkbox>
+                <TextInput mt="sm" variant="unstyled" placeholder="Nhập lựa chọn khác" />
+              </Checkbox.Group>
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                27 Theo Anh/Chị, những giải pháp nào sau đây giúp tăng tỷ lệ có việc làm đúng ngành
+                của sinh viên tốt nghiệp từ chương trình đào tạo mà Anh/Chị đã học?
+                <span className="required">*</span>
+              </Text>
+              <Checkbox.Group onChange={(value) => setCheckboxValue('employment_solutions', value)}>
+                {LIST_OPTION_QUESTION_FORM[11]?.map((item, index) => (
+                  <Checkbox
+                    key={index}
+                    checked={checkValueInArrayCheckbox('employment_solutions', item.value)}
+                    mt="lg"
+                    value={String(item.value)}
+                    label={item.label}
+                  ></Checkbox>
+                ))}
+                <Checkbox mt="lg" value="0" label="Khác"></Checkbox>
+                {watch('employment_solutions')?.value?.includes('0') && (
+                  <TextInput
+                    mt="sm"
+                    variant="unstyled"
+                    value={getValues('employment_solutions')?.other_content}
+                    onChange={(e) => setOtherContent('employment_solutions', e.target.value)}
+                    placeholder="Nhập lựa chọn khác"
+                  />
+                )}
+              </Checkbox.Group>
+            </Card>
+          </>
+        )}
         <div className="form-button">
           <Button onClick={handleSubmit(onSubmitForm)} leftSection={<IconSend size={14} />}>
             Gửi
