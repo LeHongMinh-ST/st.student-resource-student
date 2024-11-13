@@ -69,8 +69,6 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
     const valueForm = getValues(fieldName) as IOptionCheckbox;
     setValue(fieldName, { ...valueForm, value: valueCheckbox } as IOptionCheckbox);
     trigger(fieldName);
-
-    console.log(getValues('employment_solutions'));
   };
 
   const setOtherContent = (fieldName: keyof FormJobSurvey, value: string): void => {
@@ -199,7 +197,7 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
           <Select
             placeholder="Chọn giới tính"
             data={GenderSelectList}
-            value={getValues('gender') ?? ''}
+            value={String(getValues('gender') ?? '')}
             onChange={(value) => {
               if (value) {
                 // @ts-ignore
@@ -404,7 +402,7 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
                 17. Đơn vị của anh chị đang làm việc thuộc khu vực làm việc nào?
               </Text>
               <Radio.Group
-                value={getValues('work_area') as string} // Make sure to add this key in your form state
+                value={getValues('work_area') as unknown as string} // Make sure to add this key in your form state
                 onChange={(value) => setRadioValue('work_area', value)}
               >
                 {LIST_OPTION_QUESTION_FORM[2].map((item) => (
@@ -422,7 +420,7 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
                 18. Sau khi tốt nghiệp, Anh/Chị có việc làm khi nào ?
               </Text>
               <Radio.Group
-                value={getValues('employed_since') as string}
+                value={getValues('employed_since') as unknown as string}
                 onChange={(value) => setRadioValue('employed_since', value)}
               >
                 {LIST_OPTION_QUESTION_FORM[3].map((item) => (
@@ -440,7 +438,7 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
                 19. Công việc Anh/Chị đang đảm nhận có phù hợp với ngành được đào tạo không?
               </Text>
               <Radio.Group
-                value={getValues('trained_field') as string}
+                value={getValues('trained_field') as unknown as string}
                 onChange={(value) => setRadioValue('trained_field', value)}
               >
                 {LIST_OPTION_QUESTION_FORM[4].map((item) => (
