@@ -6,4 +6,9 @@ export const getStaticProps = async () => ({
   },
 });
 
+export const getStaticPaths = async () => ({
+  paths: [],
+  fallback: 'blocking',
+});
+
 export default JobSurveyPage;

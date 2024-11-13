@@ -390,6 +390,7 @@ const JobSurveyPage = () => {
               <Radio.Group
                 value={getValues('required_knowledge') as string}
                 onChange={(value) => setRadioValue('required_knowledge', value)}
+                error={errors?.required_knowledge?.message}
               >
                 {LIST_OPTION_QUESTION_FORM[5].map((item) => (
                   <Radio
@@ -408,6 +409,7 @@ const JobSurveyPage = () => {
               <Radio.Group
                 value={getValues('current_income') as string}
                 onChange={(value) => setRadioValue('current_income', value)}
+                error={errors?.current_income?.message}
               >
                 {LIST_OPTION_QUESTION_FORM[7].map((item) => (
                   <Radio
@@ -514,6 +516,7 @@ const JobSurveyPage = () => {
               </Text>
               <Checkbox.Group
                 onChange={(value) => setCheckboxValue('training_course_required', value)}
+                error={errors?.training_course_required?.message}
               >
                 {LIST_OPTION_QUESTION_FORM[10].map((item, index) => (
                   <Checkbox
@@ -542,7 +545,10 @@ const JobSurveyPage = () => {
                 của sinh viên tốt nghiệp từ chương trình đào tạo mà Anh/Chị đã học?
                 <span className="required">*</span>
               </Text>
-              <Checkbox.Group onChange={(value) => setCheckboxValue('employment_solutions', value)}>
+              <Checkbox.Group
+                onChange={(value) => setCheckboxValue('employment_solutions', value)}
+                error={errors?.employment_solutions?.message}
+              >
                 {LIST_OPTION_QUESTION_FORM[11]?.map((item, index) => (
                   <Checkbox
                     key={index}
