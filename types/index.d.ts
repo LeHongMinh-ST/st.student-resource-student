@@ -179,6 +179,6 @@ export type FormJobSurvey = {
 };
 
 export type IOptionCheckbox = {
-  value: number[] | string[];
+  value: string[];
   other_content?: string;
 };

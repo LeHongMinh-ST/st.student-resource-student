@@ -4,3 +4,15 @@
 body {
   font-family: Manrope, sans-serif;
 }
+.mantine-Tabs-tab {
+  outline: none !important;
+}
+.mantine-Dropzone-root {
+  outline: none !important;
+}
+
+button,
+input,
+textarea {
+  outline: none !important;
+}

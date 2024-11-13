@@ -18,6 +18,7 @@ const JobSurveyPage = () => {
     handleSubmit,
     getValues,
     setValue,
+    watch,
     formState: { isSubmitting },
   } = useForm<FormJobSurvey>({
     defaultValues: {},
@@ -48,27 +49,17 @@ const JobSurveyPage = () => {
     return false;
   };
 
-  const toggleValueInArrayCheckbox = (
-    fieldName: keyof FormJobSurvey,
-    value: string | number
-  ): void => {
-    const fieldValues = (getValues(fieldName) as IOptionCheckbox)?.value || [];
+  const setCheckboxValue = (fieldName: keyof FormJobSurvey, valueCheckbox: string[]): void => {
+    const valueForm = getValues(fieldName) as IOptionCheckbox;
+    setValue(fieldName, { ...valueForm, value: valueCheckbox } as IOptionCheckbox);
+    trigger(fieldName);
 
-    let updatedValues: (string | number)[];
-    if (typeof value === 'string' && fieldValues.every((item) => typeof item === 'string')) {
-      updatedValues = fieldValues.includes(value)
-        ? (fieldValues as string[]).filter((item) => item !== value)
-        : [...(fieldValues as string[]), value];
-    } else if (typeof value === 'number' && fieldValues.every((item) => typeof item === 'number')) {
-      updatedValues = fieldValues.includes(value)
-        ? (fieldValues as number[]).filter((item) => item !== value)
-        : [...(fieldValues as number[]), value];
-    } else {
-      updatedValues = fieldValues; // Giữ nguyên nếu kiểu không khớp
-    }
+    console.log(getValues('employment_solutions'));
+  };
 
-    console.log(updatedValues);
-    setValue(fieldName, { value: updatedValues } as IOptionCheckbox);
+  const setOtherContent = (fieldName: keyof FormJobSurvey, value: string): void => {
+    const valueForm = getValues(fieldName) as IOptionCheckbox;
+    setValue(fieldName, { ...valueForm, other_content: value } as IOptionCheckbox);
     trigger(fieldName);
   };
 
@@ -249,14 +240,15 @@ const JobSurveyPage = () => {
           <TextInput variant="unstyled" placeholder="vd: abc@gmail.com" {...register('email')} />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm"></Text>
-          12. Anh/Chị vui lòng cho biết tình trạng việc làm hiện tại của Anh/Chị
+          <Text fw={600} size="sm">
+            12. Anh/Chị vui lòng cho biết tình trạng việc làm hiện tại của Anh/Chị
+          </Text>
           <Radio.Group
             value={getValues('employment_status') as string}
             onChange={(value) => setRadioValue('employment_status', value)}
           >
             {LIST_OPTION_QUESTION_FORM[1].map((item) => (
-              <Radio mt="lg" value={item.value} label={item.label}></Radio>
+              <Radio mt="lg" value={String(item.value)} label={item.label}></Radio>
             ))}
           </Radio.Group>
         </Card>
@@ -358,7 +350,7 @@ const JobSurveyPage = () => {
           </Text>
           <Radio.Group>
             {LIST_OPTION_QUESTION_FORM[8].map((item) => (
-              <Radio mt="lg" value={item.value} label={item.label}></Radio>
+              <Radio mt="lg" value={String(item.value)} label={item.label}></Radio>
             ))}
           </Radio.Group>
         </Card>
@@ -403,21 +395,26 @@ const JobSurveyPage = () => {
             sinh viên tốt nghiệp từ chương trình đào tạo mà Anh/Chị đã học?
             <span className="required">*</span>
           </Text>
-          <Checkbox.Group>
-            {LIST_OPTION_QUESTION_FORM[11].map((item, index) => (
+          <Checkbox.Group onChange={(value) => setCheckboxValue('employment_solutions', value)}>
+            {LIST_OPTION_QUESTION_FORM[11]?.map((item, index) => (
               <Checkbox
                 key={index}
                 checked={checkValueInArrayCheckbox('employment_solutions', item.value)}
-                onChange={(e) => {
-                  toggleValueInArrayCheckbox('employment_solutions', e.target.value);
-                }}
                 mt="lg"
-                value={item.value}
+                value={String(item.value)}
                 label={item.label}
               ></Checkbox>
             ))}
-            <Checkbox mt="lg" value={0} label="Khác"></Checkbox>
-            <TextInput mt="sm" variant="unstyled" placeholder="Nhập lựa chọn khác" />
+            <Checkbox mt="lg" value="0" label="Khác"></Checkbox>
+            {watch('employment_solutions')?.value?.includes('0') && (
+              <TextInput
+                mt="sm"
+                variant="unstyled"
+                value={getValues('employment_solutions')?.other_content}
+                onChange={(e) => setOtherContent('employment_solutions', e.target.value)}
+                placeholder="Nhập lựa chọn khác"
+              />
+            )}
           </Checkbox.Group>
         </Card>
         <div className="form-button">

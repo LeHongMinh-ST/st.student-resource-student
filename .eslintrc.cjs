@@ -11,5 +11,5 @@ module.exports = {
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 'off',
   },
-  ignorePatterns: ['node_modules/*', 'dist/*', 'public/*'],
+  ignorePatterns: ['node_modules/*', 'dist/*', 'public/*', '**/*.css'],
 };
