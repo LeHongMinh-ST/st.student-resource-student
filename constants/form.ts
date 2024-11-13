@@ -6,6 +6,7 @@ export const ANSWER_EMPLOYMENT_STATUS = {
   employed: 1,
   advancedLearning: 2,
   unemployed: 3,
+  notLookingForJob: 4,
 };
 export const ANSWER_TRAINED_FIELD = {
   rightMajor: 1,
@@ -24,17 +25,18 @@ export const LIST_OPTION_QUESTION_FORM: SelectList<number | string | Gender>[][]
   [
     {
       label: genderLabels.male,
-      value: Gender.Male,
+      value: 1,
     },
     {
       label: genderLabels.female,
-      value: Gender.Female,
+      value: 0,
     },
   ],
   [
     { label: 'Đã có việc làm', value: ANSWER_EMPLOYMENT_STATUS.employed },
     { label: 'Đang học nâng cao', value: ANSWER_EMPLOYMENT_STATUS.advancedLearning },
     { label: 'Chưa có việc làm', value: ANSWER_EMPLOYMENT_STATUS.unemployed },
+    { label: 'Chưa đi tìm việc', value: ANSWER_EMPLOYMENT_STATUS.notLookingForJob },
   ],
   [
     { label: 'Khu vực nhà nước', value: ANSWER_WORK_AREA.governmentArea },
@@ -43,10 +45,10 @@ export const LIST_OPTION_QUESTION_FORM: SelectList<number | string | Gender>[][]
     { label: 'Tự tạo việc làm', value: ANSWER_WORK_AREA.generateEmployment },
   ],
   [
-    { label: 'Trong vòng 3 tháng', value: 1 },
-    { label: 'Trong vòng 6 tháng', value: 2 },
+    { label: 'Dưới 3 tháng', value: 1 },
+    { label: 'Từ 3 tháng đến 6 tháng', value: 2 },
     { label: 'Từ 6 tháng đến 12 tháng', value: 3 },
-    { label: 'Trên 1 năm', value: 4 },
+    { label: 'Trên 12 tháng', value: 4 },
   ],
   [
     { label: 'Đúng ngành đào tạo', value: ANSWER_TRAINED_FIELD.rightMajor },
@@ -54,15 +56,13 @@ export const LIST_OPTION_QUESTION_FORM: SelectList<number | string | Gender>[][]
     { label: 'Không liên quan đến ngành đào tạo', value: ANSWER_TRAINED_FIELD.notRelatedMajor },
   ],
   [
-    { label: 'Đã học được', value: 1 },
-    { label: 'Chỉ học được một phần', value: 2 },
-    { label: 'Không học được', value: 3 },
+    { label: 'Chưa phù hợp với trình độ chuyên môn', value: 1 },
+    { label: 'Phù hợp với trình độ chuyên môn', value: 2 },
   ],
   [
-    { label: 'Do Học viện/Khoa giới thiệu', value: 1 },
-    { label: 'Bạn bè, người quen giới thiệu', value: 2 },
-    { label: 'Tự tìm việc làm', value: 3 },
-    { label: 'Tự tạo việc làm', value: 4 },
+    { label: 'Đã học được', value: 1 },
+    { label: 'Không học được', value: 2 },
+    { label: 'Chỉ học được một phần', value: 3 },
   ],
   [
     { label: 'Dưới 5 triệu', value: 1 },
@@ -71,20 +71,27 @@ export const LIST_OPTION_QUESTION_FORM: SelectList<number | string | Gender>[][]
     { label: 'Trên 15 triệu', value: 4 },
   ],
   [
-    { label: 'Áp dụng rất nhiều', value: 1 },
-    { label: 'Áp dụng tương đối nhiều', value: 2 },
-    { label: 'Áp dụng ít', value: 3 },
-    { label: 'Áp dụng rất ít', value: 4 },
-    { label: 'Không áp dụng', value: 5 },
+    { label: 'Do Học viện/Khoa giới thiệu', value: 1 },
+    { label: 'Bạn bè, người quen giới thiệu', value: 3 },
+    { label: 'Tự tìm việc làm', value: 2 },
+    { label: 'Tự tạo việc làm', value: 4 },
+  ],
+  [
+    { label: 'Thi tuyển', value: 1 },
+    { label: 'Xét tuyển', value: 2 },
+    { label: 'Hợp đồng', value: 3 },
+    { label: 'Biệt phái', value: 4 },
+    { label: 'Biệt phái', value: 4 },
   ],
   [
     { label: 'Kỹ năng giao tiếp', value: 1 },
-    { label: 'Kỹ năng thuyết trình', value: 2 },
-    { label: 'Kỹ năng làm việc nhóm', value: 3 },
-    { label: 'Kỹ năng viết báo cáo tài liệu', value: 4 },
-    { label: 'Kỹ năng lãnh đạo', value: 5 },
-    { label: 'Kỹ năng tiếng Anh', value: 6 },
-    { label: 'Kỹ năng tin học', value: 7 },
+    { label: 'Kỹ năng lãnh đạo', value: 2 },
+    { label: 'Kỹ năng thuyết trình', value: 3 },
+    { label: 'Kỹ năng tiếng Anh', value: 4 },
+    { label: 'Kỹ năng làm việc nhóm', value: 5 },
+    { label: 'Kỹ năng tin học', value: 6 },
+    { label: 'Kỹ năng viết báo cáo tài liệu', value: 7 },
+    { label: 'Kỹ năng hội nhập quốc tế', value: 8 },
   ],
   [
     { label: 'Nâng cao kiến thức chuyên môn', value: 1 },
@@ -98,14 +105,14 @@ export const LIST_OPTION_QUESTION_FORM: SelectList<number | string | Gender>[][]
   [
     {
       label:
-        'Học viện tổ chức các buổi trao đổi chia sẻ kinh nghiệm tìm việc làm giữa cựu sinh viên với các sinh viên đang học',
+        'Học viện tổ chức các buổi trao đổi, chia sẻ kinh nghiệm tìm kiếm việc làm giữa cựu sinh viên với sinh viên',
       value: 1,
     },
     {
-      label: 'Học viện tổ chức các buổi trao đổi giữa sinh viên với các nhà sử dụng lao động',
+      label: 'Học viện tổ chức các buổi trao đổi giữa đơn vị sử dụng lao động với sinh viên',
       value: 2,
     },
-    { label: 'Nhà sử dụng lao động tham gia vào quá trình đào tạo', value: 3 },
+    { label: 'Đơn vị sử dụng lao động tham gia vào quá trình đào tạo ', value: 3 },
     {
       label:
         'Chương trình đào tạo được điều chỉnh và cập nhật theo nhu cầu của thị trường lao động',

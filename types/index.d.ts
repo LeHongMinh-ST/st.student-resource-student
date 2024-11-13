@@ -146,39 +146,62 @@ type StudentInfo = {
 
 export type FormJobSurvey = {
   id?: number;
-  form_id?: number;
-  user_id?: number;
-  email?: string;
-  full_name?: string;
-  dob?: string;
-  gender?: string;
-  code_student?: string;
-  identification_card_number?: string;
-  place_issue?: string;
-  doi_card?: string;
-  course?: string;
-  training_industry_id?: number | string;
-  phone_number?: string;
-  employment_status?: number | string;
-  work_agency?: string;
-  office_address?: string;
-  position?: string;
-  work_area?: number | string;
-  employed_since?: number | string;
-  trained_field?: number | string;
-  required_knowledge?: number | string;
-  current_income?: number | string;
-  find_job?: IOptionCheckbox;
-  degree_knowledge_used?: number | string;
-  degree_skill_used?: number | string;
-  province_work?: string;
+  survey_period_id: number;
+  student_id?: number;
+  email: string;
+  full_name: string;
+  dob: string;
+  gender: number;
+  code_student: string;
+  identification_card_number: string;
+  identification_card_number_update?: string;
+  identification_issuance_place: string;
+  identification_issuance_date: string;
+  training_industry_id: string;
+  course: string;
+  phone_number: string;
+  employment_status: string;
+
+  // optional
+  recruit_partner_name?: string;
+  recruit_partner_address?: string;
+  recruit_partner_date?: string;
+  recruit_partner_position?: string;
+  work_area?: number;
+  employed_since?: number;
+  trained_field?: number;
+  professional_qualification_field?: number;
+  level_knowledge_acquired?: number;
+  starting_salary?: string;
+  average_income?: number;
+  job_search_method?: IOptionCheckbox;
+  recruitment_type?: IOptionCheckbox;
   soft_skills_required?: IOptionCheckbox;
-  training_course_required?: IOptionCheckbox;
-  employment_solutions?: IOptionCheckbox;
-  graduation_ceremony_id?: number;
+  must_attended_courses?: IOptionCheckbox;
+  solutions_get_job: IOptionCheckbox;
 };
 
 export type IOptionCheckbox = {
   value: string[];
   other_content?: string;
+};
+
+type SurveyPeriod = {
+  id?: number;
+  title: string;
+  description: string;
+  status: StatusEnum;
+  year: string;
+  start_date?: string;
+  end_date?: string;
+  faculty_id?: number;
+  created_at?: string;
+  updated_at?: string;
+};
+
+type TrainingIndustry = {
+  id?: number;
+  name: string;
+  created_at?: string;
+  updated_at?: string;
 };

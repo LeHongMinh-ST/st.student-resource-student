@@ -27,6 +27,11 @@ export const GenderSelectList: SelectList<Gender>[] = [
   { value: Gender.Female, label: genderLabels.female },
 ];
 
+export const GenderSelectListFormSurvey: SelectList<string>[] = [
+  { value: '1', label: genderLabels.male },
+  { value: '0', label: genderLabels.female },
+];
+
 export const StudentStatusSelectList: SelectList<StudentStatus>[] = [
   { value: StudentStatus.CurrentlyStudying, label: studentStatusLabels.currently_studying },
   { value: StudentStatus.Graduated, label: studentStatusLabels.graduated },

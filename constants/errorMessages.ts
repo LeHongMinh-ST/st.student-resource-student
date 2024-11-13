@@ -38,19 +38,31 @@ export const ERROR_MESSAGES = {
       required: 'Vui lòng chọn giới tính',
     },
     identification_card_number: {
-      required: 'Vui lòng nhập CMND/CCCD',
+      required: 'Vui lòng nhập CCCD',
     },
-    place_issue: {
-      required: 'Vui lòng nhập nơi cung cấp CMND/CCCD',
+    identification_issuance_date: {
+      required: 'Vui lòng nhập ngày cấp CCCD',
+    },
+    identification_issuance_place: {
+      required: 'Vui lòng nhập nơi cấp CCCD',
     },
     course: {
-      required: 'Vui lòng nhập khóa học',
+      required: 'Vui lòng nhập khóa',
     },
     phone_number: {
       required: 'Vui lòng nhập số điện thoại',
     },
     email: {
       required: 'Vui lòng nhập email',
+    },
+    training_industry_id: {
+      required: 'Vui lòng chọn ngành đào tạo',
+    },
+    dob: {
+      required: 'Vui lòng nhập ngày sinh',
+    },
+    employment_status: {
+      required: 'Vui lòng chọn tình trạng làm việc',
     },
   },
 };
