@@ -457,9 +457,9 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
                 việc theo ngành tốt nghiệp không?
               </Text>
               <Radio.Group
-                value={getValues('required_knowledge') as string}
-                onChange={(value) => setRadioValue('required_knowledge', value)}
-                error={errors?.required_knowledge?.message}
+                value={getValues('trained_field') as unknown as string}
+                onChange={(value) => setRadioValue('trained_field', value)}
+                error={errors?.trained_field?.message}
               >
                 {LIST_OPTION_QUESTION_FORM[5].map((item) => (
                   <Radio
@@ -476,9 +476,9 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
                 21. Mức thu nhập bình quân/tháng tính theo VNĐ của Anh/Chị hiện nay?
               </Text>
               <Radio.Group
-                value={getValues('current_income') as string}
-                onChange={(value) => setRadioValue('current_income', value)}
-                error={errors?.current_income?.message}
+                value={getValues('average_income') as unknown as string}
+                onChange={(value) => setRadioValue('average_income', value)}
+                error={errors?.average_income?.message}
               >
                 {LIST_OPTION_QUESTION_FORM[7].map((item) => (
                   <Radio
@@ -494,23 +494,23 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
               <Text fw={600} size="sm">
                 22. Anh/chị tìm được việc làm thông qua những những hình thức nào?
               </Text>
-              <Checkbox.Group onChange={(value) => setCheckboxValue('find_job', value)}>
+              <Checkbox.Group onChange={(value) => setCheckboxValue('job_search_method', value)}>
                 {LIST_OPTION_QUESTION_FORM[6].map((item, index) => (
                   <Checkbox
                     mt="lg"
                     key={index}
-                    checked={checkValueInArrayCheckbox('find_job', item.value)}
+                    checked={checkValueInArrayCheckbox('job_search_method', item.value)}
                     value={String(item.value)}
                     label={item.label}
                   ></Checkbox>
                 ))}
                 <Checkbox mt="lg" value="0" label="Khác"></Checkbox>
-                {watch('find_job')?.value?.includes('0') && (
+                {watch('job_search_method')?.value?.includes('0') && (
                   <TextInput
                     mt="sm"
                     variant="unstyled"
-                    value={getValues('find_job')?.other_content}
-                    onChange={(e) => setOtherContent('find_job', e.target.value)}
+                    value={getValues('job_search_method')?.other_content}
+                    onChange={(e) => setOtherContent('job_search_method', e.target.value)}
                     placeholder="Nhập lựa chọn khác"
                   />
                 )}
@@ -521,8 +521,8 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
                 23. Mức độ Anh/Chị áp dụng kiến thức đã được đào tạo vào thực tế công việc?
               </Text>
               <Radio.Group
-                value={getValues('degree_knowledge_used') as string}
-                onChange={(value) => setRadioValue('degree_knowledge_used', value)}
+                value={getValues('level_knowledge_acquired') as unknown as string}
+                onChange={(value) => setRadioValue('level_knowledge_acquired', value)}
               >
                 {LIST_OPTION_QUESTION_FORM[8].map((item) => (
                   <Radio
@@ -539,8 +539,8 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
                 24. Mức độ Anh/Chị áp dụng kỹ năng đã được đào tạo vào thực tế công việc?
               </Text>
               <Radio.Group
-                value={getValues('degree_skill_used') as string}
-                onChange={(value) => setRadioValue('degree_skill_used', value)}
+                value={getValues('professional_qualification_field') as unknown as string}
+                onChange={(value) => setRadioValue('professional_qualification_field', value)}
               >
                 {LIST_OPTION_QUESTION_FORM[8].map((item) => (
                   <Radio
@@ -584,25 +584,25 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
                 để đáp ứng công việc không? <span className="required">*</span>
               </Text>
               <Checkbox.Group
-                onChange={(value) => setCheckboxValue('training_course_required', value)}
-                error={errors?.training_course_required?.message}
+                onChange={(value) => setCheckboxValue('must_attended_courses', value)}
+                error={errors?.must_attended_courses?.message}
               >
                 {LIST_OPTION_QUESTION_FORM[10].map((item, index) => (
                   <Checkbox
                     mt="lg"
                     key={index}
-                    checked={checkValueInArrayCheckbox('training_course_required', item.value)}
+                    checked={checkValueInArrayCheckbox('must_attended_courses', item.value)}
                     value={String(item.value)}
                     label={item.label}
                   ></Checkbox>
                 ))}
                 <Checkbox mt="lg" value="0" label="Khác"></Checkbox>
-                {watch('training_course_required')?.value?.includes('0') && (
+                {watch('must_attended_courses')?.value?.includes('0') && (
                   <TextInput
                     mt="sm"
                     variant="unstyled"
-                    value={getValues('training_course_required')?.other_content}
-                    onChange={(e) => setOtherContent('training_course_required', e.target.value)}
+                    value={getValues('must_attended_courses')?.other_content}
+                    onChange={(e) => setOtherContent('must_attended_courses', e.target.value)}
                     placeholder="Nhập lựa chọn khác"
                   />
                 )}
@@ -615,25 +615,25 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
                 <span className="required">*</span>
               </Text>
               <Checkbox.Group
-                onChange={(value) => setCheckboxValue('employment_solutions', value)}
-                error={errors?.employment_solutions?.message}
+                onChange={(value) => setCheckboxValue('solutions_get_job', value)}
+                error={errors?.solutions_get_job?.message}
               >
                 {LIST_OPTION_QUESTION_FORM[11]?.map((item, index) => (
                   <Checkbox
                     key={index}
-                    checked={checkValueInArrayCheckbox('employment_solutions', item.value)}
+                    checked={checkValueInArrayCheckbox('solutions_get_job', item.value)}
                     mt="lg"
                     value={String(item.value)}
                     label={item.label}
                   ></Checkbox>
                 ))}
                 <Checkbox mt="lg" value="0" label="Khác"></Checkbox>
-                {watch('employment_solutions')?.value?.includes('0') && (
+                {watch('solutions_get_job')?.value?.includes('0') && (
                   <TextInput
                     mt="sm"
                     variant="unstyled"
-                    value={getValues('employment_solutions')?.other_content}
-                    onChange={(e) => setOtherContent('employment_solutions', e.target.value)}
+                    value={getValues('solutions_get_job')?.other_content}
+                    onChange={(e) => setOtherContent('solutions_get_job', e.target.value)}
                     placeholder="Nhập lựa chọn khác"
                   />
                 )}
