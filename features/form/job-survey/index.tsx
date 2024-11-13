@@ -35,6 +35,8 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
     getValues,
     setValue,
     watch,
+    reset,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<FormJobSurvey>({
     defaultValues: {},
@@ -43,6 +45,7 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
   const resetForm = () => {
     console.log(getValues('employment_status'));
     // setValue('employment_status', '')
+    reset({} as FormJobSurvey);
   };
 
   const checkValueInArrayCheckbox = (
@@ -90,6 +93,11 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
   const { createResponse } = useEmploymentSurveyResponse();
 
   const onSubmitForm = async (data: FormJobSurvey) => {
+    if (!data.employment_status) {
+      setError('employment_status', 'Vui lòng chọn tình trạng việc làm');
+      return;
+    }
+
     if (!isSubmitting) {
       try {
         const res = await createResponse(data);
