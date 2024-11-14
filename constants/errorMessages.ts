@@ -70,5 +70,8 @@ export const ERROR_MESSAGES = {
     must_attended_courses: {
       required: 'Vui lòng chọn',
     },
+    city_work_id: {
+      required: 'Vui lòng chọn',
+    },
   },
 };

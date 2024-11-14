@@ -168,6 +168,7 @@ export type FormJobSurvey = {
   recruit_partner_date?: string;
   recruit_partner_position?: string;
   work_area?: number;
+  city_work_id?: number;
   employed_since?: number;
   trained_field?: number;
   professional_qualification_field?: number;
@@ -204,4 +205,10 @@ type TrainingIndustry = {
   name: string;
   created_at?: string;
   updated_at?: string;
+};
+
+type City = {
+  id?: number;
+  name: string;
+  priority: number;
 };

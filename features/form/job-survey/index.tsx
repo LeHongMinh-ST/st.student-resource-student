@@ -24,9 +24,14 @@ import { useEmploymentSurveyResponse } from '@/services/employmentSurveyResponse
 interface JobSurveyPageProps {
   surveyPeriod: SurveyPeriod; // Dữ liệu công việc, có thể không có
   dataOptionTrainingIndustries: [];
+  dataOptionCities: [];
 }
 
-const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurveyPageProps) => {
+const JobSurveyPage = ({
+  surveyPeriod,
+  dataOptionTrainingIndustries,
+  dataOptionCities,
+}: JobSurveyPageProps) => {
   const [inputSearchGenerate, setInputSearchGenerate] = useState('');
   const {
     register,
@@ -94,12 +99,28 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
 
   const onSubmitForm = async (data: FormJobSurvey) => {
     if (!data.employment_status) {
-      setError('employment_status', 'Vui lòng chọn tình trạng việc làm');
+      setError('employment_status', { message: 'Vui lòng chọn tình trạng việc làm' });
       return;
     }
 
     if (!isSubmitting) {
       try {
+        if (surveyPeriod.id !== undefined) {
+          data.survey_period_id = surveyPeriod.id;
+        } else {
+          throw new Error('Survey period ID is undefined');
+        }
+        data.dob = formatDateString(data.dob, 'yyyy-mm-dd');
+        data.identification_issuance_date = formatDateString(
+          data.identification_issuance_date,
+          'yyyy-mm-dd'
+        );
+        if (!data.identification_card_number_update?.trim()) {
+          delete data.identification_card_number_update;
+        }
+        if (data.recruit_partner_date) {
+          data.recruit_partner_date = formatDateString(data.recruit_partner_date, 'yyyy-mm-dd');
+        }
         const res = await createResponse(data);
         if (res) {
           notifications.show({
@@ -112,12 +133,31 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
         }
         // Call api here
       } catch (e: any) {
+        if (Object.keys(e?.response?.data?.errors).length > 0) {
+          const key = Object.keys(e?.response?.data?.errors)[0];
+          notifications.show({
+            title: 'Thất bại!',
+            message: e?.response?.data?.errors[key][0],
+            icon: <IconAlertTriangle />,
+            color: 'red',
+            autoClose: 5000,
+          });
+        }
+
         if (e?.status === HttpStatus.HTTP_UNPROCESSABLE_ENTITY) {
           const errors = e.response?.data?.errors;
 
           if (errors) {
             // @ts-ignore
-            setFormErrors(errors, setError);
+            if (e?.status === HttpStatus.HTTP_INTERNAL_SERVER_ERROR) {
+              notifications.show({
+                title: 'Thất bại!',
+                message: 'Có lỗi xảy ra! Vui lòng thử lại sau',
+                icon: <IconAlertTriangle />,
+                color: 'red',
+                autoClose: 5000,
+              });
+            }
           }
         }
         if (e?.status === HttpStatus.HTTP_INTERNAL_SERVER_ERROR) {
@@ -234,7 +274,7 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             value={getValues('dob') ? new Date(getValues('dob') ?? '') : null}
             onChange={(value) => {
               if (value) {
-                const formattedValue = value.toLocaleDateString('vi-VN');
+                const formattedValue = formatDateString(value, 'mm/dd/yyyy');
                 setValue('dob', formattedValue);
               } else {
                 setValue('dob', '');
@@ -256,63 +296,60 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             })}
             error={errors?.identification_card_number?.message}
           />
-        </Card>
-        {watch('identification_card_number') && (
-          <Card shadow="sm" padding="lg" mb="lg">
-            <Text fw={600} size="sm">
-              Cập nhập số căn cước công dân (nếu số căn cước công dân hiện tại chưa đúng)
-            </Text>
-            <TextInput
-              variant="unstyled"
-              placeholder="vd: 0334********"
-              {...register('identification_card_number_update', {})}
-            />
-          </Card>
-        )}
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            6. Ngày cấp <span className="required text-red">*</span>
+          {watch('identification_card_number') && (
+            <>
+              <Text fw={600} size="sm" pt={10}>
+                Cập nhập số căn cước công dân (nếu số căn cước công dân hiện tại chưa đúng)
+              </Text>
+              <TextInput
+                variant="unstyled"
+                placeholder="vd: 0334********"
+                {...register('identification_card_number_update', {})}
+              />
+            </>
+          )}
+          <Text fw={600} size="sm" pt={10}>
+            Ngày cấp <span className="required text-red">*</span>
           </Text>
           <DatePickerInput
-            {...register('identification_issuance_place', {
-              required: ERROR_MESSAGES.form_job.identification_issuance_place.required,
+            {...register('identification_issuance_date', {
+              required: ERROR_MESSAGES.form_job.identification_issuance_date.required,
             })}
             rightSection={<IconCalendar style={{ width: '18px', height: '18px' }} stroke={1.5} />}
             placeholder="DD/MM/YYYY"
             valueFormat="DD/MM/YYYY"
+            locale="vi"
             value={
-              getValues('identification_issuance_place')
-                ? new Date(getValues('identification_issuance_place') ?? '')
+              getValues('identification_issuance_date')
+                ? new Date(getValues('identification_issuance_date') ?? '')
                 : null
             }
             onChange={(value) => {
               if (value) {
-                const formattedValue = value.toLocaleDateString('vi-VN');
-                setValue('identification_issuance_place', formattedValue);
+                const formattedValue = formatDateString(value, 'mm/dd/yyyy');
+                setValue('identification_issuance_date', formattedValue);
               } else {
-                setValue('identification_issuance_place', '');
+                setValue('identification_issuance_date', '');
               }
-              trigger('identification_issuance_place');
+              trigger('identification_issuance_date');
             }}
+            error={errors?.identification_issuance_date?.message}
+          />
+          <Text fw={600} size="sm" pt={10}>
+            Nơi cấp <span className="required text-red">*</span>
+          </Text>
+          <TextInput
+            variant="unstyled"
+            placeholder="vd: Khu 2 Hoàng Khương, Thanh Ba, Phú Thọ"
+            {...register('identification_issuance_place', {
+              required: ERROR_MESSAGES.form_job.identification_issuance_place.required,
+            })}
             error={errors?.identification_issuance_place?.message}
           />
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
-            7. Nơi cấp <span className="required text-red">*</span>
-          </Text>
-          <TextInput
-            variant="unstyled"
-            placeholder="vd: Khu 2 Hoàng Khương, Thanh Ba, Phú Thọ"
-            {...register('identification_issuance_date', {
-              required: ERROR_MESSAGES.form_job.identification_issuance_date.required,
-            })}
-            error={errors?.identification_issuance_date?.message}
-          />
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            8. Khoá học <span className="required text-red">*</span>
+            6. Khoá học <span className="required text-red">*</span>
           </Text>
           <TextInput
             variant="unstyled"
@@ -325,7 +362,7 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
-            9. Tên ngành đào tạo <span className="required text-red">*</span>
+            7. Tên ngành đào tạo <span className="required text-red">*</span>
           </Text>
           <Select
             {...register('training_industry_id', {
@@ -346,7 +383,7 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
-            10. Điện thoại <span className="required text-red">*</span>
+            8. Điện thoại <span className="required text-red">*</span>
           </Text>
           <TextInput
             variant="unstyled"
@@ -359,7 +396,7 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
-            11. Email <span className="required text-red">*</span>
+            9. Email <span className="required text-red">*</span>
           </Text>
           <TextInput
             variant="unstyled"
@@ -372,7 +409,7 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
-            12. Anh/Chị vui lòng cho biết tình trạng việc làm hiện tại của Anh/Chị{' '}
+            10. Anh/chị vui lòng cho biết tình trạng việc làm hiện tại của Anh/Chị{' '}
             <span className="required text-red">*</span>
           </Text>
           <Radio.Group
@@ -385,34 +422,91 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             ))}
           </Radio.Group>
         </Card>
-        {watch('employment_status') === String(ANSWER_EMPLOYMENT_STATUS.employed) && (
+        {![
+          String(ANSWER_EMPLOYMENT_STATUS.notLookingForJob),
+          String(ANSWER_EMPLOYMENT_STATUS.advancedLearning),
+          String(ANSWER_EMPLOYMENT_STATUS.unemployed),
+        ].includes(watch('employment_status')) && (
           <>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                13. Cơ quan công tác
-              </Text>
-              <TextInput variant="unstyled" placeholder="vd: công ty TNHH A" />
-            </Card>
-            <Card shadow="sm" padding="lg" mb="lg">
-              <Text fw={600} size="sm">
-                14. Địa chỉ cơ quan
+                11. Tên đơn vị tuyển dụng
               </Text>
               <TextInput
+                {...register('recruit_partner_name', {})}
                 variant="unstyled"
-                placeholder="vd: Khu 2 Hoàng Khương, Thanh Ba, Phú Thọ"
+                placeholder="vd: công ty TNHH A"
               />
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                15. Tỉnh/Thành phố làm việc hiện tại
+                12. Địa chỉ đơn vị
               </Text>
-              <TextInput variant="unstyled" placeholder="vd: Hà Nội" />
+              <TextInput
+                {...register('recruit_partner_address', {})}
+                variant="unstyled"
+                placeholder="vd: Khu 2 Hoàng Khương, Thanh Ba, Phú Thọ"
+              />
+              <Text fw={600} size="sm" pt={20}>
+                Địa chỉ đơn vị thuộc Tỉnh/Thành phố
+              </Text>
+              <Select
+                {...register('city_work_id', {
+                  required: ERROR_MESSAGES.form_job.city_work_id.required,
+                })}
+                placeholder="Chọn tỉnh/Thành phố"
+                value={(getValues('city_work_id') as unknown as string) ?? ''}
+                onChange={(value) => {
+                  if (value) {
+                    // @ts-ignore
+                    setValue('city_work_id', value);
+                    trigger('city_work_id');
+                  }
+                }}
+                data={dataOptionCities}
+                error={errors.city_work_id?.message}
+              />
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                16. Chức vụ, vị trí việc làm
+                13. Thời gian tuyển dụng
               </Text>
-              <TextInput variant="unstyled" placeholder="vd: Trưởng phòng sale" />
+              <DatePickerInput
+                {...register('recruit_partner_date', {
+                  required: ERROR_MESSAGES.form_job.identification_issuance_date.required,
+                })}
+                rightSection={
+                  <IconCalendar style={{ width: '18px', height: '18px' }} stroke={1.5} />
+                }
+                placeholder="DD/MM/YYYY"
+                valueFormat="DD/MM/YYYY"
+                locale="vi"
+                value={
+                  getValues('recruit_partner_date')
+                    ? new Date(getValues('recruit_partner_date') ?? '')
+                    : null
+                }
+                onChange={(value) => {
+                  if (value) {
+                    const formattedValue = formatDateString(value, 'mm/dd/yyyy');
+                    setValue('recruit_partner_date', formattedValue);
+                  } else {
+                    setValue('recruit_partner_date', '');
+                  }
+                  trigger('recruit_partner_date');
+                }}
+                error={errors?.identification_issuance_date?.message}
+              />
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                14. Chức vụ, vị trí việc làm
+              </Text>
+              <TextInput
+                {...register('recruit_partner_position', {})}
+                variant="unstyled"
+                placeholder="vd: Trưởng phòng sale"
+              />
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="lg">
@@ -421,7 +515,7 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                17. Đơn vị của anh chị đang làm việc thuộc khu vực làm việc nào?
+                15. Đơn vị Anh/Chị đang làm việc thuộc khu vực làm việc nào?
               </Text>
               <Radio.Group
                 value={getValues('work_area') as unknown as string} // Make sure to add this key in your form state
@@ -439,7 +533,7 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                18. Sau khi tốt nghiệp, Anh/Chị có việc làm khi nào ?
+                16. Sau khi tốt nghiệp, Anh/Chị có việc làm từ khi nào?
               </Text>
               <Radio.Group
                 value={getValues('employed_since') as unknown as string}
@@ -457,7 +551,7 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                19. Công việc Anh/Chị đang đảm nhận có phù hợp với ngành được đào tạo không?
+                17. Công việc Anh/Chị đang đảm nhận có phù hợp với ngành được đào tạo không?
               </Text>
               <Radio.Group
                 value={getValues('trained_field') as unknown as string}
@@ -475,12 +569,11 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                20. Anh/chị có học được các kiến thức và kỹ năng cần thiết từ nhà trường cho công
-                việc theo ngành tốt nghiệp không?
+                18. Công việc Anh/Chị đang đảm nhận có phù hợp với trình độ chuyên môn không?
               </Text>
               <Radio.Group
-                value={getValues('trained_field') as unknown as string}
-                onChange={(value) => setRadioValue('trained_field', value)}
+                value={getValues('professional_qualification_field') as unknown as string}
+                onChange={(value) => setRadioValue('professional_qualification_field', value)}
                 error={errors?.trained_field?.message}
               >
                 {LIST_OPTION_QUESTION_FORM[5].map((item) => (
@@ -495,12 +588,37 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
+                19. Anh/chị có học được các kiến thức và kỹ năng cần thiết từ nhà trường cho công
+                việc theo ngành tốt nghiệp không?
+              </Text>
+              <Radio.Group
+                value={getValues('level_knowledge_acquired') as unknown as string}
+                onChange={(value) => setRadioValue('level_knowledge_acquired', value)}
+                error={errors?.level_knowledge_acquired?.message}
+              >
+                {LIST_OPTION_QUESTION_FORM[6].map((item) => (
+                  <Radio
+                    key={item.value}
+                    mt="lg"
+                    value={String(item.value)}
+                    label={item.label}
+                  ></Radio>
+                ))}
+              </Radio.Group>
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                20. Mức lương khởi điểm của Anh/Chị (đơn vị triệu đồng/1 tháng)
+              </Text>
+              <TextInput {...register('starting_salary', {})} variant="unstyled" placeholder="15" />
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
                 21. Mức thu nhập bình quân/tháng tính theo VNĐ của Anh/Chị hiện nay?
               </Text>
               <Radio.Group
                 value={getValues('average_income') as unknown as string}
                 onChange={(value) => setRadioValue('average_income', value)}
-                error={errors?.average_income?.message}
               >
                 {LIST_OPTION_QUESTION_FORM[7].map((item) => (
                   <Radio
@@ -514,10 +632,11 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                22. Anh/chị tìm được việc làm thông qua những những hình thức nào?
+                22. Anh/Chị tìm được việc làm thông qua những hình thức nào? (Có thể có nhiều lựa
+                chọn)
               </Text>
               <Checkbox.Group onChange={(value) => setCheckboxValue('job_search_method', value)}>
-                {LIST_OPTION_QUESTION_FORM[6].map((item, index) => (
+                {LIST_OPTION_QUESTION_FORM[8].map((item, index) => (
                   <Checkbox
                     mt="lg"
                     key={index}
@@ -540,13 +659,13 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                23. Mức độ Anh/Chị áp dụng kiến thức đã được đào tạo vào thực tế công việc?
+                23. Anh/chị được tuyển dụng theo hình thức nào?
               </Text>
               <Radio.Group
-                value={getValues('level_knowledge_acquired') as unknown as string}
-                onChange={(value) => setRadioValue('level_knowledge_acquired', value)}
+                value={getValues('recruitment_type') as unknown as string}
+                onChange={(value) => setRadioValue('recruitment_type', value)}
               >
-                {LIST_OPTION_QUESTION_FORM[8].map((item) => (
+                {LIST_OPTION_QUESTION_FORM[9].map((item) => (
                   <Radio
                     key={item.value}
                     mt="lg"
@@ -558,28 +677,10 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                24. Mức độ Anh/Chị áp dụng kỹ năng đã được đào tạo vào thực tế công việc?
-              </Text>
-              <Radio.Group
-                value={getValues('professional_qualification_field') as unknown as string}
-                onChange={(value) => setRadioValue('professional_qualification_field', value)}
-              >
-                {LIST_OPTION_QUESTION_FORM[8].map((item) => (
-                  <Radio
-                    key={item.value}
-                    mt="lg"
-                    value={String(item.value)}
-                    label={item.label}
-                  ></Radio>
-                ))}
-              </Radio.Group>
-            </Card>
-            <Card shadow="sm" padding="lg" mb="lg">
-              <Text fw={600} size="sm">
-                25. Trong quá trình làm việc, Anh/Chị cần những kỹ năng mềm nào sau đây?
+                24. Trong quá trình làm việc, Anh/Chị cần những kỹ năng mềm nào sau đây?
               </Text>
               <Checkbox.Group onChange={(value) => setCheckboxValue('soft_skills_required', value)}>
-                {LIST_OPTION_QUESTION_FORM[9].map((item, index) => (
+                {LIST_OPTION_QUESTION_FORM[10].map((item, index) => (
                   <Checkbox
                     mt="lg"
                     key={index}
@@ -602,14 +703,14 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                26 Sau khi được tuyển dụng, Anh/Chị có phải tham gia khóa học nâng cao nào dưới đây
+                25. Sau khi được tuyển dụng, Anh/Chị có phải tham gia khóa học nâng cao nào dưới đây
                 để đáp ứng công việc không? <span className="required">*</span>
               </Text>
               <Checkbox.Group
                 onChange={(value) => setCheckboxValue('must_attended_courses', value)}
                 error={errors?.must_attended_courses?.message}
               >
-                {LIST_OPTION_QUESTION_FORM[10].map((item, index) => (
+                {LIST_OPTION_QUESTION_FORM[11].map((item, index) => (
                   <Checkbox
                     mt="lg"
                     key={index}
@@ -630,39 +731,46 @@ const JobSurveyPage = ({ surveyPeriod, dataOptionTrainingIndustries }: JobSurvey
                 )}
               </Checkbox.Group>
             </Card>
-            <Card shadow="sm" padding="lg" mb="lg">
-              <Text fw={600} size="sm">
-                27 Theo Anh/Chị, những giải pháp nào sau đây giúp tăng tỷ lệ có việc làm đúng ngành
-                của sinh viên tốt nghiệp từ chương trình đào tạo mà Anh/Chị đã học?
-                <span className="required">*</span>
-              </Text>
-              <Checkbox.Group
-                onChange={(value) => setCheckboxValue('solutions_get_job', value)}
-                error={errors?.solutions_get_job?.message}
-              >
-                {LIST_OPTION_QUESTION_FORM[11]?.map((item, index) => (
-                  <Checkbox
-                    key={index}
-                    checked={checkValueInArrayCheckbox('solutions_get_job', item.value)}
-                    mt="lg"
-                    value={String(item.value)}
-                    label={item.label}
-                  ></Checkbox>
-                ))}
-                <Checkbox mt="lg" value="0" label="Khác"></Checkbox>
-                {watch('solutions_get_job')?.value?.includes('0') && (
-                  <TextInput
-                    mt="sm"
-                    variant="unstyled"
-                    value={getValues('solutions_get_job')?.other_content}
-                    onChange={(e) => setOtherContent('solutions_get_job', e.target.value)}
-                    placeholder="Nhập lựa chọn khác"
-                  />
-                )}
-              </Checkbox.Group>
-            </Card>
           </>
         )}
+        <Card shadow="sm" padding="lg" mb="lg">
+          <Text fw={600} size="sm">
+            {![
+              String(ANSWER_EMPLOYMENT_STATUS.notLookingForJob),
+              String(ANSWER_EMPLOYMENT_STATUS.advancedLearning),
+              String(ANSWER_EMPLOYMENT_STATUS.unemployed),
+            ].includes(watch('employment_status'))
+              ? 26
+              : 11}{' '}
+            Theo Anh/Chị, những giải pháp nào sau đây giúp tăng tỷ lệ có việc làm đúng ngành của
+            sinh viên tốt nghiệp từ chương trình đào tạo mà Anh/Chị đã học?
+            <span className="required">*</span>
+          </Text>
+          <Checkbox.Group
+            onChange={(value) => setCheckboxValue('solutions_get_job', value)}
+            error={errors?.solutions_get_job?.message}
+          >
+            {LIST_OPTION_QUESTION_FORM[12]?.map((item, index) => (
+              <Checkbox
+                key={index}
+                checked={checkValueInArrayCheckbox('solutions_get_job', item.value)}
+                mt="lg"
+                value={String(item.value)}
+                label={item.label}
+              ></Checkbox>
+            ))}
+            <Checkbox mt="lg" value="0" label="Khác"></Checkbox>
+            {watch('solutions_get_job')?.value?.includes('0') && (
+              <TextInput
+                mt="sm"
+                variant="unstyled"
+                value={getValues('solutions_get_job')?.other_content}
+                onChange={(e) => setOtherContent('solutions_get_job', e.target.value)}
+                placeholder="Nhập lựa chọn khác"
+              />
+            )}
+          </Checkbox.Group>
+        </Card>
         <div className="form-button">
           <Button onClick={handleSubmit(onSubmitForm)} leftSection={<IconSend size={14} />}>
             Gửi
