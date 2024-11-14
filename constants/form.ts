@@ -34,7 +34,7 @@ export const LIST_OPTION_QUESTION_FORM: SelectList<number | string | Gender>[][]
   ],
   [
     { label: 'Đã có việc làm', value: ANSWER_EMPLOYMENT_STATUS.employed },
-    { label: 'Đang học nâng cao', value: ANSWER_EMPLOYMENT_STATUS.advancedLearning },
+    { label: 'Đang tiếp tục học', value: ANSWER_EMPLOYMENT_STATUS.advancedLearning },
     { label: 'Chưa có việc làm', value: ANSWER_EMPLOYMENT_STATUS.unemployed },
     { label: 'Chưa đi tìm việc', value: ANSWER_EMPLOYMENT_STATUS.notLookingForJob },
   ],
@@ -81,7 +81,7 @@ export const LIST_OPTION_QUESTION_FORM: SelectList<number | string | Gender>[][]
     { label: 'Xét tuyển', value: 2 },
     { label: 'Hợp đồng', value: 3 },
     { label: 'Biệt phái', value: 4 },
-    { label: 'Biệt phái', value: 4 },
+    { label: 'Điều động', value: 4 },
   ],
   [
     { label: 'Kỹ năng giao tiếp', value: 1 },
