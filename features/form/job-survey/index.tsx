@@ -178,7 +178,7 @@ const JobSurveyPage = () => {
         if (res) {
           notifications.show({
             title: 'Thành công!',
-            message: 'Tạo mới ngành đào tạo thành công',
+            message: 'Gửi thành công',
             icon: <IconCheck />,
             color: 'green.8',
             autoClose: 5000,
@@ -229,7 +229,7 @@ const JobSurveyPage = () => {
   return (
     <JobSurveyPageStyled>
       <LoadingOverlay
-        visible={isLoading || isLoadingCity || isLoadingTrainingIndustryRes}
+        visible={isLoading || isLoadingCity || isLoadingTrainingIndustryRes || isSubmitting}
         zIndex={1000}
         overlayProps={{ blur: 2 }}
       />
