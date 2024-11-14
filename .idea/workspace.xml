@@ -78,7 +78,7 @@
     "npm.dev.executor": "Run",
     "prettierjs.PrettierConfiguration.Package": "/var/www/st.student-resource-student/node_modules/prettier",
     "settings.editor.selected.configurable": "preferences.sourceCode.TypeScript",
-    "ts.external.directory.path": "/var/www/st.student-resource-student/node_modules/typescript/lib",
+    "ts.external.directory.path": "/opt/homebrew/var/www/st-team/st.student-resource-student/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
