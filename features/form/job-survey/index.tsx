@@ -10,7 +10,7 @@ import {
   LoadingOverlay,
 } from '@mantine/core';
 import {
-  IconSearch,
+  // IconSearch,
   IconCalendar,
   IconSend,
   IconTrash,
@@ -85,7 +85,7 @@ const JobSurveyPage = () => {
     setDataOptionCities(() => data ?? []);
   }, [cityData]);
 
-  const [inputSearchGenerate, setInputSearchGenerate] = useState('');
+  // const [inputSearchGenerate, setInputSearchGenerate] = useState('');
   const {
     register,
     trigger,
@@ -252,22 +252,22 @@ const JobSurveyPage = () => {
             Phần I: Thông tin cá nhân
           </Text>
         </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={500} size="sm">
-            (Mẹo) Tự động điền thông tin cá nhân
-          </Text>
-          <div className="input-search">
-            <TextInput
-              value={inputSearchGenerate}
-              onChange={(e) => setInputSearchGenerate(e.target.value)}
-              variant="unstyled"
-              placeholder="Nhập mã sinh viên, email hoặc số điện thoại"
-            />
-            <Button leftSection={<IconSearch size={14} />} variant="outline">
-              Tìm kiếm
-            </Button>
-          </div>
-        </Card>
+        {/* <Card shadow="sm" padding="lg" mb="lg"> */}
+        {/*   <Text fw={500} size="sm"> */}
+        {/*     (Mẹo) Tự động điền thông tin cá nhân */}
+        {/*   </Text> */}
+        {/*   <div className="input-search"> */}
+        {/*     <TextInput */}
+        {/*       value={inputSearchGenerate} */}
+        {/*       onChange={(e) => setInputSearchGenerate(e.target.value)} */}
+        {/*       variant="unstyled" */}
+        {/*       placeholder="Nhập mã sinh viên, email hoặc số điện thoại" */}
+        {/*     /> */}
+        {/*     <Button leftSection={<IconSearch size={14} />} variant="outline"> */}
+        {/*       Tìm kiếm */}
+        {/*     </Button> */}
+        {/*   </div> */}
+        {/* </Card> */}
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
             1. Mã sinh viên <span className="required text-red">*</span>
