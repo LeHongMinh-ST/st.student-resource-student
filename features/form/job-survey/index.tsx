@@ -1,5 +1,14 @@
 import styled from '@emotion/styled';
-import { Card, Text, TextInput, Button, Select, Radio, Checkbox } from '@mantine/core';
+import {
+  Card,
+  Text,
+  TextInput,
+  Button,
+  Select,
+  Radio,
+  Checkbox,
+  LoadingOverlay,
+} from '@mantine/core';
 import {
   IconSearch,
   IconCalendar,
@@ -8,30 +17,74 @@ import {
   IconCheck,
   IconAlertTriangle,
 } from '@tabler/icons-react';
+import useSWR from 'swr';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DatePickerInput } from '@mantine/dates';
 import 'dayjs/locale/vi';
 import { notifications } from '@mantine/notifications';
 import { GenderSelectList } from '@/constants/commons';
 import { ANSWER_EMPLOYMENT_STATUS, LIST_OPTION_QUESTION_FORM } from '@/constants/form';
-import { FormJobSurvey, IOptionCheckbox, SurveyPeriod } from '@/types';
+import { FormJobSurvey, IOptionCheckbox, SelectList } from '@/types';
 import { ERROR_MESSAGES } from '@/constants/errorMessages';
 import { formatDateString } from '@/utils/func/formatDateString';
 import HttpStatus from '@/enums/http-status.enum';
 import { useEmploymentSurveyResponse } from '@/services/employmentSurveyResponseService';
+import { useSurveyPeriodService } from '@/services/surveyPeriodService';
+import { useTrainingIndustryService } from '@/services/trainingIndustryService';
+import { useCityService } from '@/services/cityService';
 
-interface JobSurveyPageProps {
-  surveyPeriod: SurveyPeriod; // Dữ liệu công việc, có thể không có
-  dataOptionTrainingIndustries: [];
-  dataOptionCities: [];
-}
+const JobSurveyPage = () => {
+  const surveyPeriodService = useSurveyPeriodService();
+  const trainingIndustryService = useTrainingIndustryService();
+  const cityService = useCityService();
+  const router = useRouter();
+  const { id } = router.query;
+  const [dataOptionTrainingIndustries, setDataOptionTrainingIndustries] = useState<
+    SelectList<string>[]
+  >([]);
+  const [dataOptionCities, setDataOptionCities] = useState<SelectList<string>[]>([]);
+  const handleGetSurveyPeriodService = () =>
+    surveyPeriodService.getSurveyPeriod(String(id)).then((res) => res.data.data);
 
-const JobSurveyPage = ({
-  surveyPeriod,
-  dataOptionTrainingIndustries,
-  dataOptionCities,
-}: JobSurveyPageProps) => {
+  const { data: surveyPeriod, isLoading } = useSWR([id], handleGetSurveyPeriodService);
+
+  const handleTrainingIndustryRes = () => {
+    if (surveyPeriod?.faculty_id) {
+      return trainingIndustryService
+        .getList({
+          faculty_id: surveyPeriod?.faculty_id,
+        })
+        .then((res) => res.data.data);
+    }
+    return null;
+  };
+
+  const { data: trainingIndustryRes, isLoading: isLoadingTrainingIndustryRes } = useSWR(
+    [surveyPeriod?.faculty_id],
+    handleTrainingIndustryRes
+  );
+
+  useEffect(() => {
+    const data = trainingIndustryRes?.map((item) => ({
+      label: item.name,
+      value: String(item.id),
+    }));
+    setDataOptionTrainingIndustries(() => data ?? []);
+  }, [trainingIndustryRes]);
+
+  const handleGetCityRes = () => cityService.getList().then((res) => res.data.data);
+  const { data: cityData, isLoading: isLoadingCity } = useSWR('cityData', handleGetCityRes);
+
+  useEffect(() => {
+    const data = cityData?.map((item) => ({
+      label: item.name,
+      value: String(item.id),
+    }));
+    setDataOptionCities(() => data ?? []);
+  }, [cityData]);
+
   const [inputSearchGenerate, setInputSearchGenerate] = useState('');
   const {
     register,
@@ -175,18 +228,23 @@ const JobSurveyPage = ({
 
   return (
     <JobSurveyPageStyled>
+      <LoadingOverlay
+        visible={isLoading || isLoadingCity || isLoadingTrainingIndustryRes}
+        zIndex={1000}
+        overlayProps={{ blur: 2 }}
+      />
       <div className="form-wrap">
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="xl" ta="center">
-            {surveyPeriod.title}
+            {surveyPeriod?.title}
           </Text>
           <Text size="sm" my={10}>
-            {surveyPeriod.description}
+            {surveyPeriod?.description}
           </Text>
           <Text mt="xs" size="sm">
             Thời gian khảo sát từ ngày{' '}
-            <b>{formatDateString(surveyPeriod.start_date, 'dd/mm/yyyy')}</b> đến ngày{' '}
-            <b>{formatDateString(surveyPeriod.end_date, 'dd/mm/yyyy')}</b>
+            <b>{formatDateString(surveyPeriod?.start_date, 'dd/mm/yyyy')}</b> đến ngày{' '}
+            <b>{formatDateString(surveyPeriod?.end_date, 'dd/mm/yyyy')}</b>
           </Text>
         </Card>
         <Card shadow="sm" padding="lg" mb="lg">
