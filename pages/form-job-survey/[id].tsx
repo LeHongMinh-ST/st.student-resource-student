@@ -12,7 +12,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
   if (typeof id === 'string') {
     try {
       const res = await surveyPeriodService.getSurveyPeriod(id);
-      console.log(res);
       if (!res.data) {
         throw new Error('Survey period not found');
       }
@@ -35,7 +34,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
         },
       };
     } catch (error) {
-      console.log(error);
       return {
         notFound: true,
       };
