@@ -158,8 +158,8 @@ const JobSurveyPage = () => {
 
     if (!isSubmitting) {
       try {
-        if (surveyPeriod.id !== undefined) {
-          data.survey_period_id = surveyPeriod.id;
+        if (surveyPeriod?.id !== undefined) {
+          data.survey_period_id = surveyPeriod?.id;
         } else {
           throw new Error('Survey period ID is undefined');
         }
