@@ -735,7 +735,8 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                24. Trong quá trình làm việc, Anh/Chị cần những kỹ năng mềm nào sau đây?
+                24. Trong quá trình làm việc, Anh/Chị cần những kỹ năng mềm nào sau đây? (Có thể có
+                nhiều lựa chọn)
               </Text>
               <Checkbox.Group onChange={(value) => setCheckboxValue('soft_skills_required', value)}>
                 {LIST_OPTION_QUESTION_FORM[10].map((item, index) => (
