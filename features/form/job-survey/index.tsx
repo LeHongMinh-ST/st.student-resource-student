@@ -24,6 +24,7 @@ import { useEffect, useState } from 'react';
 import { DatePickerInput } from '@mantine/dates';
 import 'dayjs/locale/vi';
 import { notifications } from '@mantine/notifications';
+import dayjs from 'dayjs';
 import { GenderSelectList } from '@/constants/commons';
 import { ANSWER_EMPLOYMENT_STATUS, LIST_OPTION_QUESTION_FORM } from '@/constants/form';
 import { FormJobSurvey, IOptionCheckbox, SelectList } from '@/types';
@@ -34,22 +35,43 @@ import { useEmploymentSurveyResponse } from '@/services/employmentSurveyResponse
 import { useSurveyPeriodService } from '@/services/surveyPeriodService';
 import { useTrainingIndustryService } from '@/services/trainingIndustryService';
 import { useCityService } from '@/services/cityService';
+import { useStudentService } from '@/services/studentService';
 import Completed from '@/features/form/job-survey/compoents/Completed';
 
 const JobSurveyPage = () => {
   const surveyPeriodService = useSurveyPeriodService();
   const trainingIndustryService = useTrainingIndustryService();
+  const studentService = useStudentService();
   const cityService = useCityService();
   const router = useRouter();
-  const { id } = router.query;
+  const { id, code } = router.query;
+
   const [dataOptionTrainingIndustries, setDataOptionTrainingIndustries] = useState<
     SelectList<string>[]
   >([]);
-  const [dataOptionCities, setDataOptionCities] = useState<SelectList<string>[]>([]);
-  const handleGetSurveyPeriodService = () =>
-    surveyPeriodService.getSurveyPeriod(String(id)).then((res) => res.data.data);
 
-  const { data: surveyPeriod, isLoading } = useSWR([id], handleGetSurveyPeriodService);
+  const [dataOptionCities, setDataOptionCities] = useState<SelectList<string>[]>([]);
+
+  const {
+    register,
+    trigger,
+    handleSubmit,
+    getValues,
+    setValue,
+    watch,
+    reset,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<FormJobSurvey>({
+    defaultValues: {},
+  });
+
+  const handleGetStudent = () =>
+    studentService
+      .getStudent({
+        code_verify: String(code),
+      })
+      .then((res) => res.data.data);
 
   const handleTrainingIndustryRes = () => {
     if (surveyPeriod?.faculty_id) {
@@ -57,18 +79,23 @@ const JobSurveyPage = () => {
         .getList({
           faculty_id: surveyPeriod?.faculty_id,
         })
-        .then((res) => res.data.data);
+        .then((res) => res?.data?.data);
     }
     return null;
   };
 
+  const handleGetSurveyPeriodService = () =>
+    surveyPeriodService.getSurveyPeriod(String(id)).then((res) => res.data.data);
+
+  const { data: surveyPeriod, isLoading } = useSWR([id], handleGetSurveyPeriodService);
+
   const { data: trainingIndustryRes, isLoading: isLoadingTrainingIndustryRes } = useSWR(
-    [surveyPeriod?.faculty_id],
+    surveyPeriod?.faculty_id ? String(surveyPeriod.faculty_id) : null,
     handleTrainingIndustryRes
   );
 
   useEffect(() => {
-    const data = trainingIndustryRes?.map((item) => ({
+    const data = (trainingIndustryRes ?? [])?.map((item) => ({
       label: item.name,
       value: String(item.id),
     }));
@@ -86,20 +113,27 @@ const JobSurveyPage = () => {
     setDataOptionCities(() => data ?? []);
   }, [cityData]);
 
+  const { data: studentData, isLoading: isLoadingStudentData } = useSWR([code], handleGetStudent);
+
+  useEffect(() => {
+    if (studentData) {
+      reset({
+        code_student: studentData?.code ?? '',
+        full_name: studentData?.last_name?.concat(' ', studentData?.first_name) ?? '',
+        dob: dayjs(studentData?.info?.dob).format('MM/DD/YYYY') ?? '',
+        phone_number: studentData?.info?.phone ?? '',
+        email: studentData?.graduate?.email ?? '',
+        course: `K${studentData?.code?.slice(0, 2) ?? ''}`,
+        gender: studentData?.info?.gender ?? '',
+        identification_card_number: studentData?.info?.citizen_identification ?? '',
+        training_industry_id: studentData?.training_industry_id
+          ? String(studentData.training_industry_id)
+          : '',
+      });
+    }
+  }, [studentData, code]);
+
   // const [inputSearchGenerate, setInputSearchGenerate] = useState('');
-  const {
-    register,
-    trigger,
-    handleSubmit,
-    getValues,
-    setValue,
-    watch,
-    reset,
-    setError,
-    formState: { errors, isSubmitting },
-  } = useForm<FormJobSurvey>({
-    defaultValues: {},
-  });
 
   const resetForm = () => {
     console.log(getValues('employment_status'));
@@ -230,7 +264,7 @@ const JobSurveyPage = () => {
   return (
     <JobSurveyPageStyled>
       <LoadingOverlay
-        visible={isLoading || isLoadingCity || isLoadingTrainingIndustryRes || isSubmitting}
+        visible={isLoading || isLoadingCity || isLoadingTrainingIndustryRes || isLoadingStudentData || isSubmitting}
         zIndex={1000}
         overlayProps={{ blur: 2 }}
       />

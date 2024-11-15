@@ -99,6 +99,17 @@ type GeneralClass = {
   updated_at?: string;
 };
 
+type StudentGraduation = {
+  id?: number;
+  student_id: number;
+  graduation_id: number;
+  gpa: number;
+  rank: string;
+  email: string;
+  created_at?: string;
+  updated_at?: string;
+};
+
 type Student = {
   id?: number;
   last_name: string;
@@ -106,6 +117,7 @@ type Student = {
   email: string;
   code: string;
   admission_year?: AdmissionYear;
+  graduate?: StudentGraduation;
   faculty?: Faculty;
   role: StudentRole;
   status: StudentStatus;
@@ -113,6 +125,7 @@ type Student = {
   family: Family[];
   info?: StudentInfo;
   currentClass: GeneralClass;
+  training_industry_id?: number;
   school_year: string;
   created_at?: string;
   updated_at?: string;
