@@ -14,7 +14,7 @@ import {
   IconCalendar,
   IconSend,
   IconTrash,
-  IconCheck,
+  // IconCheck,
   IconAlertTriangle,
 } from '@tabler/icons-react';
 import useSWR from 'swr';
@@ -34,6 +34,7 @@ import { useEmploymentSurveyResponse } from '@/services/employmentSurveyResponse
 import { useSurveyPeriodService } from '@/services/surveyPeriodService';
 import { useTrainingIndustryService } from '@/services/trainingIndustryService';
 import { useCityService } from '@/services/cityService';
+import Completed from '@/features/form/job-survey/compoents/Completed';
 
 const JobSurveyPage = () => {
   const surveyPeriodService = useSurveyPeriodService();
@@ -176,13 +177,7 @@ const JobSurveyPage = () => {
         }
         const res = await createResponse(data);
         if (res) {
-          notifications.show({
-            title: 'Thành công!',
-            message: 'Gửi thành công',
-            icon: <IconCheck />,
-            color: 'green.8',
-            autoClose: 5000,
-          });
+          setIsSuccess(true);
         }
         // Call api here
       } catch (e: any) {
@@ -225,6 +220,12 @@ const JobSurveyPage = () => {
       }
     }
   };
+
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  if (!isSuccess) {
+    return <Completed />;
+  }
 
   return (
     <JobSurveyPageStyled>
