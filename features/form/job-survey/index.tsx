@@ -358,10 +358,6 @@ const JobSurveyPage = () => {
 
   const [isSuccess, setIsSuccess] = useState(false);
 
-  if (isSuccess) {
-    return <Completed />;
-  }
-
   const [isOpen, { open: onOpen, close: onClose }] = useDisclosure(false);
 
   // eslint-disable-next-line consistent-return
@@ -394,7 +390,9 @@ const JobSurveyPage = () => {
     }
     onClose();
   }, [surveyPeriodService]);
-
+  if (isSuccess) {
+    return <Completed />;
+  }
   return (
     <JobSurveyPageStyled>
       <ConfirmModal
