@@ -223,7 +223,7 @@ const JobSurveyPage = () => {
 
   const [isSuccess, setIsSuccess] = useState(false);
 
-  if (!isSuccess) {
+  if (isSuccess) {
     return <Completed />;
   }
 
