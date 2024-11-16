@@ -98,9 +98,8 @@ export const LIST_OPTION_QUESTION_FORM: SelectList<number | string | Gender>[][]
     { label: 'Nâng cao kỹ năng chuyên môn nghiệp vụ', value: 2 },
     { label: 'Nâng cao kỹ năng về công nghệ thông tin', value: 3 },
     { label: 'Nâng cao kỹ năng ngoại ngữ', value: 4 },
-    { label: 'Nâng cao kỹ năng mềm', value: 5 },
-    { label: 'Phát triển kỹ năng quản lý', value: 6 },
-    { label: 'Tiếp tục học lên cao', value: 7 },
+    { label: 'Phát triển kỹ năng quản lý', value: 5 },
+    { label: 'Tiếp tục học lên cao', value: 6 },
   ],
   [
     {

@@ -8,7 +8,14 @@ export const useEmploymentSurveyResponse = () => {
   ): Promise<AxiosResponse<ResultResonse<FormJobSurvey>, any>> =>
     axiosInstance.post('/external/employment-survey-response', formJobSurvey);
 
+  const getResponse = (params: {
+    student_code?: string;
+    survey_period_id: number;
+  }): Promise<AxiosResponse<ResultResonse<FormJobSurvey>, any>> =>
+    axiosInstance.get('/external/employment-survey-response-search', { params });
+
   return {
     createResponse,
+    getResponse,
   };
 };
