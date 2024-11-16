@@ -20,11 +20,12 @@ import {
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { DatePickerInput } from '@mantine/dates';
 import 'dayjs/locale/vi';
 import { notifications } from '@mantine/notifications';
 import dayjs from 'dayjs';
+import { useDisclosure } from '@mantine/hooks';
 import { GenderSelectList } from '@/constants/commons';
 import { ANSWER_EMPLOYMENT_STATUS, LIST_OPTION_QUESTION_FORM } from '@/constants/form';
 import { FormJobSurvey, IOptionCheckbox, SelectList } from '@/types';
@@ -37,6 +38,7 @@ import { useTrainingIndustryService } from '@/services/trainingIndustryService';
 import { useCityService } from '@/services/cityService';
 import { useStudentService } from '@/services/studentService';
 import Completed from '@/features/form/job-survey/compoents/Completed';
+import ConfirmModal from '@/components/Modals/ConfirmModel/ConfirmModal';
 
 const JobSurveyPage = () => {
   const surveyPeriodService = useSurveyPeriodService();
@@ -45,12 +47,6 @@ const JobSurveyPage = () => {
   const cityService = useCityService();
   const router = useRouter();
   const { id, code } = router.query;
-
-  const [dataOptionTrainingIndustries, setDataOptionTrainingIndustries] = useState<
-    SelectList<string>[]
-  >([]);
-
-  const [dataOptionCities, setDataOptionCities] = useState<SelectList<string>[]>([]);
 
   const {
     register,
@@ -66,10 +62,51 @@ const JobSurveyPage = () => {
     defaultValues: {},
   });
 
+  const [studentCode, setStudentCode] = useState('');
+
+  const { createResponse, getResponse } = useEmploymentSurveyResponse();
+  const handleGetResponse = ({
+    studentCode,
+    surveyPeriodId,
+  }: {
+    studentCode: string;
+    surveyPeriodId: number;
+  }) =>
+    getResponse({
+      student_code: studentCode,
+      survey_period_id: surveyPeriodId,
+    }).then((res) => {
+      const result = res.data.data;
+      if (result?.code_student) {
+        onOpen();
+      }
+      return result;
+    });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [studentSearchKey, setStudentSearchKey] = useState('');
+
+  const isStudentCodeLongEnough = studentSearchKey.length >= 6;
+  const isCodeLongEnough = studentCode.length >= 6;
+
+  const { data: dataSurveyResponse, isLoading: isLoadingSurveyResponse } = useSWR(
+    !code && isCodeLongEnough ? [studentCode] : null,
+    () => handleGetResponse({ studentCode, surveyPeriodId: Number(id) }),
+    {
+      revalidateOnFocus: false,
+    }
+  );
+
+  const [dataOptionTrainingIndustries, setDataOptionTrainingIndustries] = useState<
+    SelectList<string>[]
+  >([]);
+
+  const [dataOptionCities, setDataOptionCities] = useState<SelectList<string>[]>([]);
+
   const handleGetStudent = () =>
     studentService
       .getStudent({
-        code_verify: String(code),
+        ...(code && { code_verify: String(code) }),
+        code: studentSearchKey,
       })
       .then((res) => res.data.data);
 
@@ -113,7 +150,13 @@ const JobSurveyPage = () => {
     setDataOptionCities(() => data ?? []);
   }, [cityData]);
 
-  const { data: studentData, isLoading: isLoadingStudentData } = useSWR([code], handleGetStudent);
+  const { data: studentData, isLoading: isLoadingStudentData } = useSWR(
+    code || isStudentCodeLongEnough ? [code, studentSearchKey] : null,
+    handleGetStudent,
+    {
+      revalidateOnFocus: false,
+    }
+  );
 
   useEffect(() => {
     if (studentData) {
@@ -131,14 +174,69 @@ const JobSurveyPage = () => {
           : '',
       });
     }
-  }, [studentData, code]);
+  }, []);
 
+  // useEffect(() => {
+  //   console.log('dataSurveyResponse', dataSurveyResponse);
+  //   console.log('isOpen', isOpen);
+  //   console.log('studentCode', studentCode);
+
+  //   if (dataSurveyResponse) {
+  //     const {
+  //       code_student,
+  //       full_name,
+  //     } = dataSurveyResponse;
+
+  //     reset({
+  //       ...dataSurveyResponse,
+  //       solutions_get_job: {
+  //         value: ["1", "2"]
+  //       }
+  //       // dob: dayjs(info?.dob).format('MM/DD/YYYY') ?? '',
+  //       // phone_number: info?.phone ?? '',
+  //       // email: graduate?.email ?? '',
+  //       // course: `K${code?.slice(0, 2) ?? ''}`,
+  //       // gender: info?.gender ?? '',
+  //       // identification_card_number: info?.citizen_identification ?? '',
+  //       // training_industry_id: training_industry_id
+  //       //   ? String(training_industry_id)
+  //       //   : ''
+  //     });
+  //   }
+  // }, [studentCode]);
   // const [inputSearchGenerate, setInputSearchGenerate] = useState('');
 
   const resetForm = () => {
-    console.log(getValues('employment_status'));
-    // setValue('employment_status', '')
-    reset({} as FormJobSurvey);
+    reset({
+      code_student: null,
+      full_name: null,
+      dob: null,
+      phone_number: null,
+      email: null,
+      course: null,
+      identification_card_number: null,
+      identification_card_number_update: null,
+      identification_issuance_place: null,
+      identification_issuance_date: null,
+      training_industry_id: null,
+      employment_status: null,
+      recruit_partner_name: null,
+      recruit_partner_address: null,
+      recruit_partner_date: null,
+      recruit_partner_position: null,
+      work_area: null,
+      employed_since: null,
+      trained_field: null,
+      professional_qualification_field: null,
+      level_knowledge_acquired: null,
+      starting_salary: null,
+      average_income: null,
+      job_search_method: { value: [] },
+      recruitment_type: { value: [] },
+      soft_skills_required: { value: [] },
+      must_attended_courses: { value: [] },
+      solutions_get_job: { value: [] },
+    } as unknown as FormJobSurvey);
   };
 
   const checkValueInArrayCheckbox = (
@@ -183,8 +281,6 @@ const JobSurveyPage = () => {
     trigger(fieldName);
   };
 
-  const { createResponse } = useEmploymentSurveyResponse();
-
   const onSubmitForm = async (data: FormJobSurvey) => {
     if (!data.employment_status) {
       setError('employment_status', { message: 'Vui lòng chọn tình trạng việc làm' });
@@ -210,9 +306,14 @@ const JobSurveyPage = () => {
           data.recruit_partner_date = formatDateString(data.recruit_partner_date, 'yyyy-mm-dd');
         }
         const res = await createResponse(data);
+        console.log('res', res);
+
         if (res) {
           setIsSuccess(true);
+          // router.replace(`/form-job-survey/thanks`);
         }
+        console.log(isSuccess);
+
         // Call api here
       } catch (e: any) {
         if (Object.keys(e?.response?.data?.errors).length > 0) {
@@ -261,10 +362,59 @@ const JobSurveyPage = () => {
     return <Completed />;
   }
 
+  const [isOpen, { open: onOpen, close: onClose }] = useDisclosure(false);
+
+  // eslint-disable-next-line consistent-return
+  const handleGetResponseNew = useCallback(async () => {
+    if (dataSurveyResponse) {
+      const {
+        code_student,
+        full_name,
+        email,
+        phone_number,
+        dob,
+        course,
+        identification_card_number,
+        identification_issuance_date,
+        identification_issuance_place,
+        employment_status,
+      } = dataSurveyResponse;
+      reset({
+        code_student,
+        full_name,
+        email,
+        phone_number,
+        dob,
+        course,
+        identification_card_number,
+        identification_issuance_date,
+        identification_issuance_place,
+        employment_status,
+      });
+    }
+    onClose();
+  }, [surveyPeriodService]);
+
   return (
     <JobSurveyPageStyled>
+      <ConfirmModal
+        entityName="Thông báo"
+        onConfirm={handleGetResponseNew}
+        isOpen={isOpen}
+        onClose={() => {
+          setIsSuccess(true);
+          onClose();
+        }}
+      />
       <LoadingOverlay
-        visible={isLoading || isLoadingCity || isLoadingTrainingIndustryRes || isLoadingStudentData || isSubmitting}
+        visible={
+          isLoading ||
+          isLoadingCity ||
+          isLoadingTrainingIndustryRes ||
+          isLoadingStudentData ||
+          isSubmitting ||
+          isLoadingSurveyResponse
+        }
         zIndex={1000}
         overlayProps={{ blur: 2 }}
       />
@@ -287,31 +437,37 @@ const JobSurveyPage = () => {
             Phần I: Thông tin cá nhân
           </Text>
         </Card>
-        {/* <Card shadow="sm" padding="lg" mb="lg"> */}
-        {/*   <Text fw={500} size="sm"> */}
-        {/*     (Mẹo) Tự động điền thông tin cá nhân */}
-        {/*   </Text> */}
-        {/*   <div className="input-search"> */}
-        {/*     <TextInput */}
-        {/*       value={inputSearchGenerate} */}
-        {/*       onChange={(e) => setInputSearchGenerate(e.target.value)} */}
-        {/*       variant="unstyled" */}
-        {/*       placeholder="Nhập mã sinh viên, email hoặc số điện thoại" */}
-        {/*     /> */}
-        {/*     <Button leftSection={<IconSearch size={14} />} variant="outline"> */}
-        {/*       Tìm kiếm */}
-        {/*     </Button> */}
-        {/*   </div> */}
-        {/* </Card> */}
+        {/* <Card shadow="sm" padding="lg" mb="lg">
+          <Text fw={500} size="sm">
+            (Mẹo) Tự động điền thông tin cá nhân
+          </Text>
+          <div className="input-search">
+            <TextInput
+              value={studentSearchKey}
+              onChange={(e) => {
+                setStudentSearchKey(e.target.value);
+              }}
+              variant="unstyled"
+              placeholder="Nhập mã sinh viên, email hoặc số điện thoại"
+            />
+            <Button leftSection={<IconSearch size={14} />} variant="outline">
+              Tìm kiếm
+            </Button>
+          </div>
+        </Card> */}
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
             1. Mã sinh viên <span className="required text-red">*</span>
           </Text>
           <TextInput
             variant="unstyled"
+            defaultValue={studentData?.code ?? ''}
             placeholder="vd: 637711"
             {...register('code_student', {
               required: ERROR_MESSAGES.form_job.code_student.required,
+              onChange(event) {
+                setStudentCode(event.target.value);
+              },
             })}
             error={errors?.code_student?.message}
           />
@@ -323,6 +479,7 @@ const JobSurveyPage = () => {
           </Text>
           <TextInput
             variant="unstyled"
+            defaultValue={studentData?.last_name?.concat(' ', studentData?.first_name) ?? ''}
             placeholder="vd: Đào Đức Anh"
             {...register('full_name', {
               required: ERROR_MESSAGES.form_job.full_name.required,
@@ -364,6 +521,7 @@ const JobSurveyPage = () => {
             placeholder="Chọn ngày sinh"
             locale="vi"
             valueFormat="DD/MM/YYYY"
+            defaultValue={studentData?.info?.dob ? new Date(studentData?.info?.dob) : null}
             value={getValues('dob') ? new Date(getValues('dob') ?? '') : null}
             onChange={(value) => {
               if (value) {
@@ -446,6 +604,7 @@ const JobSurveyPage = () => {
           </Text>
           <TextInput
             variant="unstyled"
+            defaultValue={`K${studentData?.code?.slice(0, 2) ?? ''}`}
             placeholder="vd: K63"
             {...register('course', {
               required: ERROR_MESSAGES.form_job.course.required,
@@ -461,6 +620,13 @@ const JobSurveyPage = () => {
             {...register('training_industry_id', {
               required: ERROR_MESSAGES.form_job.training_industry_id.required,
             })}
+            defaultValue={
+              dataSurveyResponse?.training_industry_id
+                ? String(dataSurveyResponse.training_industry_id)
+                : studentData?.training_industry_id
+                  ? String(studentData.training_industry_id)
+                  : ''
+            }
             placeholder="Chọn ngành đào tạo"
             value={(getValues('training_industry_id') as string) ?? ''}
             onChange={(value) => {
@@ -479,6 +645,7 @@ const JobSurveyPage = () => {
             8. Điện thoại <span className="required text-red">*</span>
           </Text>
           <TextInput
+            defaultValue={studentData?.info?.phone ?? ''}
             variant="unstyled"
             placeholder="vd: 0333555****"
             {...register('phone_number', {
@@ -493,6 +660,7 @@ const JobSurveyPage = () => {
           </Text>
           <TextInput
             variant="unstyled"
+            defaultValue={studentData?.graduate?.email ?? ''}
             placeholder="vd: abc@gmail.com"
             {...register('email', {
               required: ERROR_MESSAGES.form_job.email.required,
