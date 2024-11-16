@@ -81,7 +81,7 @@ export const LIST_OPTION_QUESTION_FORM: SelectList<number | string | Gender>[][]
     { label: 'Xét tuyển', value: 2 },
     { label: 'Hợp đồng', value: 3 },
     { label: 'Biệt phái', value: 4 },
-    { label: 'Điều động', value: 4 },
+    { label: 'Điều động', value: 5 },
   ],
   [
     { label: 'Kỹ năng giao tiếp', value: 1 },

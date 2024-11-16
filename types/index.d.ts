@@ -180,14 +180,14 @@ export type FormJobSurvey = {
   recruit_partner_address?: string;
   recruit_partner_date?: string;
   recruit_partner_position?: string;
-  work_area?: number;
-  city_work_id?: number;
-  employed_since?: number;
-  trained_field?: number;
-  professional_qualification_field?: number;
-  level_knowledge_acquired?: number;
+  work_area?: number | string;
+  city_work_id?: number | string;
+  employed_since?: number | string;
+  trained_field?: number | string;
+  professional_qualification_field?: number | string;
+  level_knowledge_acquired?: number | string;
   starting_salary?: string;
-  average_income?: number;
+  average_income?: number | string;
   job_search_method?: IOptionCheckbox;
   recruitment_type?: IOptionCheckbox;
   soft_skills_required?: IOptionCheckbox;
@@ -197,7 +197,7 @@ export type FormJobSurvey = {
 
 export type IOptionCheckbox = {
   value: string[];
-  other_content?: string;
+  content_other?: string;
 };
 
 type SurveyPeriod = {
