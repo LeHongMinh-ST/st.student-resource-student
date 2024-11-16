@@ -3,7 +3,9 @@ import { Text } from '@mantine/core';
 
 const Completed = () => (
   <CompletedStyled>
-    <div className="image-wrapper">{/* <img src="/images/completed.svg" alt="" /> */}</div>
+    <div className="image-wrapper">
+      <img src="/images/completed.svg" alt="" />
+    </div>
     <Text size="xl">Gửi khảo sát thành công! </Text>
   </CompletedStyled>
 );
