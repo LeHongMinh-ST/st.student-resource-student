@@ -68,13 +68,16 @@ const JobSurveyPage = () => {
   const handleGetResponse = ({
     studentCode,
     surveyPeriodId,
+    code_verify,
   }: {
-    studentCode: string;
+    studentCode?: string;
     surveyPeriodId: number;
+    code_verify?: string;
   }) =>
     getResponse({
-      student_code: studentCode,
+      student_code: studentCode ?? getValues('code_student'),
       survey_period_id: surveyPeriodId,
+      code_verify,
     }).then((res) => {
       const result = res.data.data;
       if (result?.code_student) {
@@ -83,14 +86,14 @@ const JobSurveyPage = () => {
       return result;
     });
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [studentSearchKey, setStudentSearchKey] = useState('');
+  const [studentSearchKey] = useState('');
 
   const isStudentCodeLongEnough = studentSearchKey.length >= 6;
   const isCodeLongEnough = studentCode.length >= 6;
 
   const { data: dataSurveyResponse, isLoading: isLoadingSurveyResponse } = useSWR(
-    !code && isCodeLongEnough ? [studentCode] : null,
-    () => handleGetResponse({ studentCode, surveyPeriodId: Number(id) }),
+    code || isCodeLongEnough ? [studentCode, code, id] : null,
+    () => handleGetResponse({ studentCode, surveyPeriodId: Number(id), code_verify: String(code) }),
     {
       revalidateOnFocus: false,
     }
@@ -167,14 +170,18 @@ const JobSurveyPage = () => {
         phone_number: studentData?.info?.phone ?? '',
         email: studentData?.graduate?.email ?? '',
         course: `K${studentData?.code?.slice(0, 2) ?? ''}`,
-        gender: studentData?.info?.gender ?? '',
         identification_card_number: studentData?.info?.citizen_identification ?? '',
-        training_industry_id: studentData?.training_industry_id
-          ? String(studentData.training_industry_id)
-          : '',
       });
+      console.log('training_industry_id', studentData?.training_industry_id);
+
+      if (studentData?.training_industry_id) {
+        setValue('training_industry_id', String(studentData?.training_industry_id));
+      }
+      if (studentData?.info?.gender) {
+        setValue('gender', studentData?.info?.gender);
+      }
     }
-  }, []);
+  }, [studentData]);
 
   // useEffect(() => {
   //   console.log('dataSurveyResponse', dataSurveyResponse);
@@ -266,13 +273,16 @@ const JobSurveyPage = () => {
 
   const setCheckboxValue = (fieldName: keyof FormJobSurvey, valueCheckbox: string[]): void => {
     const valueForm = getValues(fieldName) as IOptionCheckbox;
-    setValue(fieldName, { ...valueForm, value: valueCheckbox } as IOptionCheckbox);
+    setValue(fieldName, {
+      ...valueForm,
+      value: valueCheckbox.map((e) => String(e)),
+    } as IOptionCheckbox);
     trigger(fieldName);
   };
 
   const setOtherContent = (fieldName: keyof FormJobSurvey, value: string): void => {
     const valueForm = getValues(fieldName) as IOptionCheckbox;
-    setValue(fieldName, { ...valueForm, other_content: value } as IOptionCheckbox);
+    setValue(fieldName, { ...valueForm, content_other: value } as IOptionCheckbox);
     trigger(fieldName);
   };
 
@@ -373,7 +383,25 @@ const JobSurveyPage = () => {
         identification_card_number,
         identification_issuance_date,
         identification_issuance_place,
-        employment_status,
+        gender,
+        solutions_get_job,
+        training_industry_id,
+        recruit_partner_name,
+        recruit_partner_address,
+        recruit_partner_date,
+        recruit_partner_position,
+        city_work_id,
+        work_area,
+        employed_since,
+        trained_field,
+        professional_qualification_field,
+        level_knowledge_acquired,
+        starting_salary,
+        average_income,
+        job_search_method,
+        recruitment_type,
+        soft_skills_required,
+        must_attended_courses,
       } = dataSurveyResponse;
       reset({
         code_student,
@@ -385,11 +413,75 @@ const JobSurveyPage = () => {
         identification_card_number,
         identification_issuance_date,
         identification_issuance_place,
-        employment_status,
+        recruit_partner_name,
+        recruit_partner_address,
+        recruit_partner_date,
+        recruit_partner_position,
+        starting_salary,
+      });
+      setValue('gender', gender);
+      setValue('employment_status', String(dataSurveyResponse.employment_status));
+      if (city_work_id) {
+        console.log('city_work_id', city_work_id);
+
+        setValue('city_work_id', String(city_work_id));
+      }
+      if (training_industry_id) {
+        setValue('training_industry_id', String(training_industry_id));
+      }
+      if (work_area) {
+        setValue('work_area', String(work_area));
+      }
+      if (employed_since) {
+        setValue('employed_since', String(employed_since));
+      }
+      if (trained_field) {
+        setValue('trained_field', String(trained_field));
+      }
+      if (professional_qualification_field) {
+        setValue('professional_qualification_field', String(professional_qualification_field));
+      }
+      if (level_knowledge_acquired) {
+        setValue('level_knowledge_acquired', String(level_knowledge_acquired));
+      }
+      if (average_income) {
+        setValue('average_income', String(average_income));
+      }
+
+      setValue('solutions_get_job', {
+        value: solutions_get_job.value as string[],
+        content_other: solutions_get_job.content_other,
+      });
+      if (job_search_method?.value) {
+        console.log('job_search_method', job_search_method);
+
+        setValue('job_search_method', {
+          value: job_search_method.value as string[],
+          content_other: job_search_method.content_other,
+        });
+      }
+      setValue('recruitment_type', {
+        value: recruitment_type?.value as string[],
+        content_other: recruitment_type?.content_other,
+      });
+      setValue('soft_skills_required', {
+        value: soft_skills_required?.value as string[],
+        content_other: soft_skills_required?.content_other,
+      });
+      setValue('must_attended_courses', {
+        value: must_attended_courses?.value as string[],
+        content_other: must_attended_courses?.content_other,
+      });
+      setValue('solutions_get_job', {
+        value: solutions_get_job.value as string[],
+        content_other: solutions_get_job.content_other,
       });
     }
     onClose();
   }, [surveyPeriodService]);
+
+  console.log(12312);
+
   if (isSuccess) {
     return <Completed />;
   }
@@ -894,7 +986,10 @@ const JobSurveyPage = () => {
                 22. Anh/Chị tìm được việc làm thông qua những hình thức nào? (Có thể có nhiều lựa
                 chọn)
               </Text>
-              <Checkbox.Group onChange={(value) => setCheckboxValue('job_search_method', value)}>
+              <Checkbox.Group
+                value={getValues('job_search_method')?.value}
+                onChange={(value) => setCheckboxValue('job_search_method', value)}
+              >
                 {LIST_OPTION_QUESTION_FORM[8].map((item, index) => (
                   <Checkbox
                     mt="lg"
@@ -909,7 +1004,7 @@ const JobSurveyPage = () => {
                   <TextInput
                     mt="sm"
                     variant="unstyled"
-                    value={getValues('job_search_method')?.other_content}
+                    value={getValues('job_search_method')?.content_other}
                     onChange={(e) => setOtherContent('job_search_method', e.target.value)}
                     placeholder="Nhập lựa chọn khác"
                   />
@@ -920,26 +1015,40 @@ const JobSurveyPage = () => {
               <Text fw={600} size="sm">
                 23. Anh/chị được tuyển dụng theo hình thức nào?
               </Text>
-              <Radio.Group
-                value={getValues('recruitment_type') as unknown as string}
-                onChange={(value) => setRadioValue('recruitment_type', value)}
+              <Checkbox.Group
+                value={getValues('recruitment_type')?.value}
+                onChange={(value) => setCheckboxValue('recruitment_type', value)}
               >
-                {LIST_OPTION_QUESTION_FORM[9].map((item) => (
-                  <Radio
-                    key={item.value}
+                {LIST_OPTION_QUESTION_FORM[9].map((item, index) => (
+                  <Checkbox
                     mt="lg"
+                    key={index}
+                    checked={checkValueInArrayCheckbox('recruitment_type', item.value)}
                     value={String(item.value)}
                     label={item.label}
-                  ></Radio>
+                  ></Checkbox>
                 ))}
-              </Radio.Group>
+                <Checkbox mt="lg" value="0" label="Khác"></Checkbox>
+                {watch('recruitment_type')?.value?.includes('0') && (
+                  <TextInput
+                    mt="sm"
+                    variant="unstyled"
+                    value={getValues('recruitment_type')?.content_other}
+                    onChange={(e) => setOtherContent('recruitment_type', e.target.value)}
+                    placeholder="Nhập lựa chọn khác"
+                  />
+                )}
+              </Checkbox.Group>
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
                 24. Trong quá trình làm việc, Anh/Chị cần những kỹ năng mềm nào sau đây? (Có thể có
                 nhiều lựa chọn)
               </Text>
-              <Checkbox.Group onChange={(value) => setCheckboxValue('soft_skills_required', value)}>
+              <Checkbox.Group
+                value={getValues('soft_skills_required')?.value}
+                onChange={(value) => setCheckboxValue('soft_skills_required', value)}
+              >
                 {LIST_OPTION_QUESTION_FORM[10].map((item, index) => (
                   <Checkbox
                     mt="lg"
@@ -954,7 +1063,7 @@ const JobSurveyPage = () => {
                   <TextInput
                     mt="sm"
                     variant="unstyled"
-                    value={getValues('soft_skills_required')?.other_content}
+                    value={getValues('soft_skills_required')?.content_other}
                     onChange={(e) => setOtherContent('soft_skills_required', e.target.value)}
                     placeholder="Nhập lựa chọn khác"
                   />
@@ -969,6 +1078,7 @@ const JobSurveyPage = () => {
               <Checkbox.Group
                 onChange={(value) => setCheckboxValue('must_attended_courses', value)}
                 error={errors?.must_attended_courses?.message}
+                value={getValues('must_attended_courses')?.value}
               >
                 {LIST_OPTION_QUESTION_FORM[11].map((item, index) => (
                   <Checkbox
@@ -984,7 +1094,7 @@ const JobSurveyPage = () => {
                   <TextInput
                     mt="sm"
                     variant="unstyled"
-                    value={getValues('must_attended_courses')?.other_content}
+                    value={getValues('must_attended_courses')?.content_other}
                     onChange={(e) => setOtherContent('must_attended_courses', e.target.value)}
                     placeholder="Nhập lựa chọn khác"
                   />
@@ -1009,6 +1119,7 @@ const JobSurveyPage = () => {
           <Checkbox.Group
             onChange={(value) => setCheckboxValue('solutions_get_job', value)}
             error={errors?.solutions_get_job?.message}
+            value={getValues('solutions_get_job')?.value}
           >
             {LIST_OPTION_QUESTION_FORM[12]?.map((item, index) => (
               <Checkbox
@@ -1024,7 +1135,7 @@ const JobSurveyPage = () => {
               <TextInput
                 mt="sm"
                 variant="unstyled"
-                value={getValues('solutions_get_job')?.other_content}
+                value={getValues('solutions_get_job')?.content_other}
                 onChange={(e) => setOtherContent('solutions_get_job', e.target.value)}
                 placeholder="Nhập lựa chọn khác"
               />

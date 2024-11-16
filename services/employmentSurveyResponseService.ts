@@ -11,6 +11,7 @@ export const useEmploymentSurveyResponse = () => {
   const getResponse = (params: {
     student_code?: string;
     survey_period_id: number;
+    code_verify?: string;
   }): Promise<AxiosResponse<ResultResonse<FormJobSurvey>, any>> =>
     axiosInstance.get('/external/employment-survey-response-search', { params });
 
