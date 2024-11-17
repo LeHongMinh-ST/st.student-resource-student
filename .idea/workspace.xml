@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4c4a58e4-af05-4f90-9112-3e28168cecf5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/features/form/job-survey/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/features/form/job-survey/index.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,11 +138,15 @@
       <workItem from="1731490057409" duration="551000" />
       <workItem from="1731515289360" duration="638000" />
       <workItem from="1731606414168" duration="3076000" />
+      <workItem from="1731855784151" duration="851000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

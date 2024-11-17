@@ -92,7 +92,7 @@ const JobSurveyPage = () => {
   const isCodeLongEnough = studentCode.length >= 6;
 
   const { data: dataSurveyResponse, isLoading: isLoadingSurveyResponse } = useSWR(
-    code || isCodeLongEnough ? [studentCode, code, id] : null,
+    code || isCodeLongEnough ? [studentCode, code, id] : [id],
     () => handleGetResponse({ studentCode, surveyPeriodId: Number(id), code_verify: String(code) }),
     {
       revalidateOnFocus: false,
@@ -316,13 +316,10 @@ const JobSurveyPage = () => {
           data.recruit_partner_date = formatDateString(data.recruit_partner_date, 'yyyy-mm-dd');
         }
         const res = await createResponse(data);
-        console.log('res', res);
 
         if (res) {
           setIsSuccess(true);
-          // router.replace(`/form-job-survey/thanks`);
         }
-        console.log(isSuccess);
 
         // Call api here
       } catch (e: any) {
@@ -422,8 +419,6 @@ const JobSurveyPage = () => {
       setValue('gender', gender);
       setValue('employment_status', String(dataSurveyResponse.employment_status));
       if (city_work_id) {
-        console.log('city_work_id', city_work_id);
-
         setValue('city_work_id', String(city_work_id));
       }
       if (training_industry_id) {
@@ -453,8 +448,6 @@ const JobSurveyPage = () => {
         content_other: solutions_get_job.content_other,
       });
       if (job_search_method?.value) {
-        console.log('job_search_method', job_search_method);
-
         setValue('job_search_method', {
           value: job_search_method.value as string[],
           content_other: job_search_method.content_other,
@@ -479,8 +472,6 @@ const JobSurveyPage = () => {
     }
     onClose();
   }, [surveyPeriodService]);
-
-  console.log(12312);
 
   if (isSuccess) {
     return <Completed />;
