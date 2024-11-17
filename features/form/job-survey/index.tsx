@@ -130,7 +130,7 @@ const JobSurveyPage = () => {
   const { data: surveyPeriod, isLoading } = useSWR([id], handleGetSurveyPeriodService);
 
   const { data: trainingIndustryRes, isLoading: isLoadingTrainingIndustryRes } = useSWR(
-    surveyPeriod?.faculty_id,
+    [surveyPeriod?.faculty_id],
     handleTrainingIndustryRes
   );
 
