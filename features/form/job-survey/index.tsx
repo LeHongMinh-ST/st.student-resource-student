@@ -117,7 +117,7 @@ const JobSurveyPage = () => {
     if (surveyPeriod?.faculty_id) {
       return trainingIndustryService
         .getList({
-          faculty_id: surveyPeriod?.faculty_id,
+          faculty_id: String(surveyPeriod?.faculty_id),
         })
         .then((res) => res?.data?.data);
     }
@@ -130,7 +130,7 @@ const JobSurveyPage = () => {
   const { data: surveyPeriod, isLoading } = useSWR([id], handleGetSurveyPeriodService);
 
   const { data: trainingIndustryRes, isLoading: isLoadingTrainingIndustryRes } = useSWR(
-    surveyPeriod?.faculty_id ? String(surveyPeriod.faculty_id) : null,
+    surveyPeriod?.faculty_id,
     handleTrainingIndustryRes
   );
 
