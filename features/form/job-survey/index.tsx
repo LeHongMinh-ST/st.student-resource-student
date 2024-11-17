@@ -92,7 +92,7 @@ const JobSurveyPage = () => {
   const isCodeLongEnough = studentCode.length >= 6;
 
   const { data: dataSurveyResponse, isLoading: isLoadingSurveyResponse } = useSWR(
-    code || isCodeLongEnough ? [studentCode, code, id] : [id],
+    code || isCodeLongEnough ? [studentCode, code, id] : null,
     () => handleGetResponse({ studentCode, surveyPeriodId: Number(id), code_verify: String(code) }),
     {
       revalidateOnFocus: false,
