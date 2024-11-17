@@ -4,7 +4,7 @@ import { BaseParamsList, ResultResonse, TrainingIndustry } from '@/types';
 
 export type TrainingIndustryListParams = {
   q?: string;
-  faculty_id?: number;
+  faculty_id?: number | string;
 } & BaseParamsList;
 
 export const useTrainingIndustryService = () => {

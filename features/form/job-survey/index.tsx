@@ -117,7 +117,7 @@ const JobSurveyPage = () => {
     if (surveyPeriod?.faculty_id) {
       return trainingIndustryService
         .getList({
-          faculty_id: String(surveyPeriod?.faculty_id),
+          faculty_id: surveyPeriod?.faculty_id,
         })
         .then((res) => res?.data?.data);
     }
