@@ -876,8 +876,8 @@ const JobSurveyPage = () => {
         )}
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
-            <span>{dataSurveyResponse ? 6 : 10}</span>. Anh/chị vui lòng cho biết tình trạng việc
-            làm hiện tại của Anh/Chị <span className="required text-red">*</span>
+            <span>{dataSurveyResponse?.id ? 6 : 10}</span>. Anh/chị vui lòng cho biết tình trạng
+            việc làm hiện tại của Anh/Chị <span className="required text-red">*</span>
           </Text>
           <Radio.Group
             value={getValues('employment_status')}
@@ -897,7 +897,7 @@ const JobSurveyPage = () => {
           <>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                <span>{dataSurveyResponse ? 7 : 11}</span>. Tên đơn vị tuyển dụng{' '}
+                <span>{dataSurveyResponse?.id ? 7 : 11}</span>. Tên đơn vị tuyển dụng{' '}
                 {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
                   watch('employment_status')
                 ) ? (
@@ -914,7 +914,7 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                <span>{dataSurveyResponse ? 8 : 12}</span>. Địa chỉ đơn vị{' '}
+                <span>{dataSurveyResponse?.id ? 8 : 12}</span>. Địa chỉ đơn vị{' '}
                 {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
                   watch('employment_status')
                 ) ? (
@@ -957,7 +957,7 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                <span>{dataSurveyResponse ? 9 : 13}</span>. Thời gian tuyển dụng{' '}
+                <span>{dataSurveyResponse?.id ? 9 : 13}</span>. Thời gian tuyển dụng{' '}
                 {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
                   watch('employment_status')
                 ) ? (
@@ -995,7 +995,7 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                <span>{dataSurveyResponse ? 10 : 14}</span>. Chức vụ, vị trí việc làm{' '}
+                <span>{dataSurveyResponse?.id ? 10 : 14}</span>. Chức vụ, vị trí việc làm{' '}
                 {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
                   watch('employment_status')
                 ) ? (
@@ -1017,8 +1017,8 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                <span>{dataSurveyResponse ? 11 : 15}</span>. Đơn vị Anh/Chị đang làm việc thuộc khu
-                vực làm việc nào?{' '}
+                <span>{dataSurveyResponse?.id ? 11 : 15}</span>. Đơn vị Anh/Chị đang làm việc thuộc
+                khu vực làm việc nào?{' '}
                 {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
                   watch('employment_status')
                 ) ? (
@@ -1043,8 +1043,8 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                <span>{dataSurveyResponse ? 12 : 16}</span>. Sau khi tốt nghiệp, Anh/Chị có việc làm
-                từ khi nào?{' '}
+                <span>{dataSurveyResponse?.id ? 12 : 16}</span>. Sau khi tốt nghiệp, Anh/Chị có việc
+                làm từ khi nào?{' '}
                 {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
                   watch('employment_status')
                 ) ? (
@@ -1069,8 +1069,8 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                <span>{dataSurveyResponse ? 13 : 17}</span>. Công việc Anh/Chị đang đảm nhận có phù
-                hợp với ngành được đào tạo không?{' '}
+                <span>{dataSurveyResponse?.id ? 13 : 17}</span>. Công việc Anh/Chị đang đảm nhận có
+                phù hợp với ngành được đào tạo không?{' '}
                 {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
                   watch('employment_status')
                 ) ? (
@@ -1095,8 +1095,8 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                <span>{dataSurveyResponse ? 14 : 18}</span>. Công việc Anh/Chị đang đảm nhận có phù
-                hợp với trình độ chuyên môn không?{' '}
+                <span>{dataSurveyResponse?.id ? 14 : 18}</span>. Công việc Anh/Chị đang đảm nhận có
+                phù hợp với trình độ chuyên môn không?{' '}
                 {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
                   watch('employment_status')
                 ) ? (
@@ -1122,8 +1122,8 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                <span>{dataSurveyResponse ? 15 : 19}</span>. Anh/chị có học được các kiến thức và kỹ
-                năng cần thiết từ nhà trường cho công việc theo ngành tốt nghiệp không?{' '}
+                <span>{dataSurveyResponse?.id ? 15 : 19}</span>. Anh/chị có học được các kiến thức
+                và kỹ năng cần thiết từ nhà trường cho công việc theo ngành tốt nghiệp không?{' '}
                 {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
                   watch('employment_status')
                 ) ? (
@@ -1149,8 +1149,8 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                <span>{dataSurveyResponse ? 16 : 20}</span>. Mức lương khởi điểm của Anh/Chị (đơn vị
-                triệu đồng/1 tháng){' '}
+                <span>{dataSurveyResponse?.id ? 16 : 20}</span>. Mức lương khởi điểm của Anh/Chị
+                (đơn vị triệu đồng/1 tháng){' '}
                 {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
                   watch('employment_status')
                 ) ? (
@@ -1163,8 +1163,8 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                <span>{dataSurveyResponse ? 17 : 21}</span>. Mức thu nhập bình quân/tháng tính theo
-                VNĐ của Anh/Chị hiện nay?{' '}
+                <span>{dataSurveyResponse?.id ? 17 : 21}</span>. Mức thu nhập bình quân/tháng tính
+                theo VNĐ của Anh/Chị hiện nay?{' '}
                 {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
                   watch('employment_status')
                 ) ? (
@@ -1189,7 +1189,7 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                <span>{dataSurveyResponse ? 18 : 22}</span>. Anh/Chị tìm được việc làm thông qua
+                <span>{dataSurveyResponse?.id ? 18 : 22}</span>. Anh/Chị tìm được việc làm thông qua
                 những hình thức nào? (Có thể có nhiều lựa chọn){' '}
                 {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
                   watch('employment_status')
@@ -1226,8 +1226,8 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                <span>{dataSurveyResponse ? 19 : 23}</span>. Anh/chị được tuyển dụng theo hình thức
-                nào?{' '}
+                <span>{dataSurveyResponse?.id ? 19 : 23}</span>. Anh/chị được tuyển dụng theo hình
+                thức nào?{' '}
                 {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
                   watch('employment_status')
                 ) ? (
@@ -1263,8 +1263,8 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                <span>{dataSurveyResponse ? 20 : 24}</span>. Trong quá trình làm việc, Anh/Chị cần
-                những kỹ năng mềm nào sau đây?{' '}
+                <span>{dataSurveyResponse?.id ? 20 : 24}</span>. Trong quá trình làm việc, Anh/Chị
+                cần những kỹ năng mềm nào sau đây?{' '}
                 {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
                   watch('employment_status')
                 ) ? (
@@ -1300,7 +1300,7 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                <span>{dataSurveyResponse ? 21 : 25}</span>. Sau khi được tuyển dụng, Anh/Chị có
+                <span>{dataSurveyResponse?.id ? 21 : 25}</span>. Sau khi được tuyển dụng, Anh/Chị có
                 phải tham gia khóa học nâng cao nào dưới đây để đáp ứng công việc không?{' '}
                 {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
                   watch('employment_status')
@@ -1341,7 +1341,7 @@ const JobSurveyPage = () => {
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
             <span>
-              {dataSurveyResponse
+              {dataSurveyResponse?.id
                 ? [String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(watch('employment_status'))
                   ? 22
                   : 7
@@ -1350,8 +1350,8 @@ const JobSurveyPage = () => {
                       String(ANSWER_EMPLOYMENT_STATUS.advancedLearning),
                       String(ANSWER_EMPLOYMENT_STATUS.unemployed),
                     ].includes(watch('employment_status'))
-                  ? 26
-                  : 15}
+                  ? 11
+                  : 26}
             </span>
             . Theo Anh/Chị, những giải pháp nào sau đây giúp tăng tỷ lệ có việc làm đúng ngành của
             sinh viên tốt nghiệp từ chương trình đào tạo mà Anh/Chị đã học?
