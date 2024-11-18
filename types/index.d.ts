@@ -114,6 +114,7 @@ type Student = {
   id?: number;
   last_name: string;
   first_name: string;
+  full_name?: string;
   email: string;
   code: string;
   admission_year?: AdmissionYear;
@@ -161,18 +162,18 @@ export type FormJobSurvey = {
   id?: number;
   survey_period_id: number;
   student_id?: number;
-  email: string;
+  email?: string;
   full_name: string;
-  dob: string;
-  gender: number;
+  dob?: string;
+  gender?: number;
   code_student: string;
-  identification_card_number: string;
+  identification_card_number?: string;
   identification_card_number_update?: string;
-  identification_issuance_place: string;
-  identification_issuance_date: string;
+  identification_issuance_place?: string;
+  identification_issuance_date?: string;
   training_industry_id: string;
   course: string;
-  phone_number: string;
+  phone_number?: string;
   employment_status: string;
 
   // optional

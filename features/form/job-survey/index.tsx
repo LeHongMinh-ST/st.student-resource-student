@@ -64,7 +64,7 @@ const JobSurveyPage = () => {
 
   const [studentCode, setStudentCode] = useState('');
 
-  const { createResponse, getResponse } = useEmploymentSurveyResponse();
+  const { createResponse, getResponse, updateResponse } = useEmploymentSurveyResponse();
   const handleGetResponse = ({
     studentCode,
     surveyPeriodId,
@@ -72,12 +72,16 @@ const JobSurveyPage = () => {
   }: {
     studentCode?: string;
     surveyPeriodId: number;
-    code_verify?: string;
+    code_verify?: string | undefined;
   }) =>
     getResponse({
-      student_code: studentCode ?? getValues('code_student'),
+      // student_code: studentCode ?? getValues('code_student'),
+      ...((studentCode ?? getValues('code_student')) && {
+        student_code: studentCode ?? getValues('code_student'),
+      }),
       survey_period_id: surveyPeriodId,
-      code_verify,
+      ...(code_verify && { code_verify: String(code_verify) }),
+      // code_verify,
     }).then((res) => {
       const result = res.data.data;
       if (result?.code_student) {
@@ -91,9 +95,14 @@ const JobSurveyPage = () => {
   const isStudentCodeLongEnough = studentSearchKey.length >= 6;
   const isCodeLongEnough = studentCode.length >= 6;
 
-  const { data: dataSurveyResponse, isLoading: isLoadingSurveyResponse } = useSWR(
+  const { data: dataSurveyResponse, isLoading: isLoadingSurveyResponse } = useSWR<any>(
     code || isCodeLongEnough ? [studentCode, code, id] : null,
-    () => handleGetResponse({ studentCode, surveyPeriodId: Number(id), code_verify: String(code) }),
+    () =>
+      handleGetResponse({
+        studentCode,
+        surveyPeriodId: Number(id),
+        code_verify: code ? String(code) : undefined,
+      }),
     {
       revalidateOnFocus: false,
     }
@@ -165,14 +174,13 @@ const JobSurveyPage = () => {
     if (studentData) {
       reset({
         code_student: studentData?.code ?? '',
-        full_name: studentData?.last_name?.concat(' ', studentData?.first_name) ?? '',
+        full_name: studentData?.full_name ?? '',
         dob: dayjs(studentData?.info?.dob).format('MM/DD/YYYY') ?? '',
         phone_number: studentData?.info?.phone ?? '',
         email: studentData?.graduate?.email ?? '',
         course: `K${studentData?.code?.slice(0, 2) ?? ''}`,
         identification_card_number: studentData?.info?.citizen_identification ?? '',
       });
-      console.log('training_industry_id', studentData?.training_industry_id);
 
       if (studentData?.training_industry_id) {
         setValue('training_industry_id', String(studentData?.training_industry_id));
@@ -315,7 +323,27 @@ const JobSurveyPage = () => {
         if (data.recruit_partner_date) {
           data.recruit_partner_date = formatDateString(data.recruit_partner_date, 'yyyy-mm-dd');
         }
-        const res = await createResponse(data);
+
+        let res = null;
+        if (dataSurveyResponse?.id) {
+          const {
+            gender,
+            dob,
+            identification_card_number,
+            identification_issuance_date,
+            identification_issuance_place,
+            phone_number,
+            email,
+            ...updatedObject
+          } = data;
+
+          data = updatedObject;
+          data.id = dataSurveyResponse.id;
+
+          res = await updateResponse(data);
+        } else {
+          res = await createResponse(data);
+        }
 
         if (res) {
           setIsSuccess(true);
@@ -536,223 +564,320 @@ const JobSurveyPage = () => {
             </Button>
           </div>
         </Card> */}
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            1. Mã sinh viên <span className="required text-red">*</span>
-          </Text>
-          <TextInput
-            variant="unstyled"
-            defaultValue={studentData?.code ?? ''}
-            placeholder="vd: 637711"
-            {...register('code_student', {
-              required: ERROR_MESSAGES.form_job.code_student.required,
-              onChange(event) {
-                setStudentCode(event.target.value);
-              },
-            })}
-            error={errors?.code_student?.message}
-          />
-        </Card>
+        {dataSurveyResponse?.id ? (
+          <>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                1. Mã sinh viên <span className="required text-red">*</span>
+              </Text>
+              <TextInput
+                disabled={!!code}
+                variant="unstyled"
+                defaultValue={studentData?.code ?? ''}
+                placeholder="vd: 637711"
+                {...register('code_student', {
+                  required: ERROR_MESSAGES.form_job.code_student.required,
+                  onChange(event) {
+                    setStudentCode(event.target.value);
+                  },
+                })}
+                error={errors?.code_student?.message}
+              />
+            </Card>
 
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            2. Họ và tên <span className="required text-red">*</span>
-          </Text>
-          <TextInput
-            variant="unstyled"
-            defaultValue={studentData?.last_name?.concat(' ', studentData?.first_name) ?? ''}
-            placeholder="vd: Đào Đức Anh"
-            {...register('full_name', {
-              required: ERROR_MESSAGES.form_job.full_name.required,
-            })}
-            error={errors?.full_name?.message}
-          />
-        </Card>
-
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            3. Giới tính <span className="required text-red">*</span>
-          </Text>
-          <Select
-            {...register('gender', {
-              required: ERROR_MESSAGES.form_job.gender.required,
-            })}
-            placeholder="Chọn giới tính"
-            data={GenderSelectList}
-            value={String(getValues('gender') ?? '')}
-            onChange={(value) => {
-              if (value) {
-                // @ts-ignore
-                setValue('gender', value);
-                trigger('gender');
-              }
-            }}
-            error={errors?.gender?.message}
-          />
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            4. Ngày sinh <span className="required text-red">*</span>
-          </Text>
-          <DatePickerInput
-            {...register('dob', {
-              required: ERROR_MESSAGES.form_job.dob.required,
-            })}
-            rightSection={<IconCalendar style={{ width: '18px', height: '18px' }} stroke={1.5} />}
-            placeholder="Chọn ngày sinh"
-            locale="vi"
-            valueFormat="DD/MM/YYYY"
-            defaultValue={studentData?.info?.dob ? new Date(studentData?.info?.dob) : null}
-            value={getValues('dob') ? new Date(getValues('dob') ?? '') : null}
-            onChange={(value) => {
-              if (value) {
-                const formattedValue = formatDateString(value, 'mm/dd/yyyy');
-                setValue('dob', formattedValue);
-              } else {
-                setValue('dob', '');
-              }
-              trigger('dob');
-            }}
-            error={errors?.dob?.message}
-          />
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            5. Số căn cước công dân <span className="required text-red">*</span>
-          </Text>
-          <TextInput
-            variant="unstyled"
-            placeholder="vd: 0334********"
-            {...register('identification_card_number', {
-              required: ERROR_MESSAGES.form_job.identification_card_number.required,
-            })}
-            error={errors?.identification_card_number?.message}
-          />
-          {watch('identification_card_number') && (
-            <>
-              <Text fw={600} size="sm" pt={10}>
-                Cập nhập số căn cước công dân (nếu số căn cước công dân hiện tại chưa đúng)
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                2. Họ và tên <span className="required text-red">*</span>
+              </Text>
+              <TextInput
+                variant="unstyled"
+                defaultValue={studentData?.last_name?.concat(' ', studentData?.first_name) ?? ''}
+                placeholder="vd: Đào Đức Anh"
+                {...register('full_name', {
+                  required: ERROR_MESSAGES.form_job.full_name.required,
+                })}
+                error={errors?.full_name?.message}
+              />
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                3. Cập nhập số căn cước công dân
               </Text>
               <TextInput
                 variant="unstyled"
                 placeholder="vd: 0334********"
                 {...register('identification_card_number_update', {})}
               />
-            </>
-          )}
-          <Text fw={600} size="sm" pt={10}>
-            Ngày cấp <span className="required text-red">*</span>
-          </Text>
-          <DatePickerInput
-            {...register('identification_issuance_date', {
-              required: ERROR_MESSAGES.form_job.identification_issuance_date.required,
-            })}
-            rightSection={<IconCalendar style={{ width: '18px', height: '18px' }} stroke={1.5} />}
-            placeholder="DD/MM/YYYY"
-            valueFormat="DD/MM/YYYY"
-            locale="vi"
-            value={
-              getValues('identification_issuance_date')
-                ? new Date(getValues('identification_issuance_date') ?? '')
-                : null
-            }
-            onChange={(value) => {
-              if (value) {
-                const formattedValue = formatDateString(value, 'mm/dd/yyyy');
-                setValue('identification_issuance_date', formattedValue);
-              } else {
-                setValue('identification_issuance_date', '');
-              }
-              trigger('identification_issuance_date');
-            }}
-            error={errors?.identification_issuance_date?.message}
-          />
-          <Text fw={600} size="sm" pt={10}>
-            Nơi cấp <span className="required text-red">*</span>
-          </Text>
-          <TextInput
-            variant="unstyled"
-            placeholder="vd: Khu 2 Hoàng Khương, Thanh Ba, Phú Thọ"
-            {...register('identification_issuance_place', {
-              required: ERROR_MESSAGES.form_job.identification_issuance_place.required,
-            })}
-            error={errors?.identification_issuance_place?.message}
-          />
-        </Card>
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                4. Khoá học <span className="required text-red">*</span>
+              </Text>
+              <TextInput
+                variant="unstyled"
+                defaultValue={`K${studentData?.code?.slice(0, 2) ?? ''}`}
+                placeholder="vd: K63"
+                {...register('course', {
+                  required: ERROR_MESSAGES.form_job.course.required,
+                })}
+                error={errors?.course?.message}
+              />
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                5. Tên ngành đào tạo <span className="required text-red">*</span>
+              </Text>
+              <Select
+                {...register('training_industry_id', {
+                  required: ERROR_MESSAGES.form_job.training_industry_id.required,
+                })}
+                defaultValue={
+                  dataSurveyResponse?.training_industry_id
+                    ? String(dataSurveyResponse.training_industry_id)
+                    : studentData?.training_industry_id
+                      ? String(studentData.training_industry_id)
+                      : ''
+                }
+                placeholder="Chọn ngành đào tạo"
+                value={(getValues('training_industry_id') as string) ?? ''}
+                onChange={(value) => {
+                  if (value) {
+                    // @ts-ignore
+                    setValue('training_industry_id', value);
+                    trigger('training_industry_id');
+                  }
+                }}
+                data={dataOptionTrainingIndustries}
+                error={errors.training_industry_id?.message}
+              />
+            </Card>
+          </>
+        ) : (
+          <>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                1. Mã sinh viên <span className="required text-red">*</span>
+              </Text>
+              <TextInput
+                disabled={!!code}
+                variant="unstyled"
+                defaultValue={studentData?.code ?? ''}
+                placeholder="vd: 637711"
+                {...register('code_student', {
+                  required: ERROR_MESSAGES.form_job.code_student.required,
+                  onChange(event) {
+                    setStudentCode(event.target.value);
+                  },
+                })}
+                error={errors?.code_student?.message}
+              />
+            </Card>
+
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                2. Họ và tên <span className="required text-red">*</span>
+              </Text>
+              <TextInput
+                variant="unstyled"
+                defaultValue={studentData?.last_name?.concat(' ', studentData?.first_name) ?? ''}
+                placeholder="vd: Đào Đức Anh"
+                {...register('full_name', {
+                  required: ERROR_MESSAGES.form_job.full_name.required,
+                })}
+                error={errors?.full_name?.message}
+              />
+            </Card>
+
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                3. Giới tính <span className="required text-red">*</span>
+              </Text>
+              <Select
+                {...register('gender', {
+                  required: ERROR_MESSAGES.form_job.gender.required,
+                })}
+                placeholder="Chọn giới tính"
+                data={GenderSelectList}
+                value={String(getValues('gender') ?? '')}
+                onChange={(value) => {
+                  if (value) {
+                    // @ts-ignore
+                    setValue('gender', value);
+                    trigger('gender');
+                  }
+                }}
+                error={errors?.gender?.message}
+              />
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                4. Ngày sinh <span className="required text-red">*</span>
+              </Text>
+              <DatePickerInput
+                {...register('dob', {
+                  required: ERROR_MESSAGES.form_job.dob.required,
+                })}
+                rightSection={
+                  <IconCalendar style={{ width: '18px', height: '18px' }} stroke={1.5} />
+                }
+                placeholder="Chọn ngày sinh"
+                locale="vi"
+                valueFormat="DD/MM/YYYY"
+                defaultValue={studentData?.info?.dob ? new Date(studentData?.info?.dob) : null}
+                value={getValues('dob') ? new Date(getValues('dob') ?? '') : null}
+                onChange={(value) => {
+                  if (value) {
+                    const formattedValue = formatDateString(value, 'mm/dd/yyyy');
+                    setValue('dob', formattedValue);
+                  } else {
+                    setValue('dob', '');
+                  }
+                  trigger('dob');
+                }}
+                error={errors?.dob?.message}
+              />
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                5. Số căn cước công dân <span className="required text-red">*</span>
+              </Text>
+              <TextInput
+                variant="unstyled"
+                placeholder="vd: 0334********"
+                {...register('identification_card_number', {
+                  required: ERROR_MESSAGES.form_job.identification_card_number.required,
+                })}
+                error={errors?.identification_card_number?.message}
+              />
+              {watch('identification_card_number') && (
+                <>
+                  <Text fw={600} size="sm" pt={10}>
+                    Cập nhập số căn cước công dân (nếu số căn cước công dân hiện tại chưa đúng)
+                  </Text>
+                  <TextInput
+                    variant="unstyled"
+                    placeholder="vd: 0334********"
+                    {...register('identification_card_number_update', {})}
+                  />
+                </>
+              )}
+              <Text fw={600} size="sm" pt={10}>
+                Ngày cấp <span className="required text-red">*</span>
+              </Text>
+              <DatePickerInput
+                {...register('identification_issuance_date', {
+                  required: ERROR_MESSAGES.form_job.identification_issuance_date.required,
+                })}
+                rightSection={
+                  <IconCalendar style={{ width: '18px', height: '18px' }} stroke={1.5} />
+                }
+                placeholder="DD/MM/YYYY"
+                valueFormat="DD/MM/YYYY"
+                locale="vi"
+                value={
+                  getValues('identification_issuance_date')
+                    ? new Date(getValues('identification_issuance_date') ?? '')
+                    : null
+                }
+                onChange={(value) => {
+                  if (value) {
+                    const formattedValue = formatDateString(value, 'mm/dd/yyyy');
+                    setValue('identification_issuance_date', formattedValue);
+                  } else {
+                    setValue('identification_issuance_date', '');
+                  }
+                  trigger('identification_issuance_date');
+                }}
+                error={errors?.identification_issuance_date?.message}
+              />
+              <Text fw={600} size="sm" pt={10}>
+                Nơi cấp <span className="required text-red">*</span>
+              </Text>
+              <TextInput
+                variant="unstyled"
+                placeholder="vd: Khu 2 Hoàng Khương, Thanh Ba, Phú Thọ"
+                {...register('identification_issuance_place', {
+                  required: ERROR_MESSAGES.form_job.identification_issuance_place.required,
+                })}
+                error={errors?.identification_issuance_place?.message}
+              />
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                6. Khoá học <span className="required text-red">*</span>
+              </Text>
+              <TextInput
+                variant="unstyled"
+                defaultValue={`K${studentData?.code?.slice(0, 2) ?? ''}`}
+                placeholder="vd: K63"
+                {...register('course', {
+                  required: ERROR_MESSAGES.form_job.course.required,
+                })}
+                error={errors?.course?.message}
+              />
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                7. Tên ngành đào tạo <span className="required text-red">*</span>
+              </Text>
+              <Select
+                {...register('training_industry_id', {
+                  required: ERROR_MESSAGES.form_job.training_industry_id.required,
+                })}
+                defaultValue={
+                  dataSurveyResponse?.training_industry_id
+                    ? String(dataSurveyResponse.training_industry_id)
+                    : studentData?.training_industry_id
+                      ? String(studentData.training_industry_id)
+                      : ''
+                }
+                placeholder="Chọn ngành đào tạo"
+                value={(getValues('training_industry_id') as string) ?? ''}
+                onChange={(value) => {
+                  if (value) {
+                    // @ts-ignore
+                    setValue('training_industry_id', value);
+                    trigger('training_industry_id');
+                  }
+                }}
+                data={dataOptionTrainingIndustries}
+                error={errors.training_industry_id?.message}
+              />
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                8. Điện thoại <span className="required text-red">*</span>
+              </Text>
+              <TextInput
+                defaultValue={studentData?.info?.phone ?? ''}
+                variant="unstyled"
+                placeholder="vd: 0333555****"
+                {...register('phone_number', {
+                  required: ERROR_MESSAGES.form_job.phone_number.required,
+                })}
+                error={errors?.phone_number?.message}
+              />
+            </Card>
+            <Card shadow="sm" padding="lg" mb="lg">
+              <Text fw={600} size="sm">
+                9. Email <span className="required text-red">*</span>
+              </Text>
+              <TextInput
+                variant="unstyled"
+                defaultValue={studentData?.graduate?.email ?? ''}
+                placeholder="vd: abc@gmail.com"
+                {...register('email', {
+                  required: ERROR_MESSAGES.form_job.email.required,
+                })}
+                error={errors?.email?.message}
+              />
+            </Card>
+          </>
+        )}
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
-            6. Khoá học <span className="required text-red">*</span>
-          </Text>
-          <TextInput
-            variant="unstyled"
-            defaultValue={`K${studentData?.code?.slice(0, 2) ?? ''}`}
-            placeholder="vd: K63"
-            {...register('course', {
-              required: ERROR_MESSAGES.form_job.course.required,
-            })}
-            error={errors?.course?.message}
-          />
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            7. Tên ngành đào tạo <span className="required text-red">*</span>
-          </Text>
-          <Select
-            {...register('training_industry_id', {
-              required: ERROR_MESSAGES.form_job.training_industry_id.required,
-            })}
-            defaultValue={
-              dataSurveyResponse?.training_industry_id
-                ? String(dataSurveyResponse.training_industry_id)
-                : studentData?.training_industry_id
-                  ? String(studentData.training_industry_id)
-                  : ''
-            }
-            placeholder="Chọn ngành đào tạo"
-            value={(getValues('training_industry_id') as string) ?? ''}
-            onChange={(value) => {
-              if (value) {
-                // @ts-ignore
-                setValue('training_industry_id', value);
-                trigger('training_industry_id');
-              }
-            }}
-            data={dataOptionTrainingIndustries}
-            error={errors.training_industry_id?.message}
-          />
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            8. Điện thoại <span className="required text-red">*</span>
-          </Text>
-          <TextInput
-            defaultValue={studentData?.info?.phone ?? ''}
-            variant="unstyled"
-            placeholder="vd: 0333555****"
-            {...register('phone_number', {
-              required: ERROR_MESSAGES.form_job.phone_number.required,
-            })}
-            error={errors?.phone_number?.message}
-          />
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            9. Email <span className="required text-red">*</span>
-          </Text>
-          <TextInput
-            variant="unstyled"
-            defaultValue={studentData?.graduate?.email ?? ''}
-            placeholder="vd: abc@gmail.com"
-            {...register('email', {
-              required: ERROR_MESSAGES.form_job.email.required,
-            })}
-            error={errors?.email?.message}
-          />
-        </Card>
-        <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="sm">
-            10. Anh/chị vui lòng cho biết tình trạng việc làm hiện tại của Anh/Chị{' '}
-            <span className="required text-red">*</span>
+            <span>{dataSurveyResponse ? 6 : 10}</span>. Anh/chị vui lòng cho biết tình trạng việc
+            làm hiện tại của Anh/Chị <span className="required text-red">*</span>
           </Text>
           <Radio.Group
             value={getValues('employment_status')}
@@ -772,7 +897,14 @@ const JobSurveyPage = () => {
           <>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                11. Tên đơn vị tuyển dụng
+                <span>{dataSurveyResponse ? 7 : 11}</span>. Tên đơn vị tuyển dụng{' '}
+                {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  watch('employment_status')
+                ) ? (
+                  <span className="required">*</span>
+                ) : (
+                  <></>
+                )}
               </Text>
               <TextInput
                 {...register('recruit_partner_name', {})}
@@ -782,7 +914,14 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                12. Địa chỉ đơn vị
+                <span>{dataSurveyResponse ? 8 : 12}</span>. Địa chỉ đơn vị{' '}
+                {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  watch('employment_status')
+                ) ? (
+                  <span className="required">*</span>
+                ) : (
+                  <></>
+                )}
               </Text>
               <TextInput
                 {...register('recruit_partner_address', {})}
@@ -790,7 +929,14 @@ const JobSurveyPage = () => {
                 placeholder="vd: Khu 2 Hoàng Khương, Thanh Ba, Phú Thọ"
               />
               <Text fw={600} size="sm" pt={20}>
-                Địa chỉ đơn vị thuộc Tỉnh/Thành phố
+                Địa chỉ đơn vị thuộc Tỉnh/Thành phố{' '}
+                {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  watch('employment_status')
+                ) ? (
+                  <span className="required">*</span>
+                ) : (
+                  <></>
+                )}
               </Text>
               <Select
                 {...register('city_work_id', {
@@ -811,7 +957,14 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                13. Thời gian tuyển dụng
+                <span>{dataSurveyResponse ? 9 : 13}</span>. Thời gian tuyển dụng{' '}
+                {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  watch('employment_status')
+                ) ? (
+                  <span className="required">*</span>
+                ) : (
+                  <></>
+                )}
               </Text>
               <DatePickerInput
                 {...register('recruit_partner_date', {
@@ -842,7 +995,14 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                14. Chức vụ, vị trí việc làm
+                <span>{dataSurveyResponse ? 10 : 14}</span>. Chức vụ, vị trí việc làm{' '}
+                {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  watch('employment_status')
+                ) ? (
+                  <span className="required">*</span>
+                ) : (
+                  <></>
+                )}
               </Text>
               <TextInput
                 {...register('recruit_partner_position', {})}
@@ -857,7 +1017,15 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                15. Đơn vị Anh/Chị đang làm việc thuộc khu vực làm việc nào?
+                <span>{dataSurveyResponse ? 11 : 15}</span>. Đơn vị Anh/Chị đang làm việc thuộc khu
+                vực làm việc nào?{' '}
+                {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  watch('employment_status')
+                ) ? (
+                  <span className="required">*</span>
+                ) : (
+                  <></>
+                )}
               </Text>
               <Radio.Group
                 value={getValues('work_area') as unknown as string} // Make sure to add this key in your form state
@@ -875,7 +1043,15 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                16. Sau khi tốt nghiệp, Anh/Chị có việc làm từ khi nào?
+                <span>{dataSurveyResponse ? 12 : 16}</span>. Sau khi tốt nghiệp, Anh/Chị có việc làm
+                từ khi nào?{' '}
+                {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  watch('employment_status')
+                ) ? (
+                  <span className="required">*</span>
+                ) : (
+                  <></>
+                )}
               </Text>
               <Radio.Group
                 value={getValues('employed_since') as unknown as string}
@@ -893,7 +1069,15 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                17. Công việc Anh/Chị đang đảm nhận có phù hợp với ngành được đào tạo không?
+                <span>{dataSurveyResponse ? 13 : 17}</span>. Công việc Anh/Chị đang đảm nhận có phù
+                hợp với ngành được đào tạo không?{' '}
+                {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  watch('employment_status')
+                ) ? (
+                  <span className="required">*</span>
+                ) : (
+                  <></>
+                )}
               </Text>
               <Radio.Group
                 value={getValues('trained_field') as unknown as string}
@@ -911,7 +1095,15 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                18. Công việc Anh/Chị đang đảm nhận có phù hợp với trình độ chuyên môn không?
+                <span>{dataSurveyResponse ? 14 : 18}</span>. Công việc Anh/Chị đang đảm nhận có phù
+                hợp với trình độ chuyên môn không?{' '}
+                {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  watch('employment_status')
+                ) ? (
+                  <span className="required">*</span>
+                ) : (
+                  <></>
+                )}
               </Text>
               <Radio.Group
                 value={getValues('professional_qualification_field') as unknown as string}
@@ -930,8 +1122,15 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                19. Anh/chị có học được các kiến thức và kỹ năng cần thiết từ nhà trường cho công
-                việc theo ngành tốt nghiệp không?
+                <span>{dataSurveyResponse ? 15 : 19}</span>. Anh/chị có học được các kiến thức và kỹ
+                năng cần thiết từ nhà trường cho công việc theo ngành tốt nghiệp không?{' '}
+                {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  watch('employment_status')
+                ) ? (
+                  <span className="required">*</span>
+                ) : (
+                  <></>
+                )}
               </Text>
               <Radio.Group
                 value={getValues('level_knowledge_acquired') as unknown as string}
@@ -950,13 +1149,29 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                20. Mức lương khởi điểm của Anh/Chị (đơn vị triệu đồng/1 tháng)
+                <span>{dataSurveyResponse ? 16 : 20}</span>. Mức lương khởi điểm của Anh/Chị (đơn vị
+                triệu đồng/1 tháng){' '}
+                {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  watch('employment_status')
+                ) ? (
+                  <span className="required">*</span>
+                ) : (
+                  <></>
+                )}
               </Text>
               <TextInput {...register('starting_salary', {})} variant="unstyled" placeholder="15" />
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                21. Mức thu nhập bình quân/tháng tính theo VNĐ của Anh/Chị hiện nay?
+                <span>{dataSurveyResponse ? 17 : 21}</span>. Mức thu nhập bình quân/tháng tính theo
+                VNĐ của Anh/Chị hiện nay?{' '}
+                {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  watch('employment_status')
+                ) ? (
+                  <span className="required">*</span>
+                ) : (
+                  <></>
+                )}
               </Text>
               <Radio.Group
                 value={getValues('average_income') as unknown as string}
@@ -974,8 +1189,15 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                22. Anh/Chị tìm được việc làm thông qua những hình thức nào? (Có thể có nhiều lựa
-                chọn)
+                <span>{dataSurveyResponse ? 18 : 22}</span>. Anh/Chị tìm được việc làm thông qua
+                những hình thức nào? (Có thể có nhiều lựa chọn){' '}
+                {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  watch('employment_status')
+                ) ? (
+                  <span className="required">*</span>
+                ) : (
+                  <></>
+                )}
               </Text>
               <Checkbox.Group
                 value={getValues('job_search_method')?.value}
@@ -1004,7 +1226,15 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                23. Anh/chị được tuyển dụng theo hình thức nào?
+                <span>{dataSurveyResponse ? 19 : 23}</span>. Anh/chị được tuyển dụng theo hình thức
+                nào?{' '}
+                {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  watch('employment_status')
+                ) ? (
+                  <span className="required">*</span>
+                ) : (
+                  <></>
+                )}
               </Text>
               <Checkbox.Group
                 value={getValues('recruitment_type')?.value}
@@ -1033,8 +1263,15 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                24. Trong quá trình làm việc, Anh/Chị cần những kỹ năng mềm nào sau đây? (Có thể có
-                nhiều lựa chọn)
+                <span>{dataSurveyResponse ? 20 : 24}</span>. Trong quá trình làm việc, Anh/Chị cần
+                những kỹ năng mềm nào sau đây?{' '}
+                {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  watch('employment_status')
+                ) ? (
+                  <span className="required">*</span>
+                ) : (
+                  <></>
+                )}
               </Text>
               <Checkbox.Group
                 value={getValues('soft_skills_required')?.value}
@@ -1063,8 +1300,15 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                25. Sau khi được tuyển dụng, Anh/Chị có phải tham gia khóa học nâng cao nào dưới đây
-                để đáp ứng công việc không? <span className="required">*</span>
+                <span>{dataSurveyResponse ? 21 : 25}</span>. Sau khi được tuyển dụng, Anh/Chị có
+                phải tham gia khóa học nâng cao nào dưới đây để đáp ứng công việc không?{' '}
+                {[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  watch('employment_status')
+                ) ? (
+                  <span className="required">*</span>
+                ) : (
+                  <></>
+                )}
               </Text>
               <Checkbox.Group
                 onChange={(value) => setCheckboxValue('must_attended_courses', value)}
@@ -1096,14 +1340,20 @@ const JobSurveyPage = () => {
         )}
         <Card shadow="sm" padding="lg" mb="lg">
           <Text fw={600} size="sm">
-            {![
-              String(ANSWER_EMPLOYMENT_STATUS.notLookingForJob),
-              String(ANSWER_EMPLOYMENT_STATUS.advancedLearning),
-              String(ANSWER_EMPLOYMENT_STATUS.unemployed),
-            ].includes(watch('employment_status'))
-              ? 26
-              : 11}{' '}
-            Theo Anh/Chị, những giải pháp nào sau đây giúp tăng tỷ lệ có việc làm đúng ngành của
+            <span>
+              {dataSurveyResponse
+                ? [String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(watch('employment_status'))
+                  ? 22
+                  : 7
+                : [
+                      String(ANSWER_EMPLOYMENT_STATUS.notLookingForJob),
+                      String(ANSWER_EMPLOYMENT_STATUS.advancedLearning),
+                      String(ANSWER_EMPLOYMENT_STATUS.unemployed),
+                    ].includes(watch('employment_status'))
+                  ? 26
+                  : 15}
+            </span>
+            . Theo Anh/Chị, những giải pháp nào sau đây giúp tăng tỷ lệ có việc làm đúng ngành của
             sinh viên tốt nghiệp từ chương trình đào tạo mà Anh/Chị đã học?
             <span className="required">*</span>
           </Text>
