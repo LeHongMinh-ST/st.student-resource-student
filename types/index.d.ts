@@ -171,8 +171,8 @@ export type FormJobSurvey = {
   identification_card_number_update?: string;
   identification_issuance_place?: string;
   identification_issuance_date?: string;
-  training_industry_id: string;
-  course: string;
+  training_industry_id?: string;
+  course?: string;
   phone_number?: string;
   employment_status: string;
 
