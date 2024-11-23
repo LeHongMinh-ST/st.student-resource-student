@@ -57,6 +57,7 @@ const JobSurveyPage = () => {
     watch,
     reset,
     setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<FormJobSurvey>({
     defaultValues: {},
@@ -342,6 +343,18 @@ const JobSurveyPage = () => {
 
           res = await updateResponse(data);
         } else {
+          if (Number(data.employment_status) !== ANSWER_EMPLOYMENT_STATUS.employed) {
+            const { code_student, full_name, gender, employment_status, solutions_get_job } = data;
+
+            data = {
+              code_student,
+              full_name,
+              gender,
+              employment_status,
+              solutions_get_job,
+              survey_period_id: data.survey_period_id,
+            };
+          }
           res = await createResponse(data);
         }
 
@@ -587,7 +600,8 @@ const JobSurveyPage = () => {
 
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                2. Họ và tên <span className="required text-red">*</span>
+                2. Họ và tên
+                <span className="required text-red">*</span>
               </Text>
               <TextInput
                 variant="unstyled"
@@ -611,26 +625,21 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                4. Khoá học <span className="required text-red">*</span>
+                4. Khoá học
               </Text>
               <TextInput
                 variant="unstyled"
                 defaultValue={`K${studentData?.code?.slice(0, 2) ?? ''}`}
                 placeholder="vd: K63"
-                {...register('course', {
-                  required: ERROR_MESSAGES.form_job.course.required,
-                })}
-                error={errors?.course?.message}
+                {...register('course', {})}
               />
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                5. Tên ngành đào tạo <span className="required text-red">*</span>
+                5. Tên ngành đào tạo
               </Text>
               <Select
-                {...register('training_industry_id', {
-                  required: ERROR_MESSAGES.form_job.training_industry_id.required,
-                })}
+                {...register('training_industry_id', {})}
                 defaultValue={
                   dataSurveyResponse?.training_industry_id
                     ? String(dataSurveyResponse.training_industry_id)
@@ -648,7 +657,6 @@ const JobSurveyPage = () => {
                   }
                 }}
                 data={dataOptionTrainingIndustries}
-                error={errors.training_industry_id?.message}
               />
             </Card>
           </>
@@ -711,12 +719,10 @@ const JobSurveyPage = () => {
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                4. Ngày sinh <span className="required text-red">*</span>
+                4. Ngày sinh
               </Text>
               <DatePickerInput
-                {...register('dob', {
-                  required: ERROR_MESSAGES.form_job.dob.required,
-                })}
+                {...register('dob', {})}
                 rightSection={
                   <IconCalendar style={{ width: '18px', height: '18px' }} stroke={1.5} />
                 }
@@ -734,22 +740,19 @@ const JobSurveyPage = () => {
                   }
                   trigger('dob');
                 }}
-                error={errors?.dob?.message}
               />
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                5. Số căn cước công dân <span className="required text-red">*</span>
+                5. Số căn cước công dân
               </Text>
               <TextInput
                 variant="unstyled"
                 placeholder="vd: 0334********"
-                {...register('identification_card_number', {
-                  required: ERROR_MESSAGES.form_job.identification_card_number.required,
-                })}
-                error={errors?.identification_card_number?.message}
+                {...register('identification_card_number', {})}
               />
-              {watch('identification_card_number') && (
+
+              {/* {watch('identification_card_number') && (
                 <>
                   <Text fw={600} size="sm" pt={10}>
                     Cập nhập số căn cước công dân (nếu số căn cước công dân hiện tại chưa đúng)
@@ -760,14 +763,12 @@ const JobSurveyPage = () => {
                     {...register('identification_card_number_update', {})}
                   />
                 </>
-              )}
+              )} */}
               <Text fw={600} size="sm" pt={10}>
-                Ngày cấp <span className="required text-red">*</span>
+                Ngày cấp
               </Text>
               <DatePickerInput
-                {...register('identification_issuance_date', {
-                  required: ERROR_MESSAGES.form_job.identification_issuance_date.required,
-                })}
+                {...register('identification_issuance_date', {})}
                 rightSection={
                   <IconCalendar style={{ width: '18px', height: '18px' }} stroke={1.5} />
                 }
@@ -788,42 +789,33 @@ const JobSurveyPage = () => {
                   }
                   trigger('identification_issuance_date');
                 }}
-                error={errors?.identification_issuance_date?.message}
               />
               <Text fw={600} size="sm" pt={10}>
-                Nơi cấp <span className="required text-red">*</span>
+                Nơi cấp
               </Text>
               <TextInput
                 variant="unstyled"
                 placeholder="vd: Khu 2 Hoàng Khương, Thanh Ba, Phú Thọ"
-                {...register('identification_issuance_place', {
-                  required: ERROR_MESSAGES.form_job.identification_issuance_place.required,
-                })}
-                error={errors?.identification_issuance_place?.message}
+                {...register('identification_issuance_place', {})}
               />
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                6. Khoá học <span className="required text-red">*</span>
+                6. Khoá học
               </Text>
               <TextInput
                 variant="unstyled"
                 defaultValue={`K${studentData?.code?.slice(0, 2) ?? ''}`}
                 placeholder="vd: K63"
-                {...register('course', {
-                  required: ERROR_MESSAGES.form_job.course.required,
-                })}
-                error={errors?.course?.message}
+                {...register('course', {})}
               />
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                7. Tên ngành đào tạo <span className="required text-red">*</span>
+                7. Tên ngành đào tạo
               </Text>
               <Select
-                {...register('training_industry_id', {
-                  required: ERROR_MESSAGES.form_job.training_industry_id.required,
-                })}
+                {...register('training_industry_id', {})}
                 defaultValue={
                   dataSurveyResponse?.training_industry_id
                     ? String(dataSurveyResponse.training_industry_id)
@@ -841,35 +833,28 @@ const JobSurveyPage = () => {
                   }
                 }}
                 data={dataOptionTrainingIndustries}
-                error={errors.training_industry_id?.message}
               />
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                8. Điện thoại <span className="required text-red">*</span>
+                8. Điện thoại
               </Text>
               <TextInput
                 defaultValue={studentData?.info?.phone ?? ''}
                 variant="unstyled"
                 placeholder="vd: 0333555****"
-                {...register('phone_number', {
-                  required: ERROR_MESSAGES.form_job.phone_number.required,
-                })}
-                error={errors?.phone_number?.message}
+                {...register('phone_number', {})}
               />
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
               <Text fw={600} size="sm">
-                9. Email <span className="required text-red">*</span>
+                9. Email
               </Text>
               <TextInput
                 variant="unstyled"
                 defaultValue={studentData?.graduate?.email ?? ''}
                 placeholder="vd: abc@gmail.com"
-                {...register('email', {
-                  required: ERROR_MESSAGES.form_job.email.required,
-                })}
-                error={errors?.email?.message}
+                {...register('email', {})}
               />
             </Card>
           </>
@@ -881,7 +866,10 @@ const JobSurveyPage = () => {
           </Text>
           <Radio.Group
             value={getValues('employment_status')}
-            onChange={(value) => setRadioValue('employment_status', value)}
+            onChange={(value) => {
+              setRadioValue('employment_status', value);
+              clearErrors('employment_status');
+            }}
             error={errors.employment_status?.message}
           >
             {LIST_OPTION_QUESTION_FORM[1].map((item, index) => (
@@ -940,7 +928,11 @@ const JobSurveyPage = () => {
               </Text>
               <Select
                 {...register('city_work_id', {
-                  required: ERROR_MESSAGES.form_job.city_work_id.required,
+                  // ...([String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  //   watch('employment_status')
+                  // ) && {
+                  //   required: ERROR_MESSAGES.form_job.city_work_id.required,
+                  // })
                 })}
                 placeholder="Chọn tỉnh/Thành phố"
                 value={(getValues('city_work_id') as unknown as string) ?? ''}
@@ -952,7 +944,9 @@ const JobSurveyPage = () => {
                   }
                 }}
                 data={dataOptionCities}
-                error={errors.city_work_id?.message}
+                // error={[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                //   watch('employment_status')
+                // ) ? errors.city_work_id?.message : 'false'}
               />
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
@@ -968,7 +962,11 @@ const JobSurveyPage = () => {
               </Text>
               <DatePickerInput
                 {...register('recruit_partner_date', {
-                  required: ERROR_MESSAGES.form_job.identification_issuance_date.required,
+                  // ...([String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                  //   watch('employment_status')
+                  // ) && {
+                  //   required: ERROR_MESSAGES.form_job.identification_issuance_date.required,
+                  // })
                 })}
                 rightSection={
                   <IconCalendar style={{ width: '18px', height: '18px' }} stroke={1.5} />
@@ -990,7 +988,9 @@ const JobSurveyPage = () => {
                   }
                   trigger('recruit_partner_date');
                 }}
-                error={errors?.identification_issuance_date?.message}
+                // error={[String(ANSWER_EMPLOYMENT_STATUS.employed)].includes(
+                //   watch('employment_status')
+                // ) ? errors?.identification_issuance_date?.message : 'false'}
               />
             </Card>
             <Card shadow="sm" padding="lg" mb="lg">
