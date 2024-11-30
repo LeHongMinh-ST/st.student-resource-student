@@ -9,14 +9,7 @@ import {
   Checkbox,
   LoadingOverlay,
 } from '@mantine/core';
-import {
-  // IconSearch,
-  IconCalendar,
-  IconSend,
-  IconTrash,
-  // IconCheck,
-  IconAlertTriangle,
-} from '@tabler/icons-react';
+import { IconCalendar, IconSend, IconTrash, IconAlertTriangle } from '@tabler/icons-react';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
@@ -39,6 +32,7 @@ import { useCityService } from '@/services/cityService';
 import { useStudentService } from '@/services/studentService';
 import Completed from '@/features/form/job-survey/compoents/Completed';
 import ConfirmModal from '@/components/Modals/ConfirmModel/ConfirmModal';
+import InfoModal from './compoents/InfoModal';
 
 const JobSurveyPage = () => {
   const surveyPeriodService = useSurveyPeriodService();
@@ -135,7 +129,20 @@ const JobSurveyPage = () => {
   };
 
   const handleGetSurveyPeriodService = () =>
-    surveyPeriodService.getSurveyPeriod(String(id)).then((res) => res.data.data);
+    surveyPeriodService
+      .getSurveyPeriod(String(id))
+      .then((res) => {
+        if (res?.data?.data?.end_date && dayjs().isAfter(dayjs(res.data.data.end_date))) {
+          setDescriptionErrorModal(
+            `Đợt khảo sát tình hình việc làm của sinh viên tốt nghiệp năm ${res.data.data.year} đã kết thúc từ ngày ${formatDateString(res.data.data.end_date, 'dd/mm/yyyy')}.`
+          );
+        }
+        return res;
+      })
+      .then((res) => res.data.data)
+      .catch(() => {
+        setDescriptionErrorModal('Đợt khảo sát không tồn tại!');
+      });
 
   const { data: surveyPeriod, isLoading } = useSWR([id], handleGetSurveyPeriodService);
 
@@ -192,6 +199,7 @@ const JobSurveyPage = () => {
     }
   }, [studentData]);
 
+  const [descriptionErrorModal, setDescriptionErrorModal] = useState('');
   // useEffect(() => {
   //   console.log('dataSurveyResponse', dataSurveyResponse);
   //   console.log('isOpen', isOpen);
@@ -527,6 +535,11 @@ const JobSurveyPage = () => {
           setIsSuccess(true);
           onClose();
         }}
+      />
+      <InfoModal
+        entityName="Thông báo"
+        isOpen={Boolean(descriptionErrorModal.length)}
+        description={descriptionErrorModal}
       />
       <LoadingOverlay
         visible={
