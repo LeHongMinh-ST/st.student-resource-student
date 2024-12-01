@@ -134,7 +134,7 @@ const JobSurveyPage = () => {
       .then((res) => {
         if (res?.data?.data?.end_date && dayjs().isAfter(dayjs(res.data.data.end_date))) {
           setDescriptionErrorModal(
-            `Đợt khảo sát tình hình việc làm của sinh viên tốt nghiệp năm ${res.data.data.year} đã kết thúc từ ngày ${formatDateString(res.data.data.end_date, 'dd/mm/yyyy')}.`
+            `Đợt khảo sát tình hình việc làm của sinh viên tốt nghiệp năm ${res.data.data.year} đã kết thúc vào ${formatDateString(res.data.data.end_date, 'HH:MM dd/mm/yyyy')}.`
           );
         }
         return res;

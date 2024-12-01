@@ -26,7 +26,7 @@ export default function InfoModal({ entityName, description, isOpen }: InfoModal
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <IconInfoCircle color="blue" size={32} />
-            <Text fw={600}>Đợt khảo sát không hợp lệ</Text>
+            <Text fw={600}>Đã hết thời gian điền khảo sát</Text>
           </div>
           <div>
             <Text fw={400} size="sm" pl={47}>
