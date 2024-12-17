@@ -5,7 +5,7 @@ export const sidebarNavigationStudent: SidebarNavigationProps[] = [
   {
     title: 'Thông tin sinh viên',
     links: [
-      { label: 'Thông tin', icon: IconUserCircle, link: '/profile' },
+      { label: 'Thông tin', icon: IconUserCircle, link: '/' },
       { label: 'Lớp học', icon: IconBuilding, link: '/classes' },
     ],
   },
