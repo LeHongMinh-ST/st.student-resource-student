@@ -13,7 +13,7 @@ type MetaResponse = {
   total: number;
 };
 
-type ResultResonse<T> = {
+type ResultResponse<T> = {
   data: T;
   meta?: MetaResponse;
 };

@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import axiosInstance from '@/utils/axios';
-import { ResultResonse, Student } from '@/types';
+import { ResultResponse, Student } from '@/types';
 
 export const useStudentService = () => {
   const getStudent = (params: {
@@ -8,7 +8,7 @@ export const useStudentService = () => {
     code_verify?: string;
     phone_number?: string;
     email?: string;
-  }): Promise<AxiosResponse<ResultResonse<Student>, any>> =>
+  }): Promise<AxiosResponse<ResultResponse<Student>, any>> =>
     axiosInstance.get('/external/student-info-search', { params });
 
   return {
