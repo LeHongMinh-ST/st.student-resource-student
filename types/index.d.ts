@@ -130,6 +130,7 @@ type Student = {
   school_year: string;
   created_at?: string;
   updated_at?: string;
+  families?: Family[];
 };
 
 type Family = {

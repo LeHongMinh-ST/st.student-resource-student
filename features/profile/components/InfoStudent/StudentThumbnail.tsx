@@ -42,7 +42,7 @@ const StudentThumbnail: FC<StudentThumbnailProp> = ({ className, student }) => {
           </div>
           <div className="student-info-item">
             <IconUserStar />
-            <StatusStudentBadge status={student?.status ?? null} />
+            {student?.status && <StatusStudentBadge status={student.status} />}
           </div>
         </div>
       </Paper>

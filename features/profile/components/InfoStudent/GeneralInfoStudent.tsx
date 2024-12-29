@@ -42,7 +42,9 @@ const GeneralInfoStudent = ({ studentData }: GeneralInfoStudentProps) => {
             </ListItem>
             <ListItem>
               <LabelText>Loại hình đào tạo:</LabelText>{' '}
-              {info?.training_type ? trainingTypeLabels[info.training_type] : 'Không có'}
+              {info?.training_type
+                ? trainingTypeLabels[info.training_type as keyof typeof trainingTypeLabels]
+                : 'Không có'}
             </ListItem>
           </List>
         </Grid.Col>
@@ -60,7 +62,9 @@ const GeneralInfoStudent = ({ studentData }: GeneralInfoStudentProps) => {
             <ListItem>
               <LabelText>Đối tượng chính sách:</LabelText>{' '}
               {info?.social_policy_object
-                ? socialPolicyObjectLabels[info.social_policy_object]
+                ? socialPolicyObjectLabels[
+                    info.social_policy_object as keyof typeof socialPolicyObjectLabels
+                  ]
                 : 'Không có'}
             </ListItem>
           </List>
@@ -92,12 +96,12 @@ const GeneralInfoStudent = ({ studentData }: GeneralInfoStudentProps) => {
       </Group>
       <Divider />
       <List spacing="xs" mt="sm">
-        {families.map((family, index) => (
+        {families?.map((family: any, index: any) => (
           <ListItem key={index}>
             <LabelText>{family.relationship === 'father' ? 'Cha' : 'Mẹ'}:</LabelText>{' '}
             {family.full_name} (SĐT: {family.phone || 'Không có'})
           </ListItem>
-        ))}
+        )) || 'Không có'}
       </List>
     </Box>
   );
