@@ -6,6 +6,7 @@ import {
   Button,
   Select,
   Radio,
+  Image,
   Checkbox,
   LoadingOverlay,
 } from '@mantine/core';
@@ -555,7 +556,28 @@ const JobSurveyPage = () => {
       />
       <div className="form-wrap">
         <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={600} size="xl" ta="center">
+          <div className="wrap-header">
+            <div className="wrap-logo-header">
+              <Image src="/images/logo-vnua.png" alt="logo" className="wrap-logo" />
+            </div>
+            <div className="wrap-info-header">
+              <Text fw={100} ta="right" mb={20}>
+                Ngày{' '}
+              </Text>
+              <div className="wrap-title">
+                <Text size="lg">BỘ NÔNG NGHIỆP</Text>
+                <Text size="lg">VÀ PHÁT TRIỂN NÔNG THÔN</Text>
+                <Text fw={600} size="lg">
+                  HỌC VIỆN NÔNG NGHIỆP VIỆT NAM
+                </Text>
+                <Text fw={500} size="lg">
+                  Thị trấn Trâu Quỳ, huyện Gia Lâm, thành phố Hà Nội Điện thoại: 024.62617586 - Fax:
+                  024.62617586
+                </Text>
+              </div>
+            </div>
+          </div>
+          <Text fw={700} size="xl" ta="center">
             {surveyPeriod?.title}
           </Text>
           <Text size="sm" my={10}>
@@ -1424,8 +1446,38 @@ const JobSurveyPageStyled = styled.div`
 
   .form-wrap {
     width: 100%;
-    max-width: 700px;
+    max-width: 800px;
     margin: 20px auto;
+
+    .wrap-header {
+      display: flex;
+      justify-content: space-between;
+      margin: 0 20px 20px 20px;
+
+      .wrap-logo-header {
+        display: flex;
+        align-items: center;
+        width: 40%;
+        position: relative;
+
+        .wrap-logo {
+          padding-left: 20px;
+          width: 65%;
+          height: fit-content;
+          position: absolute;
+        }
+      }
+
+      .wrap-info-header {
+        width: 60%;
+        text-align: center;
+
+        .wrap-title {
+          display: flex;
+          flex-direction: column;
+        }
+      }
+    }
 
     .input-search {
       display: flex;
