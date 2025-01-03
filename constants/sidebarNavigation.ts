@@ -9,10 +9,6 @@ export const sidebarNavigationStudent: SidebarNavigationProps[] = [
       { label: 'Lớp học', icon: IconBuilding, link: '/classes' },
     ],
   },
-  {
-    title: 'Phản ánh',
-    links: [{ label: 'Phản ánh', icon: IconSpeakerphone, link: '/reflect' }],
-  },
 ];
 
 export const sidebarNavigationStudentPresident: SidebarNavigationProps[] = [
@@ -20,5 +16,9 @@ export const sidebarNavigationStudentPresident: SidebarNavigationProps[] = [
   {
     title: 'Yêu cầu chỉnh sửa',
     links: [{ label: 'Danh sách yêu cầu', icon: IconSpeakerphone, link: '/request-update' }],
+  },
+  {
+    title: 'Phản ánh',
+    links: [{ label: 'Phản ánh', icon: IconSpeakerphone, link: '/reflect' }],
   },
 ];

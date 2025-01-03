@@ -9,12 +9,21 @@ import {
   StudentStatus,
 } from '@/enums';
 import SocialPolicyObject from '@/enums/socialPolicyObject.enum';
+import StudentInfoUpdateStatus from '@/enums/studentInfoUpdateStatus.enum';
 import TrainingType from '@/enums/trainingType.enum';
 
 export const statusLabels: Record<StatusEnum, string> = {
   [StatusEnum.Enable]: 'Hoạt động',
   [StatusEnum.Disable]: 'Ẩn',
   [StatusEnum.Draft]: 'Nháp',
+};
+
+export const studentInfoUpdateStatusLabels: Record<StudentInfoUpdateStatus, string> = {
+  [StudentInfoUpdateStatus.Pending]: 'Chờ xử lý',
+  [StudentInfoUpdateStatus.ClassOfficerApproved]: 'Đã được cán bộ lớp xác thực',
+  [StudentInfoUpdateStatus.TeacherApproved]: 'Đã được giảng viên xác thực',
+  [StudentInfoUpdateStatus.OfficerApproved]: 'Đã được cán bộ xác thực',
+  [StudentInfoUpdateStatus.Rejected]: 'Đã từ chối',
 };
 
 export const statusFileImportLabels: Record<StatusFileImport, string> = {

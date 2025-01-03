@@ -1,23 +1,24 @@
-// RequestPage.tsx (Admin)
 import styled from '@emotion/styled';
-import { Container, Paper, Stack, Text } from '@mantine/core';
+import { Button, Container, Paper, Stack, Text, Tabs } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { IconPlus } from '@tabler/icons-react';
 import { DataTableProps } from 'mantine-datatable';
+import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { CommonDataTable, DeleteModal, PageHeader } from '@/components';
-import SearchFilter from '@/components/Filters/SearchFilter';
 import { defaultPramsList } from '@/constants/commons';
-import { dashboardRoute } from '@/routes';
+import { dashboardRoute, requestRoute } from '@/routes';
 import { RequestUpdateParams, useRequestUpdateService } from '@/services/requestUpdateService';
 import { UpdateRequest, ResultResponse } from '@/types';
 import { formatDateString } from '@/utils/func/formatDateString';
-import RequestActionMenu from './components/Cells/RequestActionMenu';
-import StatusFilter from './components/Filters/StatusFilter';
+import RequestActionMenu from '../components/Cells/RequestActionMenu';
 import StatusStudentRequestBadge from '@/components/Badge/StatusBadge/StatusStudentRequestBadge';
+import StudentInfoUpdateStatus from '@/enums/studentInfoUpdateStatus.enum';
 
-const RequestPage = () => {
+const MyRequestPage = () => {
   const requestService = useRequestUpdateService();
+  const [activeTab, setActiveTab] = useState<string>('all');
   const [requestParams, setRequestParams] = useState<RequestUpdateParams>({
     ...defaultPramsList,
   });
@@ -25,51 +26,39 @@ const RequestPage = () => {
   const [isOpen, { open: onOpen, close: onClose }] = useDisclosure(false);
   const [selected, setSelected] = useState<UpdateRequest | null>(null);
 
-  const { data, isLoading, mutate } = useSWR<ResultResponse<UpdateRequest[]>>([requestParams], () =>
-    requestService.getRequestUpdates(requestParams).then((res) => res.data)
+  const getStatusForTab = (tab: string): StudentInfoUpdateStatus | null => {
+    const statusMap: Record<string, StudentInfoUpdateStatus | null> = {
+      all: null,
+      pending: StudentInfoUpdateStatus.Pending,
+      class_officer: StudentInfoUpdateStatus.ClassOfficerApproved,
+      teacher: StudentInfoUpdateStatus.TeacherApproved,
+      admin: StudentInfoUpdateStatus.OfficerApproved,
+      rejected: StudentInfoUpdateStatus.Rejected,
+    };
+    return statusMap[tab];
+  };
+
+  const { data, isLoading, mutate } = useSWR<ResultResponse<UpdateRequest[]>>(
+    [{ ...requestParams, status: getStatusForTab(activeTab) }],
+    () =>
+      requestService
+        .getMyRequests({ ...requestParams, status: getStatusForTab(activeTab) })
+        .then((res) => res.data)
   );
 
   const columns: DataTableProps<UpdateRequest>['columns'] = useMemo(
     () => [
       {
         accessor: 'student.full_name',
-        title: 'Tên người gửi',
+        title: 'Tên',
         render: (request: UpdateRequest) => <span>{request.student.full_name}</span>,
         sorting: true,
       },
       {
-        accessor: 'student.code',
-        title: 'Mã sinh viên',
-        render: (request: UpdateRequest) => <span>{request.student.code}</span>,
-        filter: (
-          <SearchFilter
-            label="Tìm kiếm"
-            placeholder="Nhập mã sinh viên..."
-            setParams={(value: any) => {
-              setRequestParams({ ...requestParams, q: value });
-            }}
-            searchTermValue={requestParams.q}
-          />
-        ),
-        filtering: !!requestParams.q,
-      },
-      {
-        accessor: 'person_email',
-        title: 'Email',
-        render: (request: UpdateRequest) => <span>{request.person_email}</span>,
-      },
-      {
         accessor: 'status',
         title: 'Trạng thái',
-        filter: (
-          <StatusFilter
-            value={requestParams.status}
-            onChange={(value) => setRequestParams({ ...requestParams, status: value })}
-          />
-        ),
         render: (request: UpdateRequest) => <StatusStudentRequestBadge status={request.status} />,
         sorting: true,
-        filtering: !!requestParams.status,
       },
       {
         accessor: 'created_at',
@@ -84,7 +73,12 @@ const RequestPage = () => {
         title: 'Hành động',
         width: 100,
         render: (request: UpdateRequest) => (
-          <RequestActionMenu request={request} onOpen={onOpen} setSelected={setSelected} isAdmin />
+          <RequestActionMenu
+            request={request}
+            onOpen={onOpen}
+            setSelected={setSelected}
+            isAdmin={false}
+          />
         ),
       },
     ],
@@ -92,7 +86,7 @@ const RequestPage = () => {
   );
 
   return (
-    <RequestPageStyled>
+    <MyRequestPageStyled>
       <DeleteModal
         entityName="yêu cầu cập nhật"
         onDelete={async () => {
@@ -108,13 +102,32 @@ const RequestPage = () => {
       <Container fluid>
         <Stack gap="lg">
           <PageHeader
-            title="Yêu cầu cập nhật - Danh sách"
+            title="Yêu cầu của tôi"
             breadcrumbItems={[
               { title: 'Bảng điều khiển', href: dashboardRoute.dashboard },
-              { title: 'Yêu cầu cập nhật', href: null },
+              { title: 'Yêu cầu của tôi', href: null },
             ]}
+            withActions={
+              <Button
+                component={Link}
+                href={requestRoute.create}
+                leftSection={<IconPlus size={18} />}
+              >
+                Tạo mới yêu cầu
+              </Button>
+            }
           />
           <Paper p="md" shadow="md" radius="md">
+            <Tabs value={activeTab} onChange={(value) => setActiveTab(value ?? 'all')}>
+              <Tabs.List>
+                <Tabs.Tab value="all">Tất cả</Tabs.Tab>
+                <Tabs.Tab value="pending">Chờ phê duyệt</Tabs.Tab>
+                <Tabs.Tab value="class_officer">Lớp trưởng đã xác nhận</Tabs.Tab>
+                <Tabs.Tab value="teacher">Giáo viên đã xác nhận</Tabs.Tab>
+                <Tabs.Tab value="admin">Quản trị viên đã xác nhận</Tabs.Tab>
+                <Tabs.Tab value="rejected">Từ chối</Tabs.Tab>
+              </Tabs.List>
+            </Tabs>
             <CommonDataTable
               meta={data?.meta}
               columns={columns}
@@ -130,10 +143,10 @@ const RequestPage = () => {
           </Paper>
         </Stack>
       </Container>
-    </RequestPageStyled>
+    </MyRequestPageStyled>
   );
 };
 
-const RequestPageStyled = styled.div``;
+const MyRequestPageStyled = styled.div``;
 
-export default RequestPage;
+export default MyRequestPage;

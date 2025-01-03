@@ -1,8 +1,16 @@
 import { BaseParamsList, MetaResponse, SelectList } from '@/types';
-import { genderLabels, roleLabels, studentStatusLabels } from './labels';
+import {
+  genderLabels,
+  roleLabels,
+  statusLabels,
+  studentInfoUpdateStatusLabels,
+  studentStatusLabels,
+} from './labels';
 import { RoleEnum, StudentStatus } from '@/enums';
 import Role from '@/enums/role.enum';
 import Gender from '../enums/gender.enum';
+import Status from '@/enums/status.enum';
+import StudentInfoUpdateStatus from '@/enums/studentInfoUpdateStatus.enum';
 
 export const defaultPage: MetaResponse = {
   current_page: 1,
@@ -15,7 +23,26 @@ export const defaultPramsList: BaseParamsList = {
   limit: 10,
   page: 1,
 };
-
+export const StudentInfoUpdateStatusList: SelectList<StudentInfoUpdateStatus>[] = [
+  { value: StudentInfoUpdateStatus.Pending, label: studentInfoUpdateStatusLabels.pending },
+  {
+    value: StudentInfoUpdateStatus.ClassOfficerApproved,
+    label: studentInfoUpdateStatusLabels.class_officer_approved,
+  },
+  {
+    value: StudentInfoUpdateStatus.TeacherApproved,
+    label: studentInfoUpdateStatusLabels.teacher_approved,
+  },
+  {
+    value: StudentInfoUpdateStatus.OfficerApproved,
+    label: studentInfoUpdateStatusLabels.officer_approved,
+  },
+  { value: StudentInfoUpdateStatus.Rejected, label: studentInfoUpdateStatusLabels.rejected },
+];
+export const StatusList: SelectList<Status>[] = [
+  { value: Status.Enable, label: statusLabels.enable },
+  { value: Status.Disable, label: statusLabels.disable },
+];
 export const RoleSelectList: SelectList<Role>[] = [
   { value: RoleEnum.Admin, label: roleLabels.admin },
   { value: RoleEnum.Office, label: roleLabels.office },

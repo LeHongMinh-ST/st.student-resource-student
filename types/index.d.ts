@@ -1,5 +1,6 @@
 import { StudentStatus } from '@/enums';
 import Role from '@/enums/role.enum';
+import StudentInfoUpdateStatus from '@/enums/studentInfoUpdateStatus.enum';
 
 declare module '*.svg' {
   const content: React.FC<React.SVGProps<SVGElement>>;
@@ -124,7 +125,6 @@ type Student = {
   status: StudentStatus;
   info: StudentInfo;
   family: Family[];
-  info?: StudentInfo;
   currentClass: GeneralClass;
   training_industry_id?: number;
   school_year: string;
@@ -226,4 +226,30 @@ type City = {
   id?: number;
   name: string;
   priority: number;
+};
+
+type UpdateRequest = {
+  id?: number;
+  note: string;
+  person_email: string;
+  gender: Gender;
+  permanent_residence: string;
+  dob: string;
+  pob: string;
+  countryside: string;
+  address: string;
+  training_type: TrainingType;
+  phone: string;
+  nationality: string;
+  citizen_identification: string;
+  ethnic: string;
+  religion: string;
+  thumbnail: string;
+  social_policy_object: SocialPolicyObject;
+  families?: Family[];
+  student_id: number;
+  student: Student;
+  status: StudentInfoUpdateStatus;
+  created_at?: string;
+  updated_at?: string;
 };
