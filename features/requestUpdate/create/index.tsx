@@ -8,7 +8,6 @@ import {
   Paper,
   Select,
   Stack,
-  Textarea,
   TextInput,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
@@ -37,11 +36,11 @@ import {
   SocialPolicyObjectList,
   TrainingTypeList,
 } from '@/constants/commons';
-import { FamilyRelationship, SocialPolicyObject, TrainingType } from '@/enums';
+import { FamilyRelationship } from '@/enums';
 import { useAuthStore } from '@/utils/recoil/auth/authState';
 import { useRequestUpdateService } from '@/services/requestUpdateService';
 
-const StudentEditPage = () => {
+const CreateRequestPage = () => {
   const {
     register,
     trigger,
@@ -53,10 +52,11 @@ const StudentEditPage = () => {
     reset,
   } = useForm<Student>();
 
-  const { authUser } = useAuthStore();
-  const { createRequest } = useRequestUpdateService();
   const { push } = useRouter();
+  const { authUser } = useAuthStore();
 
+  if (authUser?.has_request_update) push(requestRoute.myRequest);
+  const { createRequest } = useRequestUpdateService();
   useEffect(() => {
     if (authUser) {
       reset(authUser);
@@ -90,20 +90,15 @@ const StudentEditPage = () => {
       families: data?.families ?? [],
       person_email: data.info?.person_email,
       permanent_residence: data.info.permanent_residence,
-      note: data.info.note,
       gender: data.info.gender,
-      dob: data.info.dob,
       pob: data.info.pob,
       countryside: data.info.countryside,
       address: data.info.address,
-      training_type: data.info.training_type,
       phone: data.info.phone,
       nationality: data.info.nationality,
       citizen_identification: data.info.citizen_identification,
       ethnic: data.info.ethnic,
       religion: data.info.religion,
-      thumbnail: data.info.thumbnail,
-      social_policy_object: data.info.social_policy_object,
       student_id: authUser?.id ?? 0,
     } as UpdateRequest;
 
@@ -145,11 +140,11 @@ const StudentEditPage = () => {
       <Container fluid>
         <Stack gap="lg">
           <PageHeader
-            title={`Sinh viên - Chỉnh sửa - #${authUser?.code}`}
+            title={`Yêu cầu chỉnh sửa - Tạo Yêu cầu - #${authUser?.code}`}
             breadcrumbItems={[
               { title: 'Bảng điều khiển', href: dashboardRoute.dashboard },
               { title: `Yêu cầu chỉnh sửa`, href: requestRoute.myRequest },
-              { title: 'Chỉnh sửa', href: null },
+              { title: 'Tạo yêu cầu', href: null },
             ]}
             withActions={
               <Button
@@ -189,7 +184,7 @@ const StudentEditPage = () => {
                           {...register('last_name', {
                             required: ERROR_MESSAGES.student.last_name.required,
                           })}
-                          error={errors.last_name?.message}
+                          disabled
                         />
                         <TextInput
                           withAsterisk
@@ -197,7 +192,7 @@ const StudentEditPage = () => {
                           {...register('first_name', {
                             required: ERROR_MESSAGES.student.first_name.required,
                           })}
-                          error={errors.first_name?.message}
+                          disabled
                         />
 
                         <TextInput
@@ -230,7 +225,6 @@ const StudentEditPage = () => {
                           rightSection={
                             <IconCalendar style={{ width: '18px', height: '18px' }} stroke={1.5} />
                           }
-                          disabled
                           label="Ngày sinh"
                           placeholder="Chọn ngày sinh"
                           locale="vi"
@@ -240,12 +234,26 @@ const StudentEditPage = () => {
                             getValues('info.dob') ? new Date(getValues('info.dob') ?? '') : null
                           }
                           onChange={() => {}}
+                          disabled
                         />
                         <Select
                           label="Giới tính"
                           data={GenderList}
                           disabled
                           value={getValues('info.gender')}
+                        />
+
+                        <Select
+                          label="Loại hình đào tạo"
+                          data={TrainingTypeList}
+                          value={getValues('info.training_type')}
+                          disabled
+                        />
+                        <Select
+                          label="Chế độ chính sách"
+                          data={SocialPolicyObjectList}
+                          value={getValues('info.social_policy_object')}
+                          disabled
                         />
                       </Stack>
                     </Fieldset>
@@ -278,37 +286,22 @@ const StudentEditPage = () => {
                           {...register('info.countryside')}
                           error={errors.info?.countryside?.message}
                         />
-                        <Select
-                          label="Loại hình đào tạo"
-                          data={TrainingTypeList}
-                          value={getValues('info.training_type')}
-                          onChange={(value) => {
-                            setValue('info.training_type', value as TrainingType);
-                            trigger('info.training_type');
-                          }}
-                          error={errors.info?.training_type?.message}
-                        />
-                        <TextInput
-                          label="Dân tộc"
-                          {...register('info.ethnic')}
-                          error={errors.info?.ethnic?.message}
-                        />
-                        <TextInput
-                          label="Tôn giáo"
-                          {...register('info.religion')}
-                          error={errors.info?.religion?.message}
-                        />
-
-                        <Select
-                          label="Chế độ chính sách"
-                          data={SocialPolicyObjectList}
-                          value={getValues('info.social_policy_object')}
-                          onChange={(value) => {
-                            setValue('info.social_policy_object', value as SocialPolicyObject);
-                            trigger('info.social_policy_object');
-                          }}
-                          error={errors.info?.social_policy_object?.message}
-                        />
+                        <Grid>
+                          <Grid.Col span={{ base: 12, md: 6 }}>
+                            <TextInput
+                              label="Dân tộc"
+                              {...register('info.ethnic')}
+                              error={errors.info?.ethnic?.message}
+                            />
+                          </Grid.Col>
+                          <Grid.Col span={{ base: 12, md: 6 }}>
+                            <TextInput
+                              label="Tôn giáo"
+                              {...register('info.religion')}
+                              error={errors.info?.religion?.message}
+                            />
+                          </Grid.Col>
+                        </Grid>
                       </Stack>
                     </Fieldset>
                   </Surface>
@@ -390,18 +383,6 @@ const StudentEditPage = () => {
                 </Grid.Col>
               </Grid>
 
-              <Grid gutter={{ base: 'lg', lg: 'xl' }}>
-                <Grid.Col span={{ base: 12, md: 12 }}>
-                  <Surface component={Paper} p="md" shadow="md" radius="md" h="100%">
-                    <Fieldset legend="Ghi chú">
-                      <Stack>
-                        <Textarea rows={5} {...register('info.note')} />
-                      </Stack>
-                    </Fieldset>
-                  </Surface>
-                </Grid.Col>
-              </Grid>
-
               <Button
                 className="mt-5"
                 style={{ marginTop: '1rem' }}
@@ -409,7 +390,7 @@ const StudentEditPage = () => {
                 loading={isSubmitting}
                 leftSection={<IconDeviceFloppy size={18} />}
               >
-                Lưu
+                Tạo
               </Button>
             </form>
           </Paper>
@@ -421,4 +402,4 @@ const StudentEditPage = () => {
 
 const StudentEditPageStyled = styled.div``;
 
-export default StudentEditPage;
+export default CreateRequestPage;

@@ -4,7 +4,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons-react';
 import { DataTableProps } from 'mantine-datatable';
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { CommonDataTable, DeleteModal, PageHeader } from '@/components';
 import { defaultPramsList } from '@/constants/commons';
@@ -15,6 +15,7 @@ import { formatDateString } from '@/utils/func/formatDateString';
 import RequestActionMenu from '../components/Cells/RequestActionMenu';
 import StatusStudentRequestBadge from '@/components/Badge/StatusBadge/StatusStudentRequestBadge';
 import StudentInfoUpdateStatus from '@/enums/studentInfoUpdateStatus.enum';
+import { useAuthStore } from '@/utils/recoil/auth/authState';
 
 const MyRequestPage = () => {
   const requestService = useRequestUpdateService();
@@ -22,6 +23,11 @@ const MyRequestPage = () => {
   const [requestParams, setRequestParams] = useState<RequestUpdateParams>({
     ...defaultPramsList,
   });
+
+  const { handleRefreshProfile, authUser } = useAuthStore();
+  useEffect(() => {
+    handleRefreshProfile();
+  }, []);
 
   const [isOpen, { open: onOpen, close: onClose }] = useDisclosure(false);
   const [selected, setSelected] = useState<UpdateRequest | null>(null);
@@ -51,7 +57,9 @@ const MyRequestPage = () => {
       {
         accessor: 'student.full_name',
         title: 'Tên',
-        render: (request: UpdateRequest) => <span>{request.student.full_name}</span>,
+        render: (request: UpdateRequest) => (
+          <span>Yêu cầu cập nhật thông tin sinh viên {request.student?.full_name}</span>
+        ),
         sorting: true,
       },
       {
@@ -108,20 +116,24 @@ const MyRequestPage = () => {
               { title: 'Yêu cầu của tôi', href: null },
             ]}
             withActions={
-              <Button
-                component={Link}
-                href={requestRoute.create}
-                leftSection={<IconPlus size={18} />}
-              >
-                Tạo mới yêu cầu
-              </Button>
+              !authUser?.has_request_update ? (
+                <Button
+                  component={Link}
+                  href={requestRoute.create}
+                  leftSection={<IconPlus size={18} />}
+                >
+                  Tạo mới yêu cầu
+                </Button>
+              ) : (
+                <Text>Đã có yêu cầu cập nhật</Text>
+              )
             }
           />
           <Paper p="md" shadow="md" radius="md">
             <Tabs value={activeTab} onChange={(value) => setActiveTab(value ?? 'all')}>
               <Tabs.List>
                 <Tabs.Tab value="all">Tất cả</Tabs.Tab>
-                <Tabs.Tab value="pending">Chờ phê duyệt</Tabs.Tab>
+                <Tabs.Tab value="pending">Chờ xác nhận</Tabs.Tab>
                 <Tabs.Tab value="class_officer">Lớp trưởng đã xác nhận</Tabs.Tab>
                 <Tabs.Tab value="teacher">Giáo viên đã xác nhận</Tabs.Tab>
                 <Tabs.Tab value="admin">Quản trị viên đã xác nhận</Tabs.Tab>

@@ -26,6 +26,34 @@ export const studentInfoUpdateStatusLabels: Record<StudentInfoUpdateStatus, stri
   [StudentInfoUpdateStatus.Rejected]: 'Đã từ chối',
 };
 
+export const familyRelationshipLabels: Record<FamilyRelationship, string> = {
+  [FamilyRelationship.Father]: 'Bố',
+  [FamilyRelationship.Mother]: 'Mẹ',
+  [FamilyRelationship.Siblings]: 'Anh/Chị/Em',
+
+  [FamilyRelationship.Grandparent]: 'Ông/Bà',
+  [FamilyRelationship.Other]: 'Khác',
+};
+
+export const genderLabels: Record<Gender, string> = {
+  [Gender.Male]: 'Nam',
+  [Gender.Female]: 'Nữ',
+  [Gender.Unspecified]: 'Khác',
+};
+
+export const trainingTypeLabels: Record<TrainingType, string> = {
+  [TrainingType.FormalUniversity]: 'Đại học chính quy',
+  [TrainingType.College]: 'Cao đẳng',
+  [TrainingType.StudyAndWork]: 'Vừa học vừa làm',
+};
+
+export const socialPolicyObjectLabels: Record<SocialPolicyObject, string> = {
+  [SocialPolicyObject.None]: 'Không',
+  [SocialPolicyObject.SonOfWounded]: 'Con thương binh liệt sĩ',
+  [SocialPolicyObject.EspeciallyDifficult]: 'Đối tượng đặc biệt khó khăn',
+  [SocialPolicyObject.EthnicMinorityPeopleInTheHighlands]: 'Dân tộc thiểu số ở vùng cao',
+  [SocialPolicyObject.DisabledPerson]: 'Người khuyết tật',
+};
 export const statusFileImportLabels: Record<StatusFileImport, string> = {
   [StatusFileImport.Completed]: 'Đã xử lý',
   [StatusFileImport.Processing]: 'Đang xử lý',
@@ -53,31 +81,6 @@ export const studentStatusLabels: Record<StudentStatus, string> = {
   [StudentStatus.Expelled]: 'Đã bị đuổi học',
   [StudentStatus.Deferred]: 'Bảo lưu',
   [StudentStatus.TransferStudy]: 'Chuyển nghành học',
-};
-
-export const familyRelationshipLabels: Record<FamilyRelationship, string> = {
-  [FamilyRelationship.Father]: 'Bố',
-  [FamilyRelationship.Mother]: 'Mẹ',
-  [FamilyRelationship.Siblings]: 'Anh/Chị/Em',
-};
-
-export const genderLabels: Record<Gender, string> = {
-  [Gender.Male]: 'Nam',
-  [Gender.Female]: 'Nữ',
-  [Gender.Unspecified]: 'Khác',
-};
-
-export const trainingTypeLabels: Record<TrainingType, string> = {
-  [TrainingType.FormalUniversity]: 'Đại học chính quy',
-  [TrainingType.College]: 'Cao đẳng',
-};
-
-export const socialPolicyObjectLabels: Record<SocialPolicyObject, string> = {
-  [SocialPolicyObject.None]: 'Không',
-  [SocialPolicyObject.SonOfWounded]: 'Con thương binh liệt sĩ',
-  [SocialPolicyObject.EspeciallyDifficult]: 'Đối tượng đặc biệt khó khăn',
-  [SocialPolicyObject.EthnicMinorityPeopleInTheHighlands]: 'Dân tộc thiểu số ở vùng cao',
-  [SocialPolicyObject.DisabledPerson]: 'Người khuyết tật',
 };
 
 export const classTypeLabels: Record<ClassType, string> = {

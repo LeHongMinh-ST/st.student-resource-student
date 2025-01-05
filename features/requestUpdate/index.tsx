@@ -34,13 +34,13 @@ const RequestPage = () => {
       {
         accessor: 'student.full_name',
         title: 'Tên người gửi',
-        render: (request: UpdateRequest) => <span>{request.student.full_name}</span>,
+        render: (request: UpdateRequest) => <span>{request.student?.full_name}</span>,
         sorting: true,
       },
       {
         accessor: 'student.code',
         title: 'Mã sinh viên',
-        render: (request: UpdateRequest) => <span>{request.student.code}</span>,
+        render: (request: UpdateRequest) => <span>{request.student?.code}</span>,
         filter: (
           <SearchFilter
             label="Tìm kiếm"

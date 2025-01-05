@@ -71,6 +71,13 @@ export const useAuthStore = () => {
     }
   };
 
+  const handleRefreshProfile = () => {
+    const authService = useAuthService();
+    authService.getProfile().then((res) => {
+      setAuthUser(res.data.data);
+    });
+  };
+
   const startRefreshTokenTimer = () => {
     const timeout = state.expiresIn * MILLISECOND; // Timeout in milliseconds
     const timer = setTimeout(() => handleRefresh(), timeout);
@@ -114,5 +121,6 @@ export const useAuthStore = () => {
     startRefreshTokenTimer,
     stopRefreshTokenTimer,
     logout,
+    handleRefreshProfile,
   };
 };

@@ -131,6 +131,7 @@ type Student = {
   created_at?: string;
   updated_at?: string;
   families?: Family[];
+  has_request_update: boolean;
 };
 
 type Family = {
@@ -230,7 +231,7 @@ type City = {
 
 type UpdateRequest = {
   id?: number;
-  note: string;
+  note?: string;
   person_email: string;
   gender: Gender;
   permanent_residence: string;

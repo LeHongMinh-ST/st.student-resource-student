@@ -1,12 +1,20 @@
 import { BaseParamsList, MetaResponse, SelectList } from '@/types';
 import {
+  familyRelationshipLabels,
   genderLabels,
   roleLabels,
   statusLabels,
   studentInfoUpdateStatusLabels,
   studentStatusLabels,
+  trainingTypeLabels,
 } from './labels';
-import { RoleEnum, StudentStatus } from '@/enums';
+import {
+  FamilyRelationship,
+  RoleEnum,
+  SocialPolicyObject,
+  StudentStatus,
+  TrainingType,
+} from '@/enums';
 import Role from '@/enums/role.enum';
 import Gender from '../enums/gender.enum';
 import Status from '@/enums/status.enum';
@@ -49,9 +57,36 @@ export const RoleSelectList: SelectList<Role>[] = [
   { value: RoleEnum.Teacher, label: roleLabels.teacher },
 ];
 
-export const GenderSelectList: SelectList<Gender>[] = [
-  { value: Gender.Male, label: genderLabels.male },
-  { value: Gender.Female, label: genderLabels.female },
+export const GenderList: SelectList<Gender>[] = [
+  { value: Gender.Male, label: 'Nam' },
+  { value: Gender.Female, label: 'Nữ' },
+  { value: Gender.Unspecified, label: 'Khác' },
+];
+
+export const TrainingTypeList: SelectList<TrainingType>[] = [
+  { value: TrainingType.FormalUniversity, label: trainingTypeLabels.formal_university },
+  { value: TrainingType.College, label: trainingTypeLabels.college },
+
+  { value: TrainingType.StudyAndWork, label: trainingTypeLabels.study_and_work },
+];
+
+export const SocialPolicyObjectList: SelectList<SocialPolicyObject>[] = [
+  { value: SocialPolicyObject.None, label: 'Không' },
+  { value: SocialPolicyObject.SonOfWounded, label: 'Con thương binh liệt sĩ' },
+  { value: SocialPolicyObject.DisabledPerson, label: 'Người khuyết tật' },
+  { value: SocialPolicyObject.EspeciallyDifficult, label: 'Đối tượng đặc biệt khó khăn' },
+  {
+    value: SocialPolicyObject.EthnicMinorityPeopleInTheHighlands,
+    label: 'Dân tộc thiểu số ở vùng cao',
+  },
+];
+
+export const FamilyRelationshipList: SelectList<FamilyRelationship>[] = [
+  { value: FamilyRelationship.Father, label: familyRelationshipLabels.father },
+  { value: FamilyRelationship.Mother, label: familyRelationshipLabels.mother },
+  { value: FamilyRelationship.Siblings, label: familyRelationshipLabels.siblings },
+  { value: FamilyRelationship.Grandparent, label: familyRelationshipLabels.grandparent },
+  { value: FamilyRelationship.Other, label: familyRelationshipLabels.other },
 ];
 
 export const GenderSelectListFormSurvey: SelectList<string>[] = [
