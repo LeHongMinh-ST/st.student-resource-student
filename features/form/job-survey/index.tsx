@@ -34,6 +34,7 @@ import { useStudentService } from '@/services/studentService';
 import Completed from '@/features/form/job-survey/compoents/Completed';
 import ConfirmModal from '@/components/Modals/ConfirmModel/ConfirmModal';
 import InfoModal from './compoents/InfoModal';
+import ConfirmInfoModal from './compoents/ConfirmInfo';
 
 const JobSurveyPage = () => {
   const surveyPeriodService = useSurveyPeriodService();
@@ -201,35 +202,6 @@ const JobSurveyPage = () => {
   }, [studentData]);
 
   const [descriptionErrorModal, setDescriptionErrorModal] = useState('');
-  // useEffect(() => {
-  //   console.log('dataSurveyResponse', dataSurveyResponse);
-  //   console.log('isOpen', isOpen);
-  //   console.log('studentCode', studentCode);
-
-  //   if (dataSurveyResponse) {
-  //     const {
-  //       code_student,
-  //       full_name,
-  //     } = dataSurveyResponse;
-
-  //     reset({
-  //       ...dataSurveyResponse,
-  //       solutions_get_job: {
-  //         value: ["1", "2"]
-  //       }
-  //       // dob: dayjs(info?.dob).format('MM/DD/YYYY') ?? '',
-  //       // phone_number: info?.phone ?? '',
-  //       // email: graduate?.email ?? '',
-  //       // course: `K${code?.slice(0, 2) ?? ''}`,
-  //       // gender: info?.gender ?? '',
-  //       // identification_card_number: info?.citizen_identification ?? '',
-  //       // training_industry_id: training_industry_id
-  //       //   ? String(training_industry_id)
-  //       //   : ''
-  //     });
-  //   }
-  // }, [studentCode]);
-  // const [inputSearchGenerate, setInputSearchGenerate] = useState('');
 
   const resetForm = () => {
     reset({
@@ -467,6 +439,7 @@ const JobSurveyPage = () => {
         starting_salary,
       });
       setValue('gender', gender);
+      setValue('course', `K${code_student?.slice(0, 2)}`);
       setValue('employment_status', String(dataSurveyResponse.employment_status));
       if (city_work_id) {
         setValue('city_work_id', String(city_work_id));
@@ -523,6 +496,18 @@ const JobSurveyPage = () => {
     onClose();
   }, [surveyPeriodService]);
 
+  const handleSetDataVerify = useCallback(async (data: any) => {
+    if (data) {
+      setValue('gender', data?.gender);
+      setValue('full_name', data?.full_name);
+      setValue('code_student', data?.code);
+      setValue('course', `K${data?.code?.slice(0, 2)}`);
+      console.log(`K${data?.code?.slice(0, 2)}`);
+
+      setStudentCode(data?.code);
+    }
+  }, []);
+
   if (isSuccess) {
     return <Completed />;
   }
@@ -536,6 +521,14 @@ const JobSurveyPage = () => {
           setIsSuccess(true);
           onClose();
         }}
+      />
+      <ConfirmInfoModal
+        surveyPeriodId={Number(id)}
+        callbackSetStudentData={handleSetDataVerify}
+        entityName={getValues('code_student')}
+        description="Vui lòng xác nhận thông tin trước khi phản hồi khảo sát. Xác nhận thông tin bằng cách điền mã sinh viên và một thông tin khác"
+        isOpen={!code && !getValues('code_student') && !dataSurveyResponse?.id}
+        dataOptionTrainingIndustries={dataOptionTrainingIndustries}
       />
       <InfoModal
         entityName="Thông báo"
@@ -561,9 +554,7 @@ const JobSurveyPage = () => {
               <Image src="/images/logo-vnua.png" alt="logo" className="wrap-logo" />
             </div>
             <div className="wrap-info-header">
-              <Text fw={100} ta="right" mb={20}>
-                Ngày{' '}
-              </Text>
+              <Text fw={100} ta="right" mb={20}></Text>
               <div className="wrap-title">
                 <Text size="lg">BỘ NÔNG NGHIỆP</Text>
                 <Text size="lg">VÀ PHÁT TRIỂN NÔNG THÔN</Text>
@@ -594,24 +585,7 @@ const JobSurveyPage = () => {
             Phần I: Thông tin cá nhân
           </Text>
         </Card>
-        {/* <Card shadow="sm" padding="lg" mb="lg">
-          <Text fw={500} size="sm">
-            (Mẹo) Tự động điền thông tin cá nhân
-          </Text>
-          <div className="input-search">
-            <TextInput
-              value={studentSearchKey}
-              onChange={(e) => {
-                setStudentSearchKey(e.target.value);
-              }}
-              variant="unstyled"
-              placeholder="Nhập mã sinh viên, email hoặc số điện thoại"
-            />
-            <Button leftSection={<IconSearch size={14} />} variant="outline">
-              Tìm kiếm
-            </Button>
-          </div>
-        </Card> */}
+
         {dataSurveyResponse?.id ? (
           <>
             <Card shadow="sm" padding="lg" mb="lg">
@@ -619,7 +593,7 @@ const JobSurveyPage = () => {
                 1. Mã sinh viên <span className="required text-red">*</span>
               </Text>
               <TextInput
-                disabled={!!code}
+                readOnly
                 variant="unstyled"
                 defaultValue={studentData?.code ?? ''}
                 placeholder="vd: 637711"
@@ -639,6 +613,7 @@ const JobSurveyPage = () => {
                 <span className="required text-red">*</span>
               </Text>
               <TextInput
+                readOnly
                 variant="unstyled"
                 defaultValue={studentData?.last_name?.concat(' ', studentData?.first_name) ?? ''}
                 placeholder="vd: Đào Đức Anh"
@@ -664,7 +639,7 @@ const JobSurveyPage = () => {
               </Text>
               <TextInput
                 variant="unstyled"
-                defaultValue={`K${studentData?.code?.slice(0, 2) ?? ''}`}
+                defaultValue={`K${studentData?.code?.slice(0, 2) ?? dataSurveyResponse?.code_student?.slice(0, 2) ?? ''}`}
                 placeholder="vd: K63"
                 {...register('course', {})}
               />
@@ -702,9 +677,9 @@ const JobSurveyPage = () => {
                 1. Mã sinh viên <span className="required text-red">*</span>
               </Text>
               <TextInput
-                disabled={!!code}
+                readOnly={!!code || !!getValues('code_student')}
                 variant="unstyled"
-                defaultValue={studentData?.code ?? ''}
+                defaultValue={studentData?.code}
                 placeholder="vd: 637711"
                 {...register('code_student', {
                   required: ERROR_MESSAGES.form_job.code_student.required,
@@ -721,6 +696,7 @@ const JobSurveyPage = () => {
                 2. Họ và tên <span className="required text-red">*</span>
               </Text>
               <TextInput
+                readOnly
                 variant="unstyled"
                 defaultValue={studentData?.last_name?.concat(' ', studentData?.first_name) ?? ''}
                 placeholder="vd: Đào Đức Anh"
@@ -740,6 +716,7 @@ const JobSurveyPage = () => {
                   required: ERROR_MESSAGES.form_job.gender.required,
                 })}
                 placeholder="Chọn giới tính"
+                readOnly={!!getValues('gender')}
                 data={GenderSelectList}
                 value={String(getValues('gender') ?? '')}
                 onChange={(value) => {
@@ -786,19 +763,6 @@ const JobSurveyPage = () => {
                 placeholder="vd: 0334********"
                 {...register('identification_card_number', {})}
               />
-
-              {/* {watch('identification_card_number') && (
-                <>
-                  <Text fw={600} size="sm" pt={10}>
-                    Cập nhập số căn cước công dân (nếu số căn cước công dân hiện tại chưa đúng)
-                  </Text>
-                  <TextInput
-                    variant="unstyled"
-                    placeholder="vd: 0334********"
-                    {...register('identification_card_number_update', {})}
-                  />
-                </>
-              )} */}
               <Text fw={600} size="sm" pt={10}>
                 Ngày cấp
               </Text>
@@ -840,7 +804,7 @@ const JobSurveyPage = () => {
               </Text>
               <TextInput
                 variant="unstyled"
-                defaultValue={`K${studentData?.code?.slice(0, 2) ?? ''}`}
+                defaultValue={`K${studentData?.code?.slice(0, 2) || ''}`}
                 placeholder="vd: K63"
                 {...register('course', {})}
               />
