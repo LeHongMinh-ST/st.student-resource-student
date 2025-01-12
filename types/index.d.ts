@@ -134,6 +134,15 @@ type Student = {
   has_request_update: boolean;
 };
 
+type StudentVerify = {
+  code: string;
+  email?: string;
+  phone_number?: string;
+  dob?: string;
+  identification_card_number?: string;
+  training_industry_id?: string;
+};
+
 type Family = {
   relationship: FamilyRelationship;
   full_name: string;

@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import axiosInstance from '@/utils/axios';
-import { ResultResponse, SurveyPeriod } from '@/types';
+import { ResultResponse, StudentVerify, SurveyPeriod } from '@/types';
 
 export const useSurveyPeriodService = () => {
   const getSurveyPeriod = (
@@ -8,7 +8,14 @@ export const useSurveyPeriodService = () => {
   ): Promise<AxiosResponse<ResultResponse<SurveyPeriod>, any>> =>
     axiosInstance.get(`/external/survey-periods/${id}`);
 
+  const verifySurveyPeriodStudent = (
+    id: number | string,
+    params: StudentVerify
+  ): Promise<AxiosResponse<ResultResponse<any>, any>> =>
+    axiosInstance.get(`/external/survey-periods/${id}/student-verify`, { params });
+
   return {
     getSurveyPeriod,
+    verifySurveyPeriodStudent,
   };
 };

@@ -81,6 +81,10 @@ export const SocialPolicyObjectList: SelectList<SocialPolicyObject>[] = [
   },
 ];
 
+export const GenderSelectList: SelectList<Gender>[] = [
+  { value: Gender.Male, label: genderLabels.male },
+  { value: Gender.Female, label: genderLabels.female },
+];
 export const FamilyRelationshipList: SelectList<FamilyRelationship>[] = [
   { value: FamilyRelationship.Father, label: familyRelationshipLabels.father },
   { value: FamilyRelationship.Mother, label: familyRelationshipLabels.mother },
